@@ -1,6 +1,6 @@
-@startuml retrieval-pipeline
+@startuml search-pipeline
 ' ============================================================
-' Retrieval-Pipeline für die Rechts-Wissensdatenbank
+' Such-Pipeline für die Rechts-Wissensdatenbank
 ' Hybride Suche (BM25 + Vektoren) mit Zeitfilter, RRF und Reranker
 '
 ' Farbcodierung zeigt, was im lokalen Prototyp (test/) bereits

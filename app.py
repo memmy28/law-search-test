@@ -11,7 +11,7 @@ from search import DB_URL, EMBED_MODEL, RERANK_MODEL, fetch_rows, rrf_fuse, text
 
 app = Flask(__name__)
 
-PUML_PATH = os.path.join(os.path.dirname(__file__), "diagrams", "retrieval-pipeline.puml")
+PUML_PATH = os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline.puml")
 _diagram_cache = {"mtime": None, "svg": None, "error": None}
 
 print(f"Lade Modelle ({EMBED_MODEL}, {RERANK_MODEL}) ...")
@@ -36,7 +36,7 @@ def index():
 
 
 def render_diagram_svg():
-    """Rendert diagrams/retrieval-pipeline.puml live über den lokalen PlantUML-Docker-Container.
+    """Rendert diagrams/search-pipeline.puml live über den lokalen PlantUML-Docker-Container.
     Ergebnis wird anhand der Datei-mtime gecacht, damit Änderungen an der .puml-Datei ohne
     manuellen Zwischenschritt beim nächsten Seitenaufruf sichtbar werden."""
     mtime = os.path.getmtime(PUML_PATH)

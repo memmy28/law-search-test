@@ -38,8 +38,8 @@ nach RRF-Fusion übrig bleiben.
 Über die Navbar erreichbar:
 - **Suche** (`/`) – die oben beschriebene Such-Oberfläche inkl. Zeitstrahl aller Normen.
 - **Datenbank** (`/datenbank`) – alle Normen gruppiert nach Gesetz, mit Gültigkeitszeitraum und Status.
-- **Architektur** (`/architektur`) – die Retrieval-Pipeline als Diagramm, farblich markiert nach
-  umgesetzt/teilweise/offen. Quelle ist `diagrams/retrieval-pipeline.puml`; Flask rendert die Datei
+- **Architektur** (`/architektur`) – die Such-Pipeline als Diagramm, farblich markiert nach
+  umgesetzt/teilweise/offen. Quelle ist `diagrams/search-pipeline.puml`; Flask rendert die Datei
   bei jedem Aufruf von `/architektur/diagram.svg` live über den lokalen PlantUML-Docker-Container neu
   (gecacht anhand der Datei-Änderungszeit). Einfach die `.puml`-Datei bearbeiten und die Seite neu
   laden – kein manuelles Re-Rendern nötig, Docker muss dafür laufen.
