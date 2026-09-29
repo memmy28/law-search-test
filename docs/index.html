@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rechts-Wissensdatenbank – Prototyp</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --border: #e2e4e9;
+    --text: #1a1d23;
+    --muted: #6b7280;
+    --accent: #2454ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    padding: 40px 32px 24px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  h1 {
+    margin: 0;
+    font-size: 26px;
+  }
+  .tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    background: #eaefff;
+    padding: 2px 8px;
+    border-radius: 999px;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .subtitle {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 32px 60px;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .panel h2 {
+    margin: 0 0 12px;
+    font-size: 17px;
+  }
+  .panel p, .panel li {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .panel ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  code {
+    background: #eef0f4;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  pre {
+    background: #14161a;
+    color: #e6e8eb;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .diagram-wrap {
+    overflow-x: auto;
+  }
+  .diagram-wrap img {
+    display: block;
+    width: 100%;
+    min-width: 700px;
+    height: auto;
+  }
+  .cta {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+  }
+  .disclaimer {
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 32px;
+    padding-top: 16px;
+  }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Rechts-Wissensdatenbank <span class="tag">Prototyp – statische Vorschau</span></h1>
+    <p class="subtitle">
+      Machbarkeitstest für eine zeitversionierte Rechts-Wissensdatenbank: hybride Suche
+      (Volltext + Vektor + Reranking) über Gesetze und Normen mit Gültigkeitszeiträumen in
+      Vergangenheit, Gegenwart und Zukunft. Diese Seite ist eine statische Vorschau — die
+      interaktive App (Suche, Zeitstrahl, Normen-Datenbank) läuft lokal, siehe unten.
+    </p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Drei Kernideen</h2>
+      <ul>
+        <li>Speichereinheit ist die einzelne <strong>Norm-Fassung</strong> mit Gültigkeitszeitraum
+          (<code>daterange</code>); die Datenbank verhindert per Constraint, dass sich zwei Fassungen
+          derselben Norm zeitlich überlappen.</li>
+        <li><strong>Hybride Suche:</strong> Volltext (Postgres <code>tsvector</code>, deutscher
+          Analyzer) + Vektorsuche (pgvector), kombiniert per Reciprocal Rank Fusion, danach
+          Reranking mit einem Cross-Encoder.</li>
+        <li><strong>Stichtag-Filterung:</strong> die Suche liefert nur die an einem gegebenen Datum
+          gültige Fassung jeder Norm — dieselbe Frage kann je nach Stichtag drei unterschiedliche
+          Antworten liefern.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Architektur</h2>
+      <p>
+        Retrieval-Pipeline mit Zeitfilter, RRF-Fusion und Reranking. Grün markiert, was im Prototyp
+        umgesetzt ist, orange teilweise, grau noch offen.
+      </p>
+      <div class="diagram-wrap">
+        <img src="retrieval-pipeline.svg" alt="Retrieval-Pipeline Diagramm" />
+      </div>
+      <p style="margin-top:12px; font-size:13px;">
+        Quelle: <code>diagrams/retrieval-pipeline.puml</code> — in der laufenden App wird sie live
+        gerendert, hier ist sie als statisches SVG eingebettet.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Was schon funktioniert</h2>
+      <ul>
+        <li>pgvector + Postgres-Volltextsuche + RRF + Cross-Encoder-Reranking laufen lokal
+          zusammen, komplett ohne externe API-Keys.</li>
+        <li>Der Reranker sortiert einen semantisch nahen, aber juristisch falschen Treffer
+          (Art. 26 statt Art. 28 DSGVO) zuverlässig nach hinten.</li>
+        <li><code>daterange</code> + <code>EXCLUDE USING gist</code> funktioniert wie geplant:
+          überlappende Fassungen werden von der DB abgelehnt.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Offene Punkte für die nächste Ausbaustufe</h2>
+      <ul>
+        <li>Keine separate Regex-Erkennung von Normverweisen; lange natürlichsprachliche Fragen
+          liefern oft 0 Volltext-Treffer (Vektorsuche fängt das ab).</li>
+        <li>Kein echter Import gegen EUR-Lex/CELLAR oder rechtsinformationen.bund.de.</li>
+        <li>Embedding-/Reranker-Modellwahl wurde nicht gegen ein Evaluationsset (Recall@10) geprüft.</li>
+        <li>Keine Graph-Schicht (Verweise, "setzt um", "ändert" zwischen Normen).</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Lokal ausprobieren</h2>
+      <p>Repo klonen, dann:</p>
+      <pre>docker compose up -d
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python ingest.py
+python app.py    # http://127.0.0.1:5050</pre>
+      <p>Volle Anleitung, CLI-Beispiele und Testfragen stehen in der README des Repos.</p>
+      <a class="cta" href="https://github.com/memmy28/law-search-test">Zum Repository →</a>
+    </section>
+
+    <p class="disclaimer">
+      Hinweis: Die DSGVO/BDSG-Texte in den Beispieldaten sind aus dem Gedächtnis rekonstruiert und
+      nur für diesen Test gedacht — vor echtem Einsatz gegen die Primärquelle (EUR-Lex,
+      gesetze-im-internet.de) prüfen. Das "Beispielgesetz (fiktiv)" ist komplett erfunden und dient
+      nur zum Testen der Zeitraum-Logik.
+    </p>
+  </main>
+</body>
+</html>
