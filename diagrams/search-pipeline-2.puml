@@ -1,0 +1,119 @@
+@startuml search-pipeline
+' ============================================================
+' Such-Pipeline für die Rechts-Wissensdatenbank
+' Hybride Suche (BM25 + Vektoren) mit Zeitfilter, RRF und Reranker
+'
+' Farbcodierung zeigt, was im lokalen Prototyp (test/) bereits
+' umgesetzt wurde und was noch offen ist.
+' ============================================================
+
+title Such-Pipeline: Erweiterung durch ein Glossar
+
+skinparam defaultFontName Arial
+skinparam ActivityBackgroundColor #F5F7FA
+skinparam ActivityBorderColor #4A6FA5
+skinparam PartitionBackgroundColor #FFFFFF
+skinparam PartitionBorderColor #9AA8BC
+skinparam NoteBackgroundColor #F5F7FA
+skinparam NoteBorderColor #4A6FA5
+skinparam ArrowColor #000000
+
+legend right
+  |= Farbe |= Bedeutung |
+  |<#CCE0E8>| ursprüngliches Diagramm |
+  |<#FFF2A0>| neu hinzugefügt |
+endlegend
+
+start
+
+:Kunde gibt Fall ein; <<#CCE0E8>>
+
+partition "1. Vorverarbeitung" {
+  :Stichtag / Zeitraum des Sachverhalts
+  extrahieren (LLM); <<#CCE0E8>>
+  :Normverweise per Regex erkennen
+  (z. B. "Art. 28 DSGVO"); <<#CCE0E8>>
+  :Suchanfrage aufbereiten
+  (ggf. Umformulierung / Fachbegriffe ergänzen); <<#CCE0E8>>
+  :Begriffe der Anfrage gegen
+  Definitionsbibliothek abgleichen; <<#FFF2A0>>
+  note right
+    NEU: Definitionsbibliothek verknüpft
+    Rechtsbegriffe mit der sie definierenden
+    Norm und allen Normen, die den Begriff
+    verwenden.
+    Beispiel: "Auftragsverarbeiter"
+      -> definiert in Art. 4 Nr. 8 DSGVO
+      -> verwendet in Art. 28, Art. 29 DSGVO
+  end note
+}
+
+partition "2. Zeit- & Begriffsfilter" {
+  :Nur Fassungen berücksichtigen mit
+  gültig_von <= Stichtag < gültig_bis
+  (inkl. Anwendbarkeit & Übergangsvorschriften); <<#CCE0E8>>
+  if (Begriff aus Definitions-
+  bibliothek erkannt?) then (ja)
+    :Kandidaten auf Normen einschränken,
+    die mit diesem Begriff verknüpft sind; <<#FFF2A0>>
+    note right
+      NEU: harte Einschränkung.
+      Nur Normen, die die erkannte 
+      Definition referenzieren, 
+      gehen in Schritt 3.
+    end note
+  else (nein)
+    :Kein Begriffsfilter -
+    alle zeitlich gültigen Normen
+    bleiben Kandidaten; <<#FFF2A0>>
+  endif
+}
+
+partition "3. Hybride Suche (parallel)" {
+  fork
+    :BM25 / Volltextsuche
+    (deutscher Analyzer: Stemming, 
+    Kompositazerlegung); <<#CCE0E8>>
+    :Filterung der Treffer; <<#CCE0E8>>
+  fork again
+    :Vektorsuche
+    (Embedding der Anfrage,
+    Kosinus-Ähnlichkeit); <<#CCE0E8>>
+    :Filterung der Treffer; <<#CCE0E8>>
+  fork again
+    :Direkter Lookup
+    über die Norm-ID; <<#CCE0E8>>
+  end fork
+}
+
+partition "4. Fusion" {
+  :Reciprocal Rank Fusion (RRF); <<#CCE0E8>>
+  :Filterung der Ergebnisse; <<#CCE0E8>>
+}
+
+partition "5. Reranking" {
+  :Cross-Encoder bewertet
+  Frage + Chunk gemeinsam; <<#CCE0E8>>
+  :Top 5–15 Chunks behalten; <<#CCE0E8>>
+}
+
+partition "6. Graph-Expansion (optional)" {
+  if (Verweise / Legaldefinitionen\nim Knowledge Graph?) then (ja)
+    :Verwiesene Normen & Definitionen
+    ergänzen (gleicher Stichtag); <<#CCE0E8>>
+  else (nein)
+  endif
+}
+
+partition "7. Antwortgenerierung" {
+  :LLM erzeugt Antwort
+  auf Basis der Chunks; <<#CCE0E8>>
+  :Zitate anfügen:
+  Norm, Fassung, Gültigkeit, Quell-URL; <<#CCE0E8>>
+}
+
+:Antwort an Kunden; <<#CCE0E8>>
+
+stop
+
+@enduml

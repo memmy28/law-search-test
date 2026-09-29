@@ -11,8 +11,11 @@ from search import DB_URL, EMBED_MODEL, RERANK_MODEL, fetch_rows, rrf_fuse, text
 
 app = Flask(__name__)
 
-PUML_PATH = os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline.puml")
-_diagram_cache = {"mtime": None, "svg": None, "error": None}
+DIAGRAM_PATHS = {
+    "1": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline.puml"),
+    "2": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline-2.puml"),
+}
+_diagram_cache = {}
 
 print(f"Lade Modelle ({EMBED_MODEL}, {RERANK_MODEL}) ...")
 embed_model = SentenceTransformer(EMBED_MODEL)
@@ -35,15 +38,20 @@ def index():
     return render_template("index.html", active_page="search")
 
 
-def render_diagram_svg():
-    """Rendert diagrams/search-pipeline.puml live über den lokalen PlantUML-Docker-Container.
-    Ergebnis wird anhand der Datei-mtime gecacht, damit Änderungen an der .puml-Datei ohne
-    manuellen Zwischenschritt beim nächsten Seitenaufruf sichtbar werden."""
-    mtime = os.path.getmtime(PUML_PATH)
-    if _diagram_cache["mtime"] == mtime:
-        return _diagram_cache["svg"], _diagram_cache["error"]
+def render_diagram_svg(version):
+    """Rendert diagrams/search-pipeline[-2].puml live über den lokalen PlantUML-Docker-Container.
+    Ergebnis wird pro Version anhand der Datei-mtime gecacht, damit Änderungen an der .puml-Datei
+    ohne manuellen Zwischenschritt beim nächsten Seitenaufruf sichtbar werden."""
+    puml_path = DIAGRAM_PATHS.get(version)
+    if puml_path is None or not os.path.exists(puml_path):
+        return None, f"Unbekannte Diagramm-Version oder Datei nicht gefunden: {version}"
 
-    with open(PUML_PATH, "rb") as f:
+    mtime = os.path.getmtime(puml_path)
+    cached = _diagram_cache.get(version)
+    if cached and cached["mtime"] == mtime:
+        return cached["svg"], cached["error"]
+
+    with open(puml_path, "rb") as f:
         puml_source = f.read()
 
     try:
@@ -54,15 +62,15 @@ def render_diagram_svg():
             timeout=30,
         )
     except (subprocess.TimeoutExpired, FileNotFoundError) as e:
-        _diagram_cache.update(mtime=mtime, svg=None, error=str(e))
+        _diagram_cache[version] = {"mtime": mtime, "svg": None, "error": str(e)}
         return None, str(e)
 
     if result.returncode != 0 or not result.stdout:
         error = result.stderr.decode("utf-8", errors="replace")
-        _diagram_cache.update(mtime=mtime, svg=None, error=error)
+        _diagram_cache[version] = {"mtime": mtime, "svg": None, "error": error}
         return None, error
 
-    _diagram_cache.update(mtime=mtime, svg=result.stdout, error=None)
+    _diagram_cache[version] = {"mtime": mtime, "svg": result.stdout, "error": None}
     return result.stdout, None
 
 
@@ -73,7 +81,8 @@ def architecture():
 
 @app.route("/architektur/diagram.svg")
 def architecture_diagram():
-    svg, error = render_diagram_svg()
+    version = request.args.get("v", "1")
+    svg, error = render_diagram_svg(version)
     if error:
         return Response(f"PlantUML-Renderfehler:\n\n{error}", status=500, mimetype="text/plain")
     return Response(svg, mimetype="image/svg+xml")
