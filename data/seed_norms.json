@@ -1,0 +1,102 @@
+[
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 8",
+    "title": "Begriffsbestimmungen – Auftragsverarbeiter",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Begriffsbestimmungen",
+    "body": "'Auftragsverarbeiter' eine natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 26 Abs. 1",
+    "title": "Gemeinsam für die Verarbeitung Verantwortliche",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 26 Gemeinsam Verantwortliche",
+    "body": "Legen zwei oder mehr Verantwortliche gemeinsam die Zwecke der und die Mittel zur Verarbeitung fest, so sind sie gemeinsam Verantwortliche. Sie legen in einer Vereinbarung untereinander in transparenter Form insbesondere fest, wer von ihnen welche Verpflichtung gemäß dieser Verordnung erfüllt, es sei denn und soweit die jeweiligen Pflichten der Verantwortlichen durch Rechtsvorschriften der Union oder der Mitgliedstaaten, denen die Verantwortlichen unterliegen, festgelegt sind.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 28 Abs. 1",
+    "title": "Auftragsverarbeiter – Pflicht zur Auswahl geeigneter Auftragsverarbeiter",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 28 Auftragsverarbeiter",
+    "body": "Erfolgt eine Verarbeitung im Auftrag eines Verantwortlichen, so arbeitet dieser nur mit Auftragsverarbeitern, die hinreichend Garantien dafür bieten, dass geeignete technische und organisatorische Maßnahmen so durchgeführt werden, dass die Verarbeitung im Einklang mit den Anforderungen dieser Verordnung erfolgt und den Schutz der Rechte der betroffenen Person gewährleistet.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 28 Abs. 3",
+    "title": "Auftragsverarbeiter – erforderliche Vertragsinhalte",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 28 Auftragsverarbeiter",
+    "body": "Die Verarbeitung durch einen Auftragsverarbeiter erfolgt auf der Grundlage eines Vertrags oder eines anderen Rechtsinstruments nach dem Unionsrecht oder dem Recht der Mitgliedstaaten, der bzw. das den Auftragsverarbeiter in Bezug auf den Verantwortlichen bindet und in dem Gegenstand und Dauer der Verarbeitung, Art und Zweck der Verarbeitung, die Art der personenbezogenen Daten und die Kategorien betroffener Personen sowie die Pflichten und Rechte des Verantwortlichen festgelegt sind.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 32 Abs. 1",
+    "title": "Sicherheit der Verarbeitung",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 32 Sicherheit der Verarbeitung",
+    "body": "Unter Berücksichtigung des Stands der Technik, der Implementierungskosten und der Art, des Umfangs, der Umstände und der Zwecke der Verarbeitung sowie der unterschiedlichen Eintrittswahrscheinlichkeit und Schwere des Risikos für die Rechte und Freiheiten natürlicher Personen treffen der Verantwortliche und der Auftragsverarbeiter geeignete technische und organisatorische Maßnahmen, um ein dem Risiko angemessenes Schutzniveau zu gewährleisten.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 88 Abs. 1",
+    "title": "Datenverarbeitung im Beschäftigungskontext",
+    "heading_context": "DSGVO – Kapitel IX: Vorschriften für besondere Verarbeitungssituationen – Art. 88 Datenverarbeitung im Beschäftigungskontext",
+    "body": "Die Mitgliedstaaten können durch Rechtsvorschriften oder durch Kollektivvereinbarungen spezifischere Vorschriften zur Gewährleistung des Schutzes der Rechte und Freiheiten hinsichtlich der Verarbeitung personenbezogener Daten von Beschäftigten im Beschäftigungskontext vorsehen, insbesondere für Zwecke der Einstellung, der Erfüllung des Arbeitsvertrags und der Beendigung des Beschäftigungsverhältnisses.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 26 Abs. 1",
+    "title": "Datenverarbeitung für Zwecke des Beschäftigungsverhältnisses",
+    "heading_context": "BDSG – Teil 2, Kapitel 2 – § 26 Datenverarbeitung für Zwecke des Beschäftigungsverhältnisses",
+    "body": "Personenbezogene Daten von Beschäftigten dürfen für Zwecke des Beschäftigungsverhältnisses verarbeitet werden, wenn dies für die Entscheidung über die Begründung eines Beschäftigungsverhältnisses oder nach Begründung des Beschäftigungsverhältnisses für dessen Durchführung oder Beendigung oder zur Ausübung oder Erfüllung der sich aus einem Gesetz oder einem Tarifvertrag, einer Betriebs- oder Dienstvereinbarung ergebenden Rechte und Pflichten der Interessenvertretung der Beschäftigten erforderlich ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__26.html"
+  },
+  {
+    "law_short": "Beispielgesetz (fiktiv)",
+    "norm_ref": "§ 5",
+    "title": "Testnorm für Zeitraum-Logik – Fassung 1 (Vergangenheit)",
+    "heading_context": "Beispielgesetz (fiktiv, nur zu Testzwecken) – § 5 Testvorschrift",
+    "body": "Fiktiver Testtext, Fassung 1: Diese Vorschrift regelt zu Demonstrationszwecken eine Melde­pflicht innerhalb von 30 Tagen. Diese Fassung war von 2015 bis Ende 2019 in Kraft.",
+    "valid_from": "2015-01-01",
+    "valid_to": "2019-12-31",
+    "source_url": "https://example.invalid/beispielgesetz/§5/fassung-1"
+  },
+  {
+    "law_short": "Beispielgesetz (fiktiv)",
+    "norm_ref": "§ 5",
+    "title": "Testnorm für Zeitraum-Logik – Fassung 2 (aktuell)",
+    "heading_context": "Beispielgesetz (fiktiv, nur zu Testzwecken) – § 5 Testvorschrift",
+    "body": "Fiktiver Testtext, Fassung 2: Diese Vorschrift regelt zu Demonstrationszwecken eine Meldepflicht innerhalb von 14 Tagen. Diese Fassung ist seit 2020 in Kraft und gilt derzeit.",
+    "valid_from": "2020-01-01",
+    "valid_to": "2026-12-31",
+    "source_url": "https://example.invalid/beispielgesetz/§5/fassung-2"
+  },
+  {
+    "law_short": "Beispielgesetz (fiktiv)",
+    "norm_ref": "§ 5",
+    "title": "Testnorm für Zeitraum-Logik – Fassung 3 (Zukunft)",
+    "heading_context": "Beispielgesetz (fiktiv, nur zu Testzwecken) – § 5 Testvorschrift",
+    "body": "Fiktiver Testtext, Fassung 3: Diese Vorschrift regelt zu Demonstrationszwecken eine Meldepflicht innerhalb von 72 Stunden. Diese Fassung tritt erst 2027 in Kraft.",
+    "valid_from": "2027-01-01",
+    "valid_to": null,
+    "source_url": "https://example.invalid/beispielgesetz/§5/fassung-3"
+  }
+]

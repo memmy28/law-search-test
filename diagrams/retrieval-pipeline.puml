@@ -1,0 +1,152 @@
+@startuml retrieval-pipeline
+' ============================================================
+' Retrieval-Pipeline für die Rechts-Wissensdatenbank
+' Hybride Suche (BM25 + Vektoren) mit Zeitfilter, RRF und Reranker
+'
+' Farbcodierung zeigt, was im lokalen Prototyp (test/) bereits
+' umgesetzt wurde und was noch offen ist.
+' ============================================================
+
+title Such-Pipeline: Hybride Suche mit Zeitfilter
+
+skinparam defaultFontName Arial
+skinparam ActivityBackgroundColor #F5F7FA
+skinparam ActivityBorderColor #4A6FA5
+skinparam PartitionBackgroundColor #FFFFFF
+skinparam PartitionBorderColor #9AA8BC
+skinparam NoteBackgroundColor #F5F7FA
+skinparam NoteBorderColor #4A6FA5
+skinparam ArrowColor #000000
+
+legend right
+  |= Farbe |= Bedeutung |
+  |<#B0CE9C>| umgesetzt im Prototyp |
+  |<#FFF2A0>| teilweise umgesetzt |
+  |<#FFA59B>| noch nicht umgesetzt |
+endlegend
+
+start
+
+:Kunde gibt Fall ein; <<#FFF2A0>>
+note right
+  Einfaches Web-Formular.
+  Kein Chat-Verlauf, keine Rückfragen.
+end note
+
+partition "1. Vorverarbeitung" {
+  :Stichtag / Zeitraum des Sachverhalts
+  extrahieren (LLM); <<#FFA59B>>
+  note right
+    Stichtag wird hier manuell über 
+    das Datumsfeld übergeben, nicht 
+    aus dem Fließtext extrahiert.
+  end note
+  :Normverweise per Regex erkennen
+  (z. B. "Art. 28 DSGVO"); <<#FFA59B>>
+  :Suchanfrage aufbereiten
+  (ggf. Umformulierung / Fachbegriffe ergänzen); <<#FFA59B>>
+}
+
+partition "2. Zeitfilter" {
+  :Nur Fassungen berücksichtigen mit
+  gültig_von <= Stichtag < gültig_bis
+  (inkl. Anwendbarkeit & Übergangsvorschriften); <<#B0CE9C>>
+  note right
+    Kernfilter (daterange @> Stichtag) ist
+    umgesetzt und per SQL-Test verifiziert.
+    Anwendbarkeit und Übergangsvorschriften
+    als eigene Felder gibt es noch nicht.
+  end note
+}
+
+partition "3. Hybride Suche (parallel)" {
+  fork
+    :BM25 / Volltextsuche
+    (deutscher Analyzer:
+    Stemming, Kompositazerlegung); <<#B0CE9C>>
+    note right
+      ts_rank auf deutschem tsvector
+      inkl. Stemming ist umgesetzt.
+      Kompositazerlegung leistet der
+      Postgres-Analyzer nicht wirklich –
+      dafür bräuchte es einen externen
+      Tokenizer.
+    end note
+    :Top 50 Treffer; <<#B0CE9C>>
+    note right: Default im Prototyp: Top 30, konfigurierbar.
+  fork again
+    :Vektorsuche
+    (Embedding der Anfrage,
+    Kosinus-Ähnlichkeit); <<#B0CE9C>>
+    :Top 50 Treffer; <<#B0CE9C>>
+    note right: Default im Prototyp: Top 30, konfigurierbar.
+  fork again
+    :Direkter Lookup
+    erkannter Normverweise
+    (Norm-ID); <<#FFA59B>>
+    note right
+      Nicht umgesetzt als eigener Pfad.
+      Normverweise werden nur indirekt über
+      die Volltextsuche gefunden (norm_ref
+      ist Teil des tsvector).
+    end note
+  end fork
+}
+
+partition "4. Fusion" {
+  :Reciprocal Rank Fusion (RRF)
+  Score = Σ 1 / (60 + Rang); <<#B0CE9C>>
+  :50–100 Kandidaten; <<#B0CE9C>>
+  note right: Default im Prototyp: bis zu 30 Kandidaten.
+}
+
+partition "5. Reranking" {
+  :Cross-Encoder bewertet
+  Frage + Chunk gemeinsam; <<#B0CE9C>>
+  note right: cross-encoder/mmarco-mMiniLMv2-L12-H384-v1, lokal via sentence-transformers.
+  :Top 5–15 Chunks behalten; <<#B0CE9C>>
+}
+
+partition "6. Graph-Expansion (optional)" {
+  if (Verweise / Legaldefinitionen\nim Knowledge Graph?) then (ja)
+    :Verwiesene Normen & Definitionen
+    ergänzen (gleicher Stichtag); <<#FFA59B>>
+    note right
+      Komplett offen. Keine Graph-Schicht,
+      keine Relationsdaten im Schema.
+      z. B. Art. 28 -> Art. 32 DSGVO,
+      Art. 4 Nr. 8 (Definition)
+    end note
+  else (nein)
+  endif
+}
+
+partition "7. Antwortgenerierung" {
+  :LLM erzeugt Antwort
+  auf Basis der Chunks; <<#FFA59B>>
+  note right
+    Nicht umgesetzt. Der Prototyp zeigt
+    die gerankten Chunks direkt an,
+    ohne generative Zusammenfassung.
+  end note
+  :Zitate anfügen:
+  Norm, Fassung, Gültigkeit, Quell-URL; <<#FFF2A0>>
+  note right
+    Metadaten (Norm, Fassung, Gültigkeit,
+    Quelle) werden korrekt mitgeführt und
+    angezeigt – aber als strukturierte
+    Karten/Detailseite, nicht als von
+    einem LLM formulierte Zitation.
+  end note
+}
+
+:Antwort an Kunden; <<#FFF2A0>>
+note right
+  Ergebnisliste + Detailseiten sind
+  umgesetzt; eine zusammenfassende,
+  LLM-generierte Antwort fehlt noch.
+end note
+
+stop
+
+@enduml
