@@ -113,7 +113,7 @@ def api_search():
     query = request.args.get("query", "").strip()
     as_of_str = request.args.get("as_of") or str(date.today())
     top_k = int(request.args.get("top_k", 5))
-    candidates = int(request.args.get("candidates", 30))
+    candidates = int(request.args.get("candidates", 5))
 
     if not query:
         return jsonify({"error": "query fehlt"}), 400

@@ -52,8 +52,7 @@ partition "2. Zeitfilter" {
   gültig_von <= Stichtag < gültig_bis
   (inkl. Anwendbarkeit & Übergangsvorschriften); <<#B0CE9C>>
   note right
-    Kernfilter (daterange @> Stichtag) ist
-    umgesetzt und per SQL-Test verifiziert.
+    Filterung des Stichtags ist umgesetzt.
     Anwendbarkeit und Übergangsvorschriften
     als eigene Felder gibt es noch nicht.
   end note
@@ -62,48 +61,55 @@ partition "2. Zeitfilter" {
 partition "3. Hybride Suche (parallel)" {
   fork
     :BM25 / Volltextsuche
-    (deutscher Analyzer:
-    Stemming, Kompositazerlegung); <<#B0CE9C>>
+    (deutscher Analyzer: Stemming, 
+    Kompositazerlegung); <<#FFF2A0>>
     note right
-      ts_rank auf deutschem tsvector
-      inkl. Stemming ist umgesetzt.
-      Kompositazerlegung leistet der
-      Postgres-Analyzer nicht wirklich –
-      dafür bräuchte es einen externen
-      Tokenizer.
+      Kompositazerlegung leistet 
+      der Postgres-Analyzer nicht 
+      – dafür bräuchte es einen 
+      externen Tokenizer.
     end note
-    :Top 50 Treffer; <<#B0CE9C>>
-    note right: Default im Prototyp: Top 30, konfigurierbar.
+    :Filterung der Treffer; <<#B0CE9C>>
+    note right
+      Default im Prototyp:
+      Top 5 (konfigurierbar)
+    end note
   fork again
     :Vektorsuche
     (Embedding der Anfrage,
     Kosinus-Ähnlichkeit); <<#B0CE9C>>
-    :Top 50 Treffer; <<#B0CE9C>>
-    note right: Default im Prototyp: Top 30, konfigurierbar.
+    :Filterung der Treffer; <<#B0CE9C>>
+     note right
+      Default im Prototyp:
+      Top 5 (konfigurierbar)
+    end note
   fork again
     :Direkter Lookup
-    erkannter Normverweise
-    (Norm-ID); <<#FFA59B>>
+    über die Norm-ID; <<#FFA59B>>
     note right
-      Nicht umgesetzt als eigener Pfad.
-      Normverweise werden nur indirekt über
-      die Volltextsuche gefunden (norm_ref
-      ist Teil des tsvector).
+      Normverweise nur 
+      indirekt über Voll-
+      textsuche gefunden
     end note
   end fork
 }
 
 partition "4. Fusion" {
-  :Reciprocal Rank Fusion (RRF)
-  Score = Σ 1 / (60 + Rang); <<#B0CE9C>>
-  :50–100 Kandidaten; <<#B0CE9C>>
-  note right: Default im Prototyp: bis zu 30 Kandidaten.
+  :Reciprocal Rank Fusion (RRF); <<#B0CE9C>>
+  :Filterung der Ergebnisse; <<#B0CE9C>>
+  note right
+    Default im Prototyp: 
+    bis zu 5 Kandidaten.
+  end note
 }
 
 partition "5. Reranking" {
   :Cross-Encoder bewertet
   Frage + Chunk gemeinsam; <<#B0CE9C>>
-  note right: cross-encoder/mmarco-mMiniLMv2-L12-H384-v1, lokal via sentence-transformers.
+  note right
+    cross-encoder/mmarco-mMiniLMv2-L12-H384-v1,
+    lokal via sentence-transformers.
+  end note
   :Top 5–15 Chunks behalten; <<#B0CE9C>>
 }
 
@@ -111,12 +117,6 @@ partition "6. Graph-Expansion (optional)" {
   if (Verweise / Legaldefinitionen\nim Knowledge Graph?) then (ja)
     :Verwiesene Normen & Definitionen
     ergänzen (gleicher Stichtag); <<#FFA59B>>
-    note right
-      Komplett offen. Keine Graph-Schicht,
-      keine Relationsdaten im Schema.
-      z. B. Art. 28 -> Art. 32 DSGVO,
-      Art. 4 Nr. 8 (Definition)
-    end note
   else (nein)
   endif
 }
@@ -125,26 +125,23 @@ partition "7. Antwortgenerierung" {
   :LLM erzeugt Antwort
   auf Basis der Chunks; <<#FFA59B>>
   note right
-    Nicht umgesetzt. Der Prototyp zeigt
-    die gerankten Chunks direkt an,
-    ohne generative Zusammenfassung.
+    Prototyp zeigt gerankten 
+    Chunks direkt an (ohne 
+    generative Zusammenfassung)
   end note
   :Zitate anfügen:
   Norm, Fassung, Gültigkeit, Quell-URL; <<#FFF2A0>>
   note right
-    Metadaten (Norm, Fassung, Gültigkeit,
-    Quelle) werden korrekt mitgeführt und
-    angezeigt – aber als strukturierte
-    Karten/Detailseite, nicht als von
-    einem LLM formulierte Zitation.
+    Metadaten werden angezeigt, 
+    aber ohne korrekte Zitation
   end note
 }
 
 :Antwort an Kunden; <<#FFF2A0>>
 note right
-  Ergebnisliste + Detailseiten sind
-  umgesetzt; eine zusammenfassende,
-  LLM-generierte Antwort fehlt noch.
+  Ergebnisliste und Detailseiten,
+  noch keine LLM-generierte 
+  Antwort 
 end note
 
 stop

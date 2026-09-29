@@ -65,7 +65,7 @@ def main():
     parser = argparse.ArgumentParser(description="Prototyp: hybride Suche über zeitlich versionierte Normen")
     parser.add_argument("query", help="Frage / Fallbeschreibung")
     parser.add_argument("--as-of", default=str(date.today()), help="Stichtag YYYY-MM-DD (Standard: heute)")
-    parser.add_argument("--candidates", type=int, default=30, help="Kandidaten pro Suchweg vor dem Reranking")
+    parser.add_argument("--candidates", type=int, default=5, help="Kandidaten pro Suchweg vor dem Reranking")
     parser.add_argument("--top-k", type=int, default=5, help="Anzahl Ergebnisse nach Reranking")
     args = parser.parse_args()
 

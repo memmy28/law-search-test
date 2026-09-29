@@ -22,7 +22,7 @@
   }
   header {
     padding: 40px 32px 24px;
-    max-width: 860px;
+    max-width: 1000px;
     margin: 0 auto;
   }
   h1 {
@@ -115,11 +115,11 @@
 </head>
 <body>
   <header>
-    <h1>Rechts-Wissensdatenbank <span class="tag">Prototyp – statische Vorschau</span></h1>
+    <h1>Rechts-Wissensdatenbank <span class="tag">Prototyp – Aufbau und Architektur</span></h1>
     <p class="subtitle">
       Machbarkeitstest für eine zeitversionierte Rechts-Wissensdatenbank: hybride Suche
       (Volltext + Vektor + Reranking) über Gesetze und Normen mit Gültigkeitszeiträumen in
-      Vergangenheit, Gegenwart und Zukunft. Diese Seite ist eine statische Vorschau — die
+      Vergangenheit, Gegenwart und Zukunft. Diese Seite zeigt die Idee und eine Architektur — die
       interaktive App (Suche, Zeitstrahl, Normen-Datenbank) läuft lokal, siehe unten.
     </p>
   </header>
@@ -129,7 +129,7 @@
       <h2>Drei Kernideen</h2>
       <ul>
         <li>Speichereinheit ist die einzelne <strong>Norm-Fassung</strong> mit Gültigkeitszeitraum
-          (<code>daterange</code>); die Datenbank verhindert per Constraint, dass sich zwei Fassungen
+          <code>daterange</code>; die Datenbank verhindert per Constraint, dass sich zwei Fassungen
           derselben Norm zeitlich überlappen.</li>
         <li><strong>Hybride Suche:</strong> Volltext (Postgres <code>tsvector</code>, deutscher
           Analyzer) + Vektorsuche (pgvector), kombiniert per Reciprocal Rank Fusion, danach
@@ -143,11 +143,11 @@
     <section class="panel">
       <h2>Architektur</h2>
       <p>
-        Retrieval-Pipeline mit Zeitfilter, RRF-Fusion und Reranking. Grün markiert, was im Prototyp
-        umgesetzt ist, orange teilweise, grau noch offen.
+        Such-Pipeline mit Zeitfilter, RRF-Fusion und Reranking. Grün markiert, was im Prototyp
+        umgesetzt ist, gelb teilweise, rot noch offen.
       </p>
       <div class="diagram-wrap">
-        <img src="retrieval-pipeline.svg" alt="Retrieval-Pipeline Diagramm" />
+        <img src="retrieval-pipeline.svg" alt="Such-Pipeline Diagramm" />
       </div>
       <p style="margin-top:12px; font-size:13px;">
         Quelle: <code>diagrams/retrieval-pipeline.puml</code> — in der laufenden App wird sie live
