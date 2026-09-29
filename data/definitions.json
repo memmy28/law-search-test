@@ -1,0 +1,18 @@
+[
+  {
+    "term": "Auftragsverarbeiter",
+    "definition_text": "Eine natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet (Art. 4 Nr. 8 DSGVO).",
+    "defining_norm": {"law_short": "DSGVO", "norm_ref": "Art. 4 Nr. 8"},
+    "used_by": [
+      {"law_short": "DSGVO", "norm_ref": "Art. 28 Abs. 1"},
+      {"law_short": "DSGVO", "norm_ref": "Art. 28 Abs. 3"},
+      {"law_short": "DSGVO", "norm_ref": "Art. 32 Abs. 1"}
+    ]
+  },
+  {
+    "term": "gemeinsam Verantwortliche",
+    "definition_text": "Legen zwei oder mehr Verantwortliche gemeinsam die Zwecke der und die Mittel zur Verarbeitung fest, so sind sie gemeinsam Verantwortliche (Art. 26 Abs. 1 DSGVO).",
+    "defining_norm": {"law_short": "DSGVO", "norm_ref": "Art. 26 Abs. 1"},
+    "used_by": []
+  }
+]

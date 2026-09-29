@@ -1,12 +1,15 @@
 # Prototyp: zeitversionierte Rechts-Wissensdatenbank
 
-Kleiner Machbarkeitstest für drei Kernideen:
+Kleiner Machbarkeitstest für vier Kernideen:
 
 1. Speichereinheit = einzelne Norm-Fassung mit Gültigkeitszeitraum (`daterange`), DB erzwingt per
    `EXCLUDE`-Constraint, dass sich zwei Fassungen derselben Norm nicht überlappen.
 2. Hybride Suche: Volltext (Postgres `tsvector`, deutscher Analyzer) + Vektorsuche (pgvector),
    kombiniert per Reciprocal Rank Fusion, danach Reranking mit einem Cross-Encoder.
 3. Stichtag-Filterung: die Suche liefert nur an einem gegebenen Datum gültige Fassungen.
+4. Definitionsbibliothek: Rechtsbegriffe verknüpfen die sie definierende Norm mit den Normen, die
+   sie verwenden. Erkennt die Suche einen solchen Begriff in der Anfrage, schränkt sie die
+   Kandidaten hart auf die verknüpften Normen ein, statt nur per Reranking herunterzustufen.
 
 **Hinweis zu den Daten:** Die DSGVO/BDSG-Texte in `data/seed_norms.json` sind aus dem Gedächtnis
 rekonstruiert und nur für diesen Test gedacht — vor echtem Einsatz gegen die Primärquelle (EUR-Lex,
@@ -38,6 +41,9 @@ nach RRF-Fusion übrig bleiben.
 Über die Navbar erreichbar:
 - **Suche** (`/`) – die oben beschriebene Such-Oberfläche inkl. Zeitstrahl aller Normen.
 - **Datenbank** (`/datenbank`) – alle Normen gruppiert nach Gesetz, mit Gültigkeitszeitraum und Status.
+- **Definitionen** (`/definitionen`) – alle Begriffe der Definitionsbibliothek mit definierender Norm
+  und verwendenden Normen. Norm-Detailseiten zeigen unter "Verweise auf Definitionen" dieselbe
+  Verknüpfung aus Sicht der einzelnen Norm.
 - **Architektur** (`/architektur`) – die Such-Pipeline als Diagramm, farblich markiert nach
   umgesetzt/teilweise/offen. Quelle ist `diagrams/search-pipeline.puml`; Flask rendert die Datei
   bei jedem Aufruf von `/architektur/diagram.svg` live über den lokalen PlantUML-Docker-Container neu
@@ -61,6 +67,10 @@ python search.py "Art. 28 Abs. 3 DSGVO"
 python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2018-06-01   # -> Fassung 1 (Vergangenheit)
 python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2026-09-29  # -> Fassung 2 (aktuell)
 python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2028-01-01  # -> Fassung 3 (Zukunft)
+
+# Begriffsfilter: "Auftragsverarbeiter" ist in der Definitionsbibliothek hinterlegt -> Kandidaten
+# werden hart auf die 4 verknüpften Normen eingeschränkt, Art. 26 (der "false friend") fällt komplett weg
+python search.py "Auftragsverarbeiter Vertrag"
 ```
 
 ## Was validiert wurde
@@ -76,6 +86,10 @@ python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2028-01-01  # -> Fa
   `body`. Nach Aufnahme von `law_short`/`norm_ref` in den generierten `search_vector` (siehe
   `schema.sql`) finden sowohl reine Fachbegriffe ("Sicherheit der Verarbeitung") als auch exakte
   Normverweise ("Art. 28 Abs. 3 DSGVO") zuverlässig Treffer.
+- Der Begriffsfilter über die Definitionsbibliothek (`definitions`/`definition_links`) löst das
+  Art.-26-vs.-Art.-28-Problem robuster als der Reranker allein: statt den falschen Treffer nur
+  herunterzustufen, verschwindet er komplett aus der Kandidatenmenge, sobald ein bekannter Begriff
+  erkannt wird.
 
 ## Offene Fragen für die nächste Ausbaustufe
 
@@ -85,4 +99,8 @@ python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2028-01-01  # -> Fa
   plus ggf. `websearch_to_tsquery` oder OR-Verknüpfung einzelner Begriffe.
 - Kein echter Import-Pipeline-Test gegen EUR-Lex/CELLAR oder rechtsinformationen.bund.de.
 - Embedding-/Reranker-Modellwahl wurde nicht gegen ein Evaluationsset (Recall@10) verglichen.
-- Graph-Schicht (Verweise, "setzt um", "ändert") ist in diesem Prototyp nicht enthalten.
+- Graph-Schicht für Normverweise ("verweist auf", "setzt um", "ändert") ist weiterhin nicht enthalten
+  — nur die Definitionsbibliothek als erste, engere Form einer Normen-Verknüpfung.
+- Der Begriffsabgleich in `find_matching_definitions()` ist ein simpler case-insensitiver
+  Teilstring-Match, keine echte linguistische Analyse (z. B. keine Erkennung von Synonymen oder
+  Ambiguitäten wie einem Begriff mit zwei unterschiedlichen Definitionen in verschiedenen Gesetzen).

@@ -7,7 +7,17 @@ from flask import Flask, Response, abort, jsonify, render_template, request
 from pgvector.psycopg2 import register_vector
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from search import DB_URL, EMBED_MODEL, RERANK_MODEL, fetch_rows, rrf_fuse, text_search, vector_search
+from search import (
+    DB_URL,
+    EMBED_MODEL,
+    RERANK_MODEL,
+    fetch_rows,
+    find_matching_definitions,
+    linked_norm_ids,
+    rrf_fuse,
+    text_search,
+    vector_search,
+)
 
 app = Flask(__name__)
 
@@ -117,6 +127,31 @@ def database():
     )
 
 
+@app.route("/definitionen")
+def definitions():
+    cur = conn.cursor()
+    cur.execute("SELECT id, term, definition_text FROM definitions ORDER BY term")
+    defs = [dict(zip(["id", "term", "definition_text"], r)) for r in cur.fetchall()]
+
+    for d in defs:
+        cur.execute(
+            """
+            SELECT n.id, n.law_short, n.norm_ref, n.title, dl.role
+            FROM definition_links dl
+            JOIN norms n ON n.id = dl.norm_id
+            WHERE dl.definition_id = %s
+            ORDER BY dl.role, n.law_short, n.norm_ref
+            """,
+            (d["id"],),
+        )
+        links = [dict(zip(["id", "law_short", "norm_ref", "title", "role"], r)) for r in cur.fetchall()]
+        d["defined_by"] = [l for l in links if l["role"] == "definiert"]
+        d["used_by"] = [l for l in links if l["role"] == "verwendet"]
+
+    cur.close()
+    return render_template("definitions.html", active_page="definitions", definitions=defs)
+
+
 @app.route("/api/search")
 def api_search():
     query = request.args.get("query", "").strip()
@@ -131,8 +166,12 @@ def api_search():
     cur = conn.cursor()
 
     qvec = embed_model.encode(f"query: {query}", normalize_embeddings=True)
-    vec_ids = vector_search(cur, qvec, as_of_str, candidates)
-    txt_ids = text_search(cur, query, as_of_str, candidates)
+
+    matched_defs = find_matching_definitions(cur, query)
+    allowed_ids = linked_norm_ids(cur, [d["id"] for d in matched_defs]) if matched_defs else None
+
+    vec_ids = vector_search(cur, qvec, as_of_str, candidates, allowed_ids)
+    txt_ids = text_search(cur, query, as_of_str, candidates, allowed_ids)
     fused = rrf_fuse([vec_ids, txt_ids])
     candidate_ids = [doc_id for doc_id, _ in fused[:candidates]]
     rows = fetch_rows(cur, candidate_ids)
@@ -168,6 +207,8 @@ def api_search():
             "vector_candidates": len(vec_ids),
             "text_candidates": len(txt_ids),
             "fused_candidates": len(candidate_ids),
+            "matched_definitions": [{"term": d["term"]} for d in matched_defs],
+            "allowed_norm_count": len(allowed_ids) if allowed_ids is not None else None,
             "results": results,
         }
     )
@@ -231,6 +272,21 @@ def norm_detail(norm_id):
         (norm["law_short"], norm["norm_ref"]),
     )
     versions = [dict(zip(["id", "valid_from", "valid_to", "title"], r)) for r in cur.fetchall()]
+
+    cur.execute(
+        """
+        SELECT d.id, d.term, dl.role
+        FROM definition_links dl
+        JOIN definitions d ON d.id = dl.definition_id
+        WHERE dl.norm_id = %s
+        ORDER BY dl.role, d.term
+        """,
+        (norm_id,),
+    )
+    def_links = [dict(zip(["id", "term", "role"], r)) for r in cur.fetchall()]
+    defines = [l for l in def_links if l["role"] == "definiert"]
+    uses = [l for l in def_links if l["role"] == "verwendet"]
+
     cur.close()
 
     today = date.today()
@@ -238,7 +294,9 @@ def norm_detail(norm_id):
     for v in versions:
         v["status"] = classify_validity(v["valid_from"], v["valid_to"], today)
 
-    return render_template("norm_detail.html", norm=norm, versions=versions)
+    return render_template(
+        "norm_detail.html", norm=norm, versions=versions, defines=defines, uses=uses
+    )
 
 
 if __name__ == "__main__":

@@ -42,10 +42,17 @@ async function runSearch() {
     return;
   }
 
-  pipelineEl.textContent =
+  let pipelineText =
     `Stichtag ${data.as_of} · ${data.vector_candidates} Kandidaten (Vektor) / ` +
     `${data.text_candidates} (Volltext) → ${data.fused_candidates} nach RRF-Fusion → ` +
     `${data.results.length} nach Reranking`;
+  if (data.matched_definitions && data.matched_definitions.length > 0) {
+    const terms = data.matched_definitions.map((d) => d.term).join(", ");
+    pipelineText =
+      `Begriff erkannt: "${terms}" → Suche auf ${data.allowed_norm_count} verknüpfte Norm(en) eingeschränkt · ` +
+      pipelineText;
+  }
+  pipelineEl.textContent = pipelineText;
   pipelineEl.classList.remove("hidden");
 
   if (data.results.length === 0) {

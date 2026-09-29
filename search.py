@@ -20,29 +20,55 @@ def rrf_fuse(rank_lists, k=RRF_K):
     return sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
 
 
-def vector_search(cur, qvec, as_of, limit):
+def vector_search(cur, qvec, as_of, limit, allowed_ids=None):
     cur.execute(
         """
         SELECT id FROM norms
         WHERE daterange(valid_from, valid_to, '[]') @> %s::date
+          AND (%s::int[] IS NULL OR id = ANY(%s))
         ORDER BY embedding <=> %s
         LIMIT %s
         """,
-        (as_of, qvec, limit),
+        (as_of, allowed_ids, allowed_ids, qvec, limit),
     )
     return [row[0] for row in cur.fetchall()]
 
 
-def text_search(cur, query, as_of, limit):
+def text_search(cur, query, as_of, limit, allowed_ids=None):
     cur.execute(
         """
         SELECT id FROM norms
         WHERE daterange(valid_from, valid_to, '[]') @> %s::date
+          AND (%s::int[] IS NULL OR id = ANY(%s))
           AND search_vector @@ plainto_tsquery('german', %s)
         ORDER BY ts_rank(search_vector, plainto_tsquery('german', %s)) DESC
         LIMIT %s
         """,
-        (as_of, query, query, limit),
+        (as_of, allowed_ids, allowed_ids, query, query, limit),
+    )
+    return [row[0] for row in cur.fetchall()]
+
+
+def find_matching_definitions(cur, query):
+    """Erkennt Rechtsbegriffe aus der Definitionsbibliothek in der Anfrage
+    (case-insensitiver Teilstring-Abgleich - ein Prototyp-Kompromiss, der
+    Stemming/Flexionsformen wie "Auftragsverarbeitern" als Präfix mitnimmt,
+    aber keine echte linguistische Analyse ersetzt)."""
+    cur.execute("SELECT id, term, definition_text FROM definitions")
+    query_lower = query.lower()
+    return [
+        {"id": def_id, "term": term, "definition_text": definition_text}
+        for def_id, term, definition_text in cur.fetchall()
+        if term.lower() in query_lower
+    ]
+
+
+def linked_norm_ids(cur, definition_ids):
+    if not definition_ids:
+        return None
+    cur.execute(
+        "SELECT DISTINCT norm_id FROM definition_links WHERE definition_id = ANY(%s)",
+        (definition_ids,),
     )
     return [row[0] for row in cur.fetchall()]
 
@@ -79,14 +105,20 @@ def main():
 
     qvec = embed_model.encode(f"query: {args.query}", normalize_embeddings=True)
 
-    vec_ids = vector_search(cur, qvec, args.as_of, args.candidates)
-    txt_ids = text_search(cur, args.query, args.as_of, args.candidates)
+    matched_defs = find_matching_definitions(cur, args.query)
+    allowed_ids = linked_norm_ids(cur, [d["id"] for d in matched_defs]) if matched_defs else None
+
+    vec_ids = vector_search(cur, qvec, args.as_of, args.candidates, allowed_ids)
+    txt_ids = text_search(cur, args.query, args.as_of, args.candidates, allowed_ids)
 
     fused = rrf_fuse([vec_ids, txt_ids])
     candidate_ids = [doc_id for doc_id, _ in fused[: args.candidates]]
     rows = fetch_rows(cur, candidate_ids)
 
     print(f"\nAnfrage: {args.query!r}  |  Stichtag: {args.as_of}")
+    if matched_defs:
+        terms = ", ".join(d["term"] for d in matched_defs)
+        print(f"Begriff(e) erkannt: {terms} -> Suche eingeschränkt auf {len(allowed_ids)} verknüpfte Norm(en)")
     print(f"Kandidaten: {len(vec_ids)} (Vektor) / {len(txt_ids)} (Volltext) -> {len(candidate_ids)} nach RRF-Fusion")
 
     if not candidate_ids:

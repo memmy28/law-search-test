@@ -29,3 +29,23 @@ CREATE TABLE IF NOT EXISTS norms (
 
 CREATE INDEX IF NOT EXISTS norms_search_idx ON norms USING gin (search_vector);
 CREATE INDEX IF NOT EXISTS norms_embedding_idx ON norms USING hnsw (embedding vector_cosine_ops);
+
+-- Definitionsbibliothek: Rechtsbegriffe, die eine Norm definiert und die andere
+-- Normen verwenden. Wird zur Suchzeit genutzt, um bei erkanntem Begriff die
+-- Kandidatenmenge hart auf verknüpfte Normen einzuschränken.
+CREATE TABLE IF NOT EXISTS definitions (
+    id SERIAL PRIMARY KEY,
+    term VARCHAR(100) NOT NULL UNIQUE,
+    definition_text TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS definition_links (
+    id SERIAL PRIMARY KEY,
+    definition_id INTEGER NOT NULL REFERENCES definitions(id) ON DELETE CASCADE,
+    norm_id INTEGER NOT NULL REFERENCES norms(id) ON DELETE CASCADE,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('definiert', 'verwendet')),
+    UNIQUE (definition_id, norm_id, role)
+);
+
+CREATE INDEX IF NOT EXISTS definition_links_norm_idx ON definition_links (norm_id);
+CREATE INDEX IF NOT EXISTS definition_links_def_idx ON definition_links (definition_id);

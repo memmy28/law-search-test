@@ -49,6 +49,28 @@
         {% endfor %}
       </ul>
     </section>
+
+    {% if defines or uses %}
+    <section class="panel">
+      <h2>Verweise auf Definitionen</h2>
+      {% if defines %}
+      <p class="def-links-label">Definiert</p>
+      <ul class="def-links">
+        {% for d in defines %}
+        <li><a href="/definitionen">{{ d.term }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if uses %}
+      <p class="def-links-label">Verwendet</p>
+      <ul class="def-links">
+        {% for d in uses %}
+        <li><a href="/definitionen">{{ d.term }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </section>
+    {% endif %}
   </main>
 </body>
 </html>
