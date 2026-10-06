@@ -1,5 +1,6 @@
 import os
 import subprocess
+import time
 from datetime import date
 
 import psycopg2
@@ -76,18 +77,26 @@ def run_jev_classification(cur, query):
     in einer gemeinsamen Transaktion, damit sie denselben created_at-Zeitstempel
     tragen und sich später als ein Lauf zusammenführen lassen.
 
-    Gibt ein Dict zurück: {laws, norms, law_error, norm_error}. Ein Fehler in
-    Stufe 2 verwirft nicht das Ergebnis von Stufe 1 - die Suche bleibt in jedem
-    Fall funktionsfähig."""
+    Gibt ein Dict zurück: {laws, norms, law_error, norm_error, duration_ms,
+    question_count, estimated_cost_usd}. Ein Fehler in Stufe 2 verwirft nicht
+    das Ergebnis von Stufe 1 - die Suche bleibt in jedem Fall funktionsfähig."""
     cur.execute("SELECT DISTINCT law_short FROM norms ORDER BY law_short")
     all_laws = [row[0] for row in cur.fetchall()]
+
+    started = time.monotonic()
 
     try:
         law_results = jev.classify_laws(query, all_laws)
     except jev.JevError as e:
-        return {"laws": None, "norms": [], "law_error": str(e), "norm_error": None}
+        duration_ms = (time.monotonic() - started) * 1000
+        return {
+            "laws": None, "norms": [], "law_error": str(e), "norm_error": None,
+            "duration_ms": duration_ms, "question_count": 0, "estimated_cost_usd": 0.0,
+            "cost_per_question_usd": jev.JEV_ESTIMATED_COST_PER_QUESTION_USD,
+        }
 
     relevant_laws = [r["law"] for r in law_results if r["relevant"]]
+    question_count = len(all_laws)
 
     norm_results = []
     norm_error = None
@@ -102,10 +111,14 @@ def run_jev_classification(cur, query):
         )
         cols = ["id", "law_short", "norm_ref", "title"]
         candidate_norms = [dict(zip(cols, r)) for r in cur.fetchall()]
+        question_count += len(candidate_norms)
         try:
             norm_results = jev.classify_norms(query, candidate_norms)
         except jev.JevError as e:
             norm_error = str(e)
+
+    duration_ms = (time.monotonic() - started) * 1000
+    estimated_cost_usd = question_count * jev.JEV_ESTIMATED_COST_PER_QUESTION_USD
 
     for r in law_results:
         cur.execute(
@@ -125,7 +138,16 @@ def run_jev_classification(cur, query):
         )
     conn.commit()
 
-    return {"laws": law_results, "norms": norm_results, "law_error": None, "norm_error": norm_error}
+    return {
+        "laws": law_results,
+        "norms": norm_results,
+        "law_error": None,
+        "norm_error": norm_error,
+        "duration_ms": duration_ms,
+        "question_count": question_count,
+        "estimated_cost_usd": estimated_cost_usd,
+        "cost_per_question_usd": jev.JEV_ESTIMATED_COST_PER_QUESTION_USD,
+    }
 
 
 def classify_validity(valid_from, valid_to, as_of):
@@ -318,12 +340,18 @@ def api_search():
 
     law_classification, jev_error = None, None
     norm_classification, norm_jev_error = [], None
+    jev_duration_ms, jev_question_count, jev_estimated_cost_usd = None, None, None
+    jev_cost_per_question_usd = None
     if state == "classification":
         classification = run_jev_classification(cur, query)
         law_classification = classification["laws"]
         jev_error = classification["law_error"]
         norm_classification = classification["norms"]
         norm_jev_error = classification["norm_error"]
+        jev_duration_ms = classification["duration_ms"]
+        jev_question_count = classification["question_count"]
+        jev_estimated_cost_usd = classification["estimated_cost_usd"]
+        jev_cost_per_question_usd = classification["cost_per_question_usd"]
 
     vec_ids = vector_search(cur, qvec, as_of_str, candidates, allowed_ids)
     txt_ids = text_search(cur, query, as_of_str, candidates, allowed_ids)
@@ -368,6 +396,10 @@ def api_search():
             "jev_error": jev_error,
             "norm_classification": norm_classification,
             "norm_jev_error": norm_jev_error,
+            "jev_duration_ms": jev_duration_ms,
+            "jev_question_count": jev_question_count,
+            "jev_estimated_cost_usd": jev_estimated_cost_usd,
+            "jev_cost_per_question_usd": jev_cost_per_question_usd,
             "results": results,
         }
     )

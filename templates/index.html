@@ -83,6 +83,13 @@
 
     <section id="results"></section>
 
+    {% if app_state == 'classification' %}
+    <section id="jev-cost-card" class="panel hidden">
+      <h2>Jev-Laufzeit &amp; Kosten</h2>
+      <div id="jev-cost-content"></div>
+    </section>
+    {% endif %}
+
     <section class="panel timeline-panel">
       <h2>Zeitliche Übersicht aller Normen</h2>
       <p class="subtitle">

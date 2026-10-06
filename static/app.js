@@ -6,6 +6,8 @@ const pipelineEl = document.getElementById("pipeline-info");
 const jevPanelEl = document.getElementById("jev-panel");
 const jevChipsEl = document.getElementById("jev-chips");
 const jevNormsEl = document.getElementById("jev-norms");
+const jevCostCardEl = document.getElementById("jev-cost-card");
+const jevCostContentEl = document.getElementById("jev-cost-content");
 
 asOfEl.valueAsDate = new Date();
 
@@ -36,6 +38,7 @@ async function runSearch() {
   resultsEl.innerHTML = '<div class="empty">Suche läuft …</div>';
   pipelineEl.classList.add("hidden");
   jevPanelEl?.classList.add("hidden");
+  jevCostCardEl?.classList.add("hidden");
 
   const params = new URLSearchParams({ query, as_of: asOf });
   const res = await fetch(`/api/search?${params.toString()}`);
@@ -47,6 +50,12 @@ async function runSearch() {
   }
 
   renderJevPanel(data.law_classification, data.jev_error, data.norm_classification, data.norm_jev_error);
+  renderJevCostCard(
+    data.jev_duration_ms,
+    data.jev_question_count,
+    data.jev_estimated_cost_usd,
+    data.jev_cost_per_question_usd
+  );
 
   let pipelineText =
     `Stichtag ${data.as_of} · ${data.vector_candidates} Kandidaten (Vektor) / ` +
@@ -139,6 +148,26 @@ function renderJevPanel(laws, error, norms, normError) {
   }
 
   jevPanelEl.classList.remove("hidden");
+}
+
+function renderJevCostCard(durationMs, questionCount, estimatedCostUsd, costPerQuestion) {
+  if (!jevCostCardEl) return;
+  if (durationMs == null) return;
+
+  const seconds = (durationMs / 1000).toFixed(2);
+  const cost = estimatedCostUsd.toFixed(4);
+  jevCostContentEl.innerHTML = `
+    <p class="subtitle">
+      Jev hat <strong>${questionCount}</strong> Noul-Frage${questionCount === 1 ? "" : "n"}
+      in <strong>${seconds}s</strong> beantwortet &middot;
+      geschätzte Kosten: <strong>$${cost}</strong>
+    </p>
+    <p class="subtitle jev-cost-disclaimer">
+      Schätzung, keine echte Abrechnung - TypeSafe veröffentlicht keine Preisliste.
+      Annahme: $${costPerQuestion.toFixed(4)} pro Noul-Frage (in jev.py anpassbar).
+    </p>
+  `;
+  jevCostCardEl.classList.remove("hidden");
 }
 
 function escapeHtml(str) {

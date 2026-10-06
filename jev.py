@@ -15,6 +15,11 @@ JEV_API_URL = "https://api.typesafe.ai/v1/systemone"
 JEV_MODEL = "jev-latest"
 JEV_RELEVANCE_THRESHOLD = 0.5
 
+# TypeSafe veröffentlicht keine Preisliste für Jev/Noul-Fragen (Stand: dieser Prototyp).
+# Grobe Platzhalter-Annahme pro Noul-Frage, nur zur Größenordnungseinschätzung -
+# bei Kenntnis des echten Tarifs hier anpassen.
+JEV_ESTIMATED_COST_PER_QUESTION_USD = 0.0005
+
 
 class JevError(Exception):
     pass
