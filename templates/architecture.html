@@ -11,26 +11,26 @@
   <header>
     <h1>Such-Pipeline <span class="tag">Architektur</span></h1>
     <p class="subtitle" id="diagram-subtitle">
-      Hybride Suche mit Zeitfilter, RRF und Reranking — grün markiert, was im Prototyp
-      bereits umgesetzt ist, gelb teilweise, rot noch offen.
+      Erweiterung um eine Definitionsbibliothek (gelb markiert) — Begriffe aus der Anfrage
+      schränken die Kandidatennormen vor der eigentlichen Suche hart ein.
     </p>
   </header>
 
   <main class="architecture-main">
     <div class="version-toggle">
-      <button type="button" class="version-btn active" data-version="1">Version 1</button>
-      <button type="button" class="version-btn" data-version="2">Version 2</button>
+      <button type="button" class="version-btn" data-version="1">Version 1</button>
+      <button type="button" class="version-btn active" data-version="2">Version 2</button>
     </div>
 
     <section class="panel diagram-panel">
-      <img src="/architektur/diagram.svg?v=1" alt="Such-Pipeline Diagramm" class="diagram" id="diagram-img" />
+      <img src="/architektur/diagram.svg?v=2" alt="Such-Pipeline Diagramm" class="diagram" id="diagram-img" />
     </section>
   </main>
 
   <script>
     const SUBTITLES = {
       "1": "Hybride Suche mit Zeitfilter, RRF und Reranking — grün markiert, was im Prototyp bereits umgesetzt ist, gelb teilweise, rot noch offen.",
-      "2": "Ursprüngliche Fassung des Diagramms ohne Umsetzungsstatus-Markierung — zum Vergleich mit der aktuellen Version."
+      "2": "Erweiterung um eine Definitionsbibliothek (gelb markiert) — Begriffe aus der Anfrage schränken die Kandidatennormen vor der eigentlichen Suche hart ein."
     };
 
     document.querySelectorAll(".version-btn").forEach((btn) => {
