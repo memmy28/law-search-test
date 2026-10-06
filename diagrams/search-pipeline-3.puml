@@ -48,31 +48,50 @@ partition "1b. Jev-Klassifikation" {
   lassen; <<#FFF2A0>>
   :Ergebnis in jev_classifications
   protokollieren; <<#FFF2A0>>
-  if (Gesetz-Wahrscheinlichkeit
-  >= 50 %?) then (ja)
-    :Stufe 2 - pro einzelner Norm
-    dieses Gesetzes eine weitere
-    Noul-Frage "Ist diese Norm
-    einschlägig?" parallel auswerten
-    lassen; <<#FFF2A0>>
+  if (Begriff aus Definitions-
+  bibliothek erkannt (Schritt 1)?) then (ja)
+    :Stufe 2 - NUR die vom Begriffsfilter
+    gelieferten Normen klassifizieren,
+    unabhängig von der Gesetz-
+    Wahrscheinlichkeit; <<#FFF2A0>>
     :Ergebnis in
     jev_norm_classifications
     protokollieren; <<#FFF2A0>>
   else (nein)
-    :Keine Normen-Klassifikation für
-    dieses Gesetz - Stufe 2 entfällt,
-    um API-Aufrufe zu sparen; <<#FFF2A0>>
+    if (Gesetz-Wahrscheinlichkeit
+    >= 50 %?) then (ja)
+      :Stufe 2 - pro einzelner Norm
+      dieses Gesetzes eine weitere
+      Noul-Frage "Ist diese Norm
+      einschlägig?" parallel auswerten
+      lassen; <<#FFF2A0>>
+      :Ergebnis in
+      jev_norm_classifications
+      protokollieren; <<#FFF2A0>>
+    else (nein)
+      :Keine Normen-Klassifikation für
+      dieses Gesetz - Stufe 2 entfällt,
+      um API-Aufrufe zu sparen; <<#FFF2A0>>
+    endif
   endif
   note right
-    NEU: läuft unabhängig vom Zeit-/
-    Begriffsfilter (reine Textanalyse,
-    kennt den Stichtag nicht). Ergebnis
-    wird zusätzlich in der Antwort
-    angezeigt (Panel auf der Suchseite
-    + Verlauf unter /jev) UND als dritte
-    Rangliste in Schritt 3/4 eingespeist
-    (sortiert nach Wahrscheinlichkeit,
-    siehe Fork-Zweig "Jev-Ranking").
+    NEU: läuft unabhängig vom Zeitfilter
+    (reine Textanalyse, kennt den
+    Stichtag nicht). Begriffsfilter vor
+    Gesetz-Wahrscheinlichkeit: die
+    Definitionsbibliothek liefert eine
+    präzisere, deterministische Kandidaten-
+    menge als Jevs eigene Gesetz-
+    Einschätzung - dann lohnt sich die
+    50 %-Hürde nicht mehr, Stufe 2 läuft
+    direkt und günstiger auf weniger
+    Normen. Ergebnis wird zusätzlich in
+    der Antwort angezeigt (Panel auf der
+    Suchseite + Verlauf unter /jev) UND
+    als dritte Rangliste in Schritt 3/4
+    eingespeist (sortiert nach
+    Wahrscheinlichkeit, siehe Fork-Zweig
+    "Jev-Ranking").
   end note
 }
 

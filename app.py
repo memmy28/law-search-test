@@ -84,9 +84,18 @@ conn = psycopg2.connect(DB_URL)
 register_vector(conn)
 
 
-def run_jev_classification(cur, query):
-    """Zweistufige Jev-Klassifikation: erst pro Gesetz, dann - nur für Gesetze mit
-    Wahrscheinlichkeit >= 50 % - zusätzlich pro einzelner Norm dieses Gesetzes.
+def run_jev_classification(cur, query, allowed_ids=None):
+    """Zweistufige Jev-Klassifikation: erst pro Gesetz, dann zusätzlich pro
+    einzelner Norm. Welche Normen in Stufe 2 klassifiziert werden, hängt davon
+    ab, ob die Definitionsbibliothek die Kandidatenmenge schon eingeschränkt hat:
+
+    - allowed_ids gesetzt (Begriff erkannt): Stufe 2 klassifiziert NUR diese
+      Normen - die Definitionsbibliothek ist ein präziseres, deterministisches
+      Signal als Jevs eigene Gesetz-Einschätzung, daher entfällt hier die
+      sonst übliche >= 50 %-Hürde pro Gesetz.
+    - kein allowed_ids: Stufe 2 läuft wie bisher nur für Gesetze, die Stufe 1
+      mit >= 50 % als relevant einstuft (Kostenkontrolle ohne Begriffsfilter).
+
     Protokolliert beide Stufen (jev_classifications / jev_norm_classifications)
     in einer gemeinsamen Transaktion, damit sie denselben created_at-Zeitstempel
     tragen und sich später als ein Lauf zusammenführen lassen.
@@ -114,7 +123,23 @@ def run_jev_classification(cur, query):
 
     norm_results = []
     norm_error = None
-    if relevant_laws:
+    cols = ["id", "law_short", "norm_ref", "title"]
+    if allowed_ids:
+        cur.execute(
+            """
+            SELECT id, law_short, norm_ref, title FROM norms
+            WHERE id = ANY(%s)
+            ORDER BY law_short, norm_ref
+            """,
+            (allowed_ids,),
+        )
+        candidate_norms = [dict(zip(cols, r)) for r in cur.fetchall()]
+        question_count += len(candidate_norms)
+        try:
+            norm_results = jev.classify_norms(query, candidate_norms)
+        except jev.JevError as e:
+            norm_error = str(e)
+    elif relevant_laws:
         cur.execute(
             """
             SELECT id, law_short, norm_ref, title FROM norms
@@ -123,7 +148,6 @@ def run_jev_classification(cur, query):
             """,
             (relevant_laws,),
         )
-        cols = ["id", "law_short", "norm_ref", "title"]
         candidate_norms = [dict(zip(cols, r)) for r in cur.fetchall()]
         question_count += len(candidate_norms)
         try:
@@ -333,7 +357,7 @@ def api_search():
     jev_duration_ms, jev_question_count, jev_estimated_cost_usd = None, None, None
     jev_cost_per_question_usd = None
     if state == "classification":
-        classification = run_jev_classification(cur, query)
+        classification = run_jev_classification(cur, query, allowed_ids)
         law_classification = classification["laws"]
         jev_error = classification["law_error"]
         norm_classification = classification["norms"]
