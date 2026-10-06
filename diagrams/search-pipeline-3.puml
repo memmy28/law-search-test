@@ -39,47 +39,41 @@ partition "1. Vorverarbeitung" {
   Definitionsbibliothek abgleichen; <<#CCE0E8>>
 }
 
-partition "1b. Jev-Klassifikation (parallel, informativ)" {
-  fork
-    :(Haupt-Pipeline läuft normal weiter,
-    siehe Schritt 2 ff.); <<#CCE0E8>>
-  fork again
-    :Anfrage an Jev-Modell (TypeSafe AI)
-    senden; <<#FFF2A0>>
-    :Stufe 1 - pro Gesetz in der DB eine
-    Noul-Frage "Ist dieses Gesetz
+partition "1b. Jev-Klassifikation" {
+  :Anfrage an Jev-Modell (TypeSafe AI)
+  senden; <<#FFF2A0>>
+  :Stufe 1 - pro Gesetz in der DB eine
+  Noul-Frage "Ist dieses Gesetz
+  einschlägig?" parallel auswerten
+  lassen; <<#FFF2A0>>
+  :Ergebnis in jev_classifications
+  protokollieren; <<#FFF2A0>>
+  if (Gesetz-Wahrscheinlichkeit
+  >= 50 %?) then (ja)
+    :Stufe 2 - pro einzelner Norm
+    dieses Gesetzes eine weitere
+    Noul-Frage "Ist diese Norm
     einschlägig?" parallel auswerten
     lassen; <<#FFF2A0>>
-    :Ergebnis in jev_classifications
+    :Ergebnis in
+    jev_norm_classifications
     protokollieren; <<#FFF2A0>>
-    if (Gesetz-Wahrscheinlichkeit
-    >= 50 %?) then (ja)
-      :Stufe 2 - pro einzelner Norm
-      dieses Gesetzes eine weitere
-      Noul-Frage "Ist diese Norm
-      einschlägig?" parallel auswerten
-      lassen; <<#FFF2A0>>
-      :Ergebnis in
-      jev_norm_classifications
-      protokollieren; <<#FFF2A0>>
-    else (nein)
-      :Keine Normen-Klassifikation für
-      dieses Gesetz - Stufe 2 entfällt,
-      um API-Aufrufe zu sparen; <<#FFF2A0>>
-    endif
-    note right
-      NEU: läuft unabhängig von Zeit-/
-      Begriffsfilter und Suche und
-      beeinflusst die Kandidatenmenge
-      NICHT. Zweistufig, um Kosten zu
-      sparen: Stufe 2 (Normebene) läuft
-      nur für Gesetze, die Stufe 1 schon
-      als relevant eingestuft hat. Ergebnis
-      wird zusätzlich in der Antwort
-      angezeigt (Panel auf der Suchseite
-      + Verlauf unter /jev).
-    end note
-  end fork
+  else (nein)
+    :Keine Normen-Klassifikation für
+    dieses Gesetz - Stufe 2 entfällt,
+    um API-Aufrufe zu sparen; <<#FFF2A0>>
+  endif
+  note right
+    NEU: läuft unabhängig vom Zeit-/
+    Begriffsfilter (reine Textanalyse,
+    kennt den Stichtag nicht). Ergebnis
+    wird zusätzlich in der Antwort
+    angezeigt (Panel auf der Suchseite
+    + Verlauf unter /jev) UND als dritte
+    Rangliste in Schritt 3/4 eingespeist
+    (sortiert nach Wahrscheinlichkeit,
+    siehe Fork-Zweig "Jev-Ranking").
+  end note
 }
 
 partition "2. Zeit- & Begriffsfilter" {
@@ -100,7 +94,7 @@ partition "2. Zeit- & Begriffsfilter" {
 partition "3. Hybride Suche (parallel)" {
   fork
     :BM25 / Volltextsuche
-    (deutscher Analyzer: Stemming, 
+    (deutscher Analyzer: Stemming,
     Kompositazerlegung); <<#CCE0E8>>
     :Filterung der Treffer; <<#CCE0E8>>
   fork again
@@ -111,11 +105,28 @@ partition "3. Hybride Suche (parallel)" {
   fork again
     :Direkter Lookup
     über die Norm-ID; <<#CCE0E8>>
+  fork again
+    :Jev-Ranking übernehmen
+    (Stufe-2-Normen nach
+    Wahrscheinlichkeit sortiert); <<#FFF2A0>>
+    :Nur am Stichtag gültige (und ggf.
+    durch Begriffsfilter erlaubte)
+    Normen behalten; <<#FFF2A0>>
+    note right
+      NEU: macht Jev zur dritten
+      Rangliste statt nur zur Anzeige.
+      Kein harter Filter - eine von
+      Jev hoch bewertete Norm bekommt
+      per RRF mehr Gewicht, fällt aber
+      nicht automatisch rein, wenn sie
+      am Stichtag nicht gültig ist.
+    end note
   end fork
 }
 
 partition "4. Fusion" {
-  :Reciprocal Rank Fusion (RRF); <<#CCE0E8>>
+  :Reciprocal Rank Fusion (RRF) über
+  Volltext-, Vektor- und Jev-Rangliste; <<#FFF2A0>>
   :Filterung der Ergebnisse; <<#CCE0E8>>
 }
 

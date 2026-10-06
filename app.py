@@ -16,6 +16,7 @@ from search import (
     RERANK_MODEL,
     fetch_rows,
     find_matching_definitions,
+    jev_norm_ids,
     linked_norm_ids,
     rrf_fuse,
     text_search,
@@ -342,9 +343,11 @@ def api_search():
         jev_estimated_cost_usd = classification["estimated_cost_usd"]
         jev_cost_per_question_usd = classification["cost_per_question_usd"]
 
+    jev_ids = jev_norm_ids(cur, norm_classification, as_of_str, candidates, allowed_ids)
+
     vec_ids = vector_search(cur, qvec, as_of_str, candidates, allowed_ids)
     txt_ids = text_search(cur, query, as_of_str, candidates, allowed_ids)
-    fused = rrf_fuse([vec_ids, txt_ids])
+    fused = rrf_fuse([vec_ids, txt_ids, jev_ids])
     candidate_ids = [doc_id for doc_id, _ in fused[:candidates]]
     rows = fetch_rows(cur, candidate_ids)
     cur.close()
@@ -379,6 +382,7 @@ def api_search():
             "state": state,
             "vector_candidates": len(vec_ids),
             "text_candidates": len(txt_ids),
+            "jev_candidates": len(jev_ids),
             "fused_candidates": len(candidate_ids),
             "matched_definitions": [{"term": d["term"]} for d in matched_defs],
             "allowed_norm_count": len(allowed_ids) if allowed_ids is not None else None,

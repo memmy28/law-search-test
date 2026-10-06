@@ -24,7 +24,9 @@ import Loading from "../components/Loading";
 function pipelineSummary(data) {
   let text =
     `Stichtag ${data.as_of} · ${data.vector_candidates} Kandidaten (Vektor) / ` +
-    `${data.text_candidates} (Volltext) → ${data.fused_candidates} nach RRF-Fusion → ` +
+    `${data.text_candidates} (Volltext)` +
+    (data.jev_candidates > 0 ? ` / ${data.jev_candidates} (Jev)` : "") +
+    ` → ${data.fused_candidates} nach RRF-Fusion → ` +
     `${data.results.length} nach Reranking`;
   if (data.matched_definitions?.length) {
     const terms = data.matched_definitions.map((/** @type {any} */ d) => d.term).join(", ");

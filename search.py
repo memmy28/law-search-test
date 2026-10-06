@@ -49,6 +49,35 @@ def text_search(cur, query, as_of, limit, allowed_ids=None):
     return [row[0] for row in cur.fetchall()]
 
 
+def jev_norm_ids(cur, norm_classification, as_of, limit, allowed_ids=None):
+    """Wandelt eine bereits berechnete Jev-Normen-Klassifikation (Liste von Dicts
+    mit norm_id/probability) in eine nach Wahrscheinlichkeit sortierte ID-Liste
+    um, gefiltert auf am Stichtag gültige (und ggf. durch die Definitions-
+    bibliothek erlaubte) Normen - zur Fusion mit Vektor- und Volltextsuche per
+    RRF. Jev selbst kennt den Stichtag nicht (die Klassifikation ist rein
+    textbasiert), die Gültigkeitsprüfung passiert erst hier, direkt vor der
+    Fusion."""
+    if not norm_classification:
+        return []
+
+    ranked_ids = [
+        r["norm_id"]
+        for r in sorted(norm_classification, key=lambda r: r["probability"], reverse=True)
+    ]
+
+    cur.execute(
+        """
+        SELECT id FROM norms
+        WHERE id = ANY(%s)
+          AND daterange(valid_from, valid_to, '[]') @> %s::date
+          AND (%s::int[] IS NULL OR id = ANY(%s))
+        """,
+        (ranked_ids, as_of, allowed_ids, allowed_ids),
+    )
+    valid_ids = {row[0] for row in cur.fetchall()}
+    return [doc_id for doc_id in ranked_ids if doc_id in valid_ids][:limit]
+
+
 def find_matching_definitions(cur, query):
     """Erkennt Rechtsbegriffe aus der Definitionsbibliothek in der Anfrage
     (case-insensitiver Teilstring-Abgleich - ein Prototyp-Kompromiss, der
