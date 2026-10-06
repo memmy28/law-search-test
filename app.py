@@ -4,7 +4,7 @@ from datetime import date
 
 import psycopg2
 from dotenv import load_dotenv
-from flask import Flask, Response, abort, jsonify, render_template, request
+from flask import Flask, Response, abort, jsonify, redirect, render_template, request
 from pgvector.psycopg2 import register_vector
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -31,6 +31,35 @@ DIAGRAM_PATHS = {
     "3": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline-3.puml"),
 }
 _diagram_cache = {}
+
+# Die drei Entwicklungsstände (ursprünglich eigene Branches), zwischen denen sich die
+# Anwendung zur Laufzeit per Cookie umschalten lässt - jeder Stand baut auf dem
+# vorherigen auf (kumulativ), analog zu den Diagrammversionen 1/2/3.
+APP_STATES = ("plain", "definition", "classification")
+DEFAULT_APP_STATE = "classification"
+DIAGRAM_VERSION_FOR_STATE = {"plain": "1", "definition": "2", "classification": "3"}
+
+
+def current_app_state():
+    state = request.cookies.get("app_state", DEFAULT_APP_STATE)
+    return state if state in APP_STATES else DEFAULT_APP_STATE
+
+
+@app.context_processor
+def inject_app_state():
+    return {"app_state": current_app_state()}
+
+
+@app.route("/set-state/<state>")
+def set_state(state):
+    if state not in APP_STATES:
+        abort(404)
+    next_url = request.args.get("next", "/")
+    if not next_url.startswith("/") or next_url.startswith("//"):
+        next_url = "/"
+    resp = redirect(next_url)
+    resp.set_cookie("app_state", state, max_age=60 * 60 * 24 * 365)
+    return resp
 
 print(f"Lade Modelle ({EMBED_MODEL}, {RERANK_MODEL}) ...")
 embed_model = SentenceTransformer(EMBED_MODEL)
@@ -116,7 +145,10 @@ def render_diagram_svg(version):
 
 @app.route("/architektur")
 def architecture():
-    return render_template("architecture.html", active_page="architecture")
+    default_version = DIAGRAM_VERSION_FOR_STATE[current_app_state()]
+    return render_template(
+        "architecture.html", active_page="architecture", default_version=default_version
+    )
 
 
 @app.route("/architektur/diagram.svg")
@@ -219,13 +251,19 @@ def api_search():
 
     today = date.today()
     cur = conn.cursor()
+    state = current_app_state()
 
     qvec = embed_model.encode(f"query: {query}", normalize_embeddings=True)
 
-    matched_defs = find_matching_definitions(cur, query)
-    allowed_ids = linked_norm_ids(cur, [d["id"] for d in matched_defs]) if matched_defs else None
+    matched_defs = []
+    allowed_ids = None
+    if state in ("definition", "classification"):
+        matched_defs = find_matching_definitions(cur, query)
+        allowed_ids = linked_norm_ids(cur, [d["id"] for d in matched_defs]) if matched_defs else None
 
-    law_classification, jev_error = run_jev_classification(cur, query)
+    law_classification, jev_error = (None, None)
+    if state == "classification":
+        law_classification, jev_error = run_jev_classification(cur, query)
 
     vec_ids = vector_search(cur, qvec, as_of_str, candidates, allowed_ids)
     txt_ids = text_search(cur, query, as_of_str, candidates, allowed_ids)

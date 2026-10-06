@@ -10,40 +10,23 @@
   {% include "_navbar.html" %}
   <header>
     <h1>Such-Pipeline <span class="tag">Architektur</span></h1>
-    <p class="subtitle" id="diagram-subtitle">
+    <p class="subtitle">
+      {% if default_version == "1" %}
+      Hybride Suche mit Zeitfilter, RRF und Reranking — grün markiert, was im Prototyp bereits umgesetzt ist, gelb teilweise, rot noch offen.
+      {% elif default_version == "2" %}
+      Erweiterung um eine Definitionsbibliothek (gelb markiert) — Begriffe aus der Anfrage schränken die Kandidatennormen vor der eigentlichen Suche hart ein.
+      {% else %}
       Erweiterung um die Jev-Klassifikation (grün markiert) — läuft parallel zur Suche und
       schätzt pro Gesetz ein, ob es einschlägig ist, ohne die Kandidatenmenge zu beeinflussen.
+      {% endif %}
+      Zum Wechseln den Stand oben rechts in der Navigation umschalten.
     </p>
   </header>
 
   <main class="architecture-main">
-    <div class="version-toggle">
-      <button type="button" class="version-btn" data-version="1">Version 1</button>
-      <button type="button" class="version-btn" data-version="2">Version 2</button>
-      <button type="button" class="version-btn active" data-version="3">Version 3</button>
-    </div>
-
     <section class="panel diagram-panel">
-      <img src="/architektur/diagram.svg?v=3" alt="Such-Pipeline Diagramm" class="diagram" id="diagram-img" />
+      <img src="/architektur/diagram.svg?v={{ default_version }}" alt="Such-Pipeline Diagramm" class="diagram" />
     </section>
   </main>
-
-  <script>
-    const SUBTITLES = {
-      "1": "Hybride Suche mit Zeitfilter, RRF und Reranking — grün markiert, was im Prototyp bereits umgesetzt ist, gelb teilweise, rot noch offen.",
-      "2": "Erweiterung um eine Definitionsbibliothek (gelb markiert) — Begriffe aus der Anfrage schränken die Kandidatennormen vor der eigentlichen Suche hart ein.",
-      "3": "Erweiterung um die Jev-Klassifikation (grün markiert) — läuft parallel zur Suche und schätzt pro Gesetz ein, ob es einschlägig ist, ohne die Kandidatenmenge zu beeinflussen."
-    };
-
-    document.querySelectorAll(".version-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const version = btn.dataset.version;
-        document.querySelectorAll(".version-btn").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        document.getElementById("diagram-img").src = `/architektur/diagram.svg?v=${version}`;
-        document.getElementById("diagram-subtitle").textContent = SUBTITLES[version];
-      });
-    });
-  </script>
 </body>
 </html>

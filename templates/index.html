@@ -72,11 +72,13 @@
 
     <section id="pipeline-info" class="pipeline-info hidden"></section>
 
+    {% if app_state == 'classification' %}
     <section id="jev-panel" class="panel hidden">
       <h2>Jev-Einschätzung: welche Gesetze sind einschlägig?</h2>
       <div id="jev-chips" class="jev-panel"></div>
       <p class="subtitle">Verlauf aller Klassifikationen: <a href="/jev">Jev-Klassifikation</a></p>
     </section>
+    {% endif %}
 
     <section id="results"></section>
 

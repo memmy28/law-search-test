@@ -35,9 +35,41 @@ body {
   text-decoration: none;
 }
 
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .navbar-links {
   display: flex;
   gap: 20px;
+}
+
+.state-switcher {
+  display: flex;
+  gap: 6px;
+  padding-left: 20px;
+  border-left: 1px solid var(--border);
+}
+
+.state-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef0f4;
+}
+
+.state-btn:hover {
+  background: #dfe2e8;
+}
+
+.state-btn.active {
+  background: var(--accent);
+  color: white;
 }
 
 .navbar-links a {
@@ -297,32 +329,6 @@ button:hover { opacity: 0.9; }
 
 .architecture-main {
   max-width: 1400px;
-}
-
-.version-toggle {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.version-btn {
-  background: var(--panel);
-  color: var(--muted);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 8px;
-}
-
-.version-btn:hover {
-  color: var(--text);
-}
-
-.version-btn.active {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
 }
 
 .diagram-panel {

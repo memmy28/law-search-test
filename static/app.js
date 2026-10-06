@@ -34,7 +34,7 @@ async function runSearch() {
 
   resultsEl.innerHTML = '<div class="empty">Suche läuft …</div>';
   pipelineEl.classList.add("hidden");
-  jevPanelEl.classList.add("hidden");
+  jevPanelEl?.classList.add("hidden");
 
   const params = new URLSearchParams({ query, as_of: asOf });
   const res = await fetch(`/api/search?${params.toString()}`);
@@ -85,6 +85,7 @@ async function runSearch() {
 }
 
 function renderJevPanel(laws, error) {
+  if (!jevPanelEl) return;
   if (error) {
     jevChipsEl.innerHTML = `<div class="empty">Jev-Klassifikation nicht verfügbar: ${escapeHtml(error)}</div>`;
     jevPanelEl.classList.remove("hidden");
