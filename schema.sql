@@ -62,3 +62,17 @@ CREATE TABLE IF NOT EXISTS jev_classifications (
 );
 
 CREATE INDEX IF NOT EXISTS jev_classifications_created_idx ON jev_classifications (created_at DESC);
+
+-- Protokoll der Jev-Normen-Klassifikation: zweite Stufe, läuft nur für Normen
+-- von Gesetzen, die in jev_classifications als relevant (>= 50 %) eingestuft wurden.
+CREATE TABLE IF NOT EXISTS jev_norm_classifications (
+    id SERIAL PRIMARY KEY,
+    query TEXT NOT NULL,
+    norm_id INTEGER NOT NULL REFERENCES norms(id) ON DELETE CASCADE,
+    probability REAL NOT NULL,
+    relevant BOOLEAN NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS jev_norm_classifications_created_idx ON jev_norm_classifications (created_at DESC);
+CREATE INDEX IF NOT EXISTS jev_norm_classifications_norm_idx ON jev_norm_classifications (norm_id);

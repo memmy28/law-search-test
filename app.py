@@ -70,19 +70,44 @@ register_vector(conn)
 
 
 def run_jev_classification(cur, query):
-    """Lässt Jev einschätzen, welche der in der Datenbank vorhandenen Gesetze für
-    die Anfrage einschlägig sind, und protokolliert das Ergebnis in
-    jev_classifications. Gibt (results, error) zurück - bei einem Jev-Fehler
-    bleibt die Suche selbst trotzdem funktionsfähig."""
+    """Zweistufige Jev-Klassifikation: erst pro Gesetz, dann - nur für Gesetze mit
+    Wahrscheinlichkeit >= 50 % - zusätzlich pro einzelner Norm dieses Gesetzes.
+    Protokolliert beide Stufen (jev_classifications / jev_norm_classifications)
+    in einer gemeinsamen Transaktion, damit sie denselben created_at-Zeitstempel
+    tragen und sich später als ein Lauf zusammenführen lassen.
+
+    Gibt ein Dict zurück: {laws, norms, law_error, norm_error}. Ein Fehler in
+    Stufe 2 verwirft nicht das Ergebnis von Stufe 1 - die Suche bleibt in jedem
+    Fall funktionsfähig."""
     cur.execute("SELECT DISTINCT law_short FROM norms ORDER BY law_short")
-    laws = [row[0] for row in cur.fetchall()]
+    all_laws = [row[0] for row in cur.fetchall()]
 
     try:
-        results = jev.classify_laws(query, laws)
+        law_results = jev.classify_laws(query, all_laws)
     except jev.JevError as e:
-        return None, str(e)
+        return {"laws": None, "norms": [], "law_error": str(e), "norm_error": None}
 
-    for r in results:
+    relevant_laws = [r["law"] for r in law_results if r["relevant"]]
+
+    norm_results = []
+    norm_error = None
+    if relevant_laws:
+        cur.execute(
+            """
+            SELECT id, law_short, norm_ref, title FROM norms
+            WHERE law_short = ANY(%s)
+            ORDER BY law_short, norm_ref
+            """,
+            (relevant_laws,),
+        )
+        cols = ["id", "law_short", "norm_ref", "title"]
+        candidate_norms = [dict(zip(cols, r)) for r in cur.fetchall()]
+        try:
+            norm_results = jev.classify_norms(query, candidate_norms)
+        except jev.JevError as e:
+            norm_error = str(e)
+
+    for r in law_results:
         cur.execute(
             """
             INSERT INTO jev_classifications (query, law_short, probability, relevant)
@@ -90,8 +115,17 @@ def run_jev_classification(cur, query):
             """,
             (query, r["law"], r["probability"], r["relevant"]),
         )
+    for r in norm_results:
+        cur.execute(
+            """
+            INSERT INTO jev_norm_classifications (query, norm_id, probability, relevant)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (query, r["norm_id"], r["probability"], r["relevant"]),
+        )
     conn.commit()
-    return results, None
+
+    return {"laws": law_results, "norms": norm_results, "law_error": None, "norm_error": norm_error}
 
 
 def classify_validity(valid_from, valid_to, as_of):
@@ -225,17 +259,38 @@ def jev_view():
         LIMIT 200
         """
     )
-    cols = ["query", "law_short", "probability", "relevant", "created_at"]
-    rows = [dict(zip(cols, r)) for r in cur.fetchall()]
+    law_cols = ["query", "law_short", "probability", "relevant", "created_at"]
+    law_rows = [dict(zip(law_cols, r)) for r in cur.fetchall()]
+
+    cur.execute(
+        """
+        SELECT jnc.query, n.law_short, n.norm_ref, n.title, jnc.probability, jnc.relevant, jnc.created_at
+        FROM jev_norm_classifications jnc
+        JOIN norms n ON n.id = jnc.norm_id
+        ORDER BY jnc.created_at DESC
+        LIMIT 2000
+        """
+    )
+    norm_cols = ["query", "law_short", "norm_ref", "title", "probability", "relevant", "created_at"]
+    norm_rows = [dict(zip(norm_cols, r)) for r in cur.fetchall()]
     cur.close()
 
-    queries = {}
-    for r in rows:
+    runs = {}
+    law_index = {}
+    for r in law_rows:
         key = (r["created_at"], r["query"])
-        queries.setdefault(key, {"query": r["query"], "created_at": r["created_at"], "laws": []})
-        queries[key]["laws"].append(r)
-    runs = sorted(queries.values(), key=lambda q: q["created_at"], reverse=True)
+        run = runs.setdefault(key, {"query": r["query"], "created_at": r["created_at"], "laws": []})
+        law_entry = dict(r, norms=[])
+        run["laws"].append(law_entry)
+        law_index[(key, r["law_short"])] = law_entry
 
+    for r in norm_rows:
+        key = (r["created_at"], r["query"])
+        law_entry = law_index.get((key, r["law_short"]))
+        if law_entry is not None:
+            law_entry["norms"].append(r)
+
+    runs = sorted(runs.values(), key=lambda q: q["created_at"], reverse=True)
     return render_template("jev.html", active_page="jev", runs=runs)
 
 
@@ -261,9 +316,14 @@ def api_search():
         matched_defs = find_matching_definitions(cur, query)
         allowed_ids = linked_norm_ids(cur, [d["id"] for d in matched_defs]) if matched_defs else None
 
-    law_classification, jev_error = (None, None)
+    law_classification, jev_error = None, None
+    norm_classification, norm_jev_error = [], None
     if state == "classification":
-        law_classification, jev_error = run_jev_classification(cur, query)
+        classification = run_jev_classification(cur, query)
+        law_classification = classification["laws"]
+        jev_error = classification["law_error"]
+        norm_classification = classification["norms"]
+        norm_jev_error = classification["norm_error"]
 
     vec_ids = vector_search(cur, qvec, as_of_str, candidates, allowed_ids)
     txt_ids = text_search(cur, query, as_of_str, candidates, allowed_ids)
@@ -306,6 +366,8 @@ def api_search():
             "allowed_norm_count": len(allowed_ids) if allowed_ids is not None else None,
             "law_classification": law_classification,
             "jev_error": jev_error,
+            "norm_classification": norm_classification,
+            "norm_jev_error": norm_jev_error,
             "results": results,
         }
     )

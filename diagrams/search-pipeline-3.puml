@@ -46,18 +46,38 @@ partition "1b. Jev-Klassifikation (parallel, informativ)" {
   fork again
     :Anfrage an Jev-Modell (TypeSafe AI)
     senden; <<#FFF2A0>>
-    :Pro Gesetz in der DB eine Noul-Frage
-    "Ist dieses Gesetz einschlägig?"
-    parallel auswerten lassen; <<#FFF2A0>>
+    :Stufe 1 - pro Gesetz in der DB eine
+    Noul-Frage "Ist dieses Gesetz
+    einschlägig?" parallel auswerten
+    lassen; <<#FFF2A0>>
     :Ergebnis in jev_classifications
     protokollieren; <<#FFF2A0>>
+    if (Gesetz-Wahrscheinlichkeit
+    >= 50 %?) then (ja)
+      :Stufe 2 - pro einzelner Norm
+      dieses Gesetzes eine weitere
+      Noul-Frage "Ist diese Norm
+      einschlägig?" parallel auswerten
+      lassen; <<#FFF2A0>>
+      :Ergebnis in
+      jev_norm_classifications
+      protokollieren; <<#FFF2A0>>
+    else (nein)
+      :Keine Normen-Klassifikation für
+      dieses Gesetz - Stufe 2 entfällt,
+      um API-Aufrufe zu sparen; <<#FFF2A0>>
+    endif
     note right
       NEU: läuft unabhängig von Zeit-/
       Begriffsfilter und Suche und
       beeinflusst die Kandidatenmenge
-      NICHT. Ergebnis wird zusätzlich in
-      der Antwort angezeigt (Panel auf
-      der Suchseite + Verlauf unter /jev).
+      NICHT. Zweistufig, um Kosten zu
+      sparen: Stufe 2 (Normebene) läuft
+      nur für Gesetze, die Stufe 1 schon
+      als relevant eingestuft hat. Ergebnis
+      wird zusätzlich in der Antwort
+      angezeigt (Panel auf der Suchseite
+      + Verlauf unter /jev).
     end note
   end fork
 }

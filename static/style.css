@@ -307,6 +307,18 @@ button:hover { opacity: 0.9; }
   font-weight: 700;
 }
 
+.jev-norm-group {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.jev-norm-law {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
 .card-body {
   margin-top: 10px;
   font-size: 14px;
@@ -394,6 +406,23 @@ button:hover { opacity: 0.9; }
 
 .db-table a:hover {
   text-decoration: underline;
+}
+
+.jev-norms-cell {
+  background: #fafbfc;
+  padding: 4px 10px 10px !important;
+}
+
+.jev-norms-cell summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 4px 0;
+}
+
+.jev-norms-table {
+  margin-top: 6px;
+  font-size: 12px;
 }
 
 .timeline-panel {

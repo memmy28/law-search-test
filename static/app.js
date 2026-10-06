@@ -5,6 +5,7 @@ const resultsEl = document.getElementById("results");
 const pipelineEl = document.getElementById("pipeline-info");
 const jevPanelEl = document.getElementById("jev-panel");
 const jevChipsEl = document.getElementById("jev-chips");
+const jevNormsEl = document.getElementById("jev-norms");
 
 asOfEl.valueAsDate = new Date();
 
@@ -45,7 +46,7 @@ async function runSearch() {
     return;
   }
 
-  renderJevPanel(data.law_classification, data.jev_error);
+  renderJevPanel(data.law_classification, data.jev_error, data.norm_classification, data.norm_jev_error);
 
   let pipelineText =
     `Stichtag ${data.as_of} · ${data.vector_candidates} Kandidaten (Vektor) / ` +
@@ -84,10 +85,11 @@ async function runSearch() {
     .join("");
 }
 
-function renderJevPanel(laws, error) {
+function renderJevPanel(laws, error, norms, normError) {
   if (!jevPanelEl) return;
   if (error) {
     jevChipsEl.innerHTML = `<div class="empty">Jev-Klassifikation nicht verfügbar: ${escapeHtml(error)}</div>`;
+    jevNormsEl.innerHTML = "";
     jevPanelEl.classList.remove("hidden");
     return;
   }
@@ -103,6 +105,39 @@ function renderJevPanel(laws, error) {
       `;
     })
     .join("");
+
+  if (normError) {
+    jevNormsEl.innerHTML = `<div class="empty">Normen-Klassifikation nicht verfügbar: ${escapeHtml(normError)}</div>`;
+  } else if (norms && norms.length > 0) {
+    const byLaw = new Map();
+    norms.forEach((n) => {
+      if (!byLaw.has(n.law_short)) byLaw.set(n.law_short, []);
+      byLaw.get(n.law_short).push(n);
+    });
+    jevNormsEl.innerHTML = Array.from(byLaw.entries())
+      .map(([lawShort, list]) => {
+        const chips = list
+          .map((n) => {
+            const pct = Math.round(n.probability * 100);
+            return `
+              <span class="jev-chip ${n.relevant ? "relevant" : ""}">
+                ${escapeHtml(n.norm_ref)} <span class="prob">${pct}%</span>
+              </span>
+            `;
+          })
+          .join("");
+        return `
+          <div class="jev-norm-group">
+            <span class="jev-norm-law">${escapeHtml(lawShort)} – einzelne Normen:</span>
+            <div class="jev-panel">${chips}</div>
+          </div>
+        `;
+      })
+      .join("");
+  } else {
+    jevNormsEl.innerHTML = "";
+  }
+
   jevPanelEl.classList.remove("hidden");
 }
 
