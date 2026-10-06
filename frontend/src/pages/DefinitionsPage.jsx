@@ -16,6 +16,7 @@ import { useApi } from "../api";
 import PageHeader from "../components/PageHeader";
 import Loading from "../components/Loading";
 
+/** @param {{norms: any[]}} props */
 function NormLinkList({ norms }) {
   return (
     <List dense disablePadding>
@@ -68,7 +69,7 @@ export default function DefinitionsPage() {
       {error && <Alert severity="error">{error.message}</Alert>}
 
       <Stack spacing={2}>
-        {data?.definitions.map((d) => (
+        {data?.definitions.map((/** @type {any} */ d) => (
           <Card key={d.id}>
             <CardContent>
               <Typography variant="h6" gutterBottom>

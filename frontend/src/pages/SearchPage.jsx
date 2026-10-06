@@ -20,13 +20,14 @@ import JevCostCard from "../components/JevCostCard";
 import ResultCard from "../components/ResultCard";
 import Loading from "../components/Loading";
 
+/** @param {any} data */
 function pipelineSummary(data) {
   let text =
     `Stichtag ${data.as_of} · ${data.vector_candidates} Kandidaten (Vektor) / ` +
     `${data.text_candidates} (Volltext) → ${data.fused_candidates} nach RRF-Fusion → ` +
     `${data.results.length} nach Reranking`;
   if (data.matched_definitions?.length) {
-    const terms = data.matched_definitions.map((d) => d.term).join(", ");
+    const terms = data.matched_definitions.map((/** @type {any} */ d) => d.term).join(", ");
     text = `Begriff erkannt: "${terms}" → Suche auf ${data.allowed_norm_count} verknüpfte Norm(en) eingeschränkt · ${text}`;
   }
   return text;
@@ -37,8 +38,8 @@ export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [asOf, setAsOf] = useState(todayISO());
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+  const [data, setData] = useState(/** @type {any} */ (null));
+  const [error, setError] = useState(/** @type {string|null} */ (null));
 
   async function runSearch(q = query, date = asOf) {
     const trimmed = q.trim();
@@ -50,12 +51,16 @@ export default function SearchPage() {
       const params = new URLSearchParams({ query: trimmed, as_of: date });
       setData(await getJSON(`/api/search?${params}`));
     } catch (e) {
-      setError(e.message);
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
     }
   }
 
+  /**
+   * @param {string} exampleQuery
+   * @param {string} [exampleAsOf]
+   */
   function pickExample(exampleQuery, exampleAsOf) {
     const date = exampleAsOf || todayISO();
     setQuery(exampleQuery);
@@ -144,7 +149,7 @@ export default function SearchPage() {
               </Typography>
             ) : (
               <Stack spacing={1.5}>
-                {data.results.map((r, i) => (
+                {data.results.map((/** @type {any} */ r, /** @type {number} */ i) => (
                   <ResultCard key={r.id} rank={i + 1} result={r} />
                 ))}
               </Stack>

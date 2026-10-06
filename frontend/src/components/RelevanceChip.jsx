@@ -3,6 +3,7 @@ import { Chip } from "@mui/material";
 const RELEVANT_SX = { bgcolor: "#dcfce7", color: "#15803d" };
 const IRRELEVANT_SX = { bgcolor: "#f3f4f6", color: "#6b7280" };
 
+/** @param {{relevant: boolean}} props */
 export function RelevanceChip({ relevant }) {
   return (
     <Chip
@@ -19,6 +20,7 @@ export function RelevanceChip({ relevant }) {
   );
 }
 
+/** @param {{label: string, probability: number, relevant: boolean}} props */
 export function ProbabilityChip({ label, probability, relevant }) {
   return (
     <Chip

@@ -26,10 +26,12 @@ import { STATUS_COLORS, STATUS_LABEL_LONG } from "../theme";
 export default function DatabasePage() {
   const { data, error, loading } = useApi("/api/norms");
 
+  /** @type {Map<string, any[]>} */
   const groups = new Map();
-  data?.norms.forEach((n) => {
-    if (!groups.has(n.law_short)) groups.set(n.law_short, []);
-    groups.get(n.law_short).push(n);
+  data?.norms.forEach((/** @type {any} */ n) => {
+    const list = groups.get(n.law_short) ?? [];
+    list.push(n);
+    groups.set(n.law_short, list);
   });
 
   return (

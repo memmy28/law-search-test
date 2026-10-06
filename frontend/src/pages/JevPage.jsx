@@ -24,9 +24,15 @@ import PageHeader from "../components/PageHeader";
 import Loading from "../components/Loading";
 import { RelevanceChip } from "../components/RelevanceChip";
 
+/**
+ * @param {{probability: number}} a
+ * @param {{probability: number}} b
+ */
 const byProbability = (a, b) => b.probability - a.probability;
+/** @param {number} p */
 const percent = (p) => `${Math.round(p * 100)}%`;
 
+/** @param {{norms: any[]}} props */
 function NormTable({ norms }) {
   return (
     <Table size="small">
@@ -54,6 +60,7 @@ function NormTable({ norms }) {
   );
 }
 
+/** @param {{run: any}} props */
 function RunCard({ run }) {
   return (
     <Card>
@@ -132,7 +139,7 @@ export default function JevPage() {
       )}
 
       <Stack spacing={2}>
-        {data?.runs.map((run) => (
+        {data?.runs.map((/** @type {any} */ run) => (
           <RunCard key={`${run.created_at}-${run.query}`} run={run} />
         ))}
       </Stack>

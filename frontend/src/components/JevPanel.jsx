@@ -11,15 +11,25 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { ProbabilityChip } from "./RelevanceChip";
 
+/** @param {any[]} norms */
 function groupByLaw(norms) {
+  /** @type {Map<string, any[]>} */
   const byLaw = new Map();
   norms.forEach((n) => {
-    if (!byLaw.has(n.law_short)) byLaw.set(n.law_short, []);
-    byLaw.get(n.law_short).push(n);
+    const list = byLaw.get(n.law_short) ?? [];
+    list.push(n);
+    byLaw.set(n.law_short, list);
   });
   return [...byLaw.entries()];
 }
 
+/**
+ * @param {Object} props
+ * @param {any[]} props.laws
+ * @param {string|null} [props.error]
+ * @param {any[]} [props.norms]
+ * @param {string|null} [props.normError]
+ */
 export default function JevPanel({ laws, error, norms, normError }) {
   return (
     <Card>
@@ -51,7 +61,7 @@ export default function JevPanel({ laws, error, norms, normError }) {
           </Alert>
         )}
 
-        {!error && !normError && norms?.length > 0 && (
+        {!error && !normError && norms && norms.length > 0 && (
           <Stack spacing={1.5} sx={{ mt: 2 }}>
             {groupByLaw(norms).map(([lawShort, list]) => (
               <Stack key={lawShort} spacing={1}>

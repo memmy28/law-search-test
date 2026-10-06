@@ -1,6 +1,9 @@
 import { Chip, Stack, Typography } from "@mui/material";
 
+/** @typedef {{label: string, query: string, asOf?: string}} ExampleItem */
+
 // Zwei Beispiele pro Testfall aus TESTFRAGEN.md.
+/** @type {{label: string, items: ExampleItem[]}[]} */
 const GROUPS = [
   {
     label: "1. Eindeutige Treffer",
@@ -89,6 +92,11 @@ const GROUPS = [
   },
 ];
 
+/**
+ * @param {Object} props
+ * @param {(query: string, asOf?: string) => void} props.onPick
+ * @param {boolean} [props.disabled]
+ */
 export default function ExampleChips({ onPick, disabled }) {
   return (
     <Stack spacing={1} sx={{ mt: 2 }}>

@@ -9,11 +9,13 @@ const AXIS_PAD = 24;
 
 // Jahresbeschriftung so ausdünnen, dass höchstens ~12 Labels entstehen
 // (der Datensatz reicht von 1907 bis 2027, jedes Jahr wäre unlesbar).
+/** @param {number} span */
 function yearStep(span) {
   const raw = span / 12;
   return [1, 2, 5, 10, 20, 25, 50, 100].find((s) => s >= raw) ?? 100;
 }
 
+/** @param {{norms: any[], today: string}} props */
 export default function NormTimeline({ norms, today: todayStr }) {
   if (!norms?.length) {
     return (
@@ -27,11 +29,13 @@ export default function NormTimeline({ norms, today: todayStr }) {
     );
   }
 
+  /** @type {Map<string, {label: string, items: any[]}>} */
   const groups = new Map();
   norms.forEach((n) => {
     const key = `${n.law_short} ${n.norm_ref}`;
-    if (!groups.has(key)) groups.set(key, { label: key, items: [] });
-    groups.get(key).items.push(n);
+    const group = groups.get(key) ?? { label: key, items: [] };
+    group.items.push(n);
+    groups.set(key, group);
   });
   const rows = [...groups.values()].sort((a, b) =>
     a.label.localeCompare(b.label, "de"),
@@ -39,14 +43,15 @@ export default function NormTimeline({ norms, today: todayStr }) {
 
   const today = new Date(todayStr);
   const openEndedFallback = new Date(today.getFullYear() + 2, 0, 1);
-  const dates = [today];
+  const timestamps = [today.getTime()];
   norms.forEach((n) => {
-    dates.push(new Date(n.valid_from));
-    dates.push(n.valid_to ? new Date(n.valid_to) : openEndedFallback);
+    timestamps.push(new Date(n.valid_from).getTime());
+    timestamps.push((n.valid_to ? new Date(n.valid_to) : openEndedFallback).getTime());
   });
-  const minDate = Math.min(...dates);
-  const maxDate = Math.max(...dates);
-  const pct = (d) => ((d - minDate) / (maxDate - minDate)) * 100;
+  const minDate = Math.min(...timestamps);
+  const maxDate = Math.max(...timestamps);
+  /** @param {Date} date */
+  const pct = (date) => ((date.getTime() - minDate) / (maxDate - minDate)) * 100;
 
   const startYear = new Date(minDate).getFullYear();
   const endYear = new Date(maxDate).getFullYear();

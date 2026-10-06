@@ -10,6 +10,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import StatusChip from "./StatusChip";
 
+/** @param {{rank: number, result: any}} props */
 export default function ResultCard({ rank, result }) {
   return (
     <Card>

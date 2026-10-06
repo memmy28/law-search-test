@@ -1,5 +1,12 @@
 import { Card, CardContent, Typography } from "@mui/material";
 
+/**
+ * @param {Object} props
+ * @param {number} props.durationMs
+ * @param {number} props.questionCount
+ * @param {number} props.estimatedCostUsd
+ * @param {number} props.costPerQuestionUsd
+ */
 export default function JevCostCard({
   durationMs,
   questionCount,

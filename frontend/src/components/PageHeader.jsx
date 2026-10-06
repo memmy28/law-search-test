@@ -1,5 +1,12 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
 
+/**
+ * @param {Object} props
+ * @param {string} props.title
+ * @param {import("react").ReactNode} [props.tag]
+ * @param {import("react").ReactNode} [props.subtitle]
+ * @param {import("react").ReactNode} [props.children]
+ */
 export default function PageHeader({ title, tag, subtitle, children = null }) {
   return (
     <Box sx={{ mb: 2.5 }}>

@@ -19,6 +19,7 @@ import PageHeader from "../components/PageHeader";
 import StatusChip from "../components/StatusChip";
 import Loading from "../components/Loading";
 
+/** @param {{label: string, definitions: any[]}} props */
 function DefinitionChips({ label, definitions }) {
   if (!definitions.length) return null;
   return (
@@ -119,7 +120,7 @@ export default function NormDetailPage() {
               Alle Fassungen von {norm.law_short} {norm.norm_ref}
             </Typography>
             <List disablePadding>
-              {versions.map((v) => (
+              {versions.map((/** @type {any} */ v) => (
                 <ListItemButton
                   key={v.id}
                   component={RouterLink}

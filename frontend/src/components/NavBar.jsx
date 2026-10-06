@@ -36,6 +36,7 @@ export default function NavBar() {
     return true;
   });
 
+  /** @param {string} to */
   const isActive = (to) =>
     to === "/"
       ? pathname === "/" || pathname.startsWith("/norm/")

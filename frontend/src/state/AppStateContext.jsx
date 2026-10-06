@@ -11,18 +11,28 @@ import { getJSON, postJSON } from "../api";
 // Die drei Entwicklungsstände (plain -> definition -> classification) werden
 // serverseitig per Cookie gehalten; der Client spiegelt sie nur, damit Navigation
 // und /api/search konsistent denselben Stand sehen.
+/** @type {Record<string, string>} */
 export const STATE_LABELS = {
   plain: "Plain",
   definition: "+ Definitionen",
   classification: "+ Jev",
 };
 
+/** @type {Record<string, string>} */
 export const STATE_DESCRIPTIONS = {
   plain: "Nur hybride Suche, ohne Definitionsbibliothek und ohne Jev",
   definition: "+ Definitionsbibliothek (Begriffsfilter)",
   classification: "+ Jev-Klassifikation pro Gesetz und Norm",
 };
 
+/**
+ * @typedef {Object} StateApiResponse
+ * @property {string} state
+ * @property {string[]} states
+ * @property {string} diagram_version
+ */
+
+/** @type {StateApiResponse} */
 const FALLBACK = {
   state: "classification",
   states: Object.keys(STATE_LABELS),
@@ -40,11 +50,11 @@ const FALLBACK = {
  * @property {(state: string) => Promise<void>} setState
  */
 
-/** @type {import("react").Context<AppStateValue|null>} */
-const AppStateContext = createContext(null);
+const AppStateContext = createContext(/** @type {AppStateValue|null} */ (null));
 
+/** @param {{children: import("react").ReactNode}} props */
 export function AppStateProvider({ children }) {
-  const [info, setInfo] = useState(null);
+  const [info, setInfo] = useState(/** @type {StateApiResponse|null} */ (null));
 
   useEffect(() => {
     getJSON("/api/state")
@@ -52,10 +62,14 @@ export function AppStateProvider({ children }) {
       .catch(() => setInfo(FALLBACK));
   }, []);
 
-  const setState = useCallback(async (state) => {
-    const next = await postJSON("/api/state", { state });
-    setInfo(next);
-  }, []);
+  const setState = useCallback(
+    /** @param {string} state */
+    async (state) => {
+      const next = await postJSON("/api/state", { state });
+      setInfo(next);
+    },
+    [],
+  );
 
   const state = info?.state ?? null;
   const value = {
