@@ -3,6 +3,8 @@ const queryEl = document.getElementById("query");
 const asOfEl = document.getElementById("as_of");
 const resultsEl = document.getElementById("results");
 const pipelineEl = document.getElementById("pipeline-info");
+const jevPanelEl = document.getElementById("jev-panel");
+const jevChipsEl = document.getElementById("jev-chips");
 
 asOfEl.valueAsDate = new Date();
 
@@ -32,6 +34,7 @@ async function runSearch() {
 
   resultsEl.innerHTML = '<div class="empty">Suche läuft …</div>';
   pipelineEl.classList.add("hidden");
+  jevPanelEl.classList.add("hidden");
 
   const params = new URLSearchParams({ query, as_of: asOf });
   const res = await fetch(`/api/search?${params.toString()}`);
@@ -41,6 +44,8 @@ async function runSearch() {
     resultsEl.innerHTML = `<div class="empty">${data.error}</div>`;
     return;
   }
+
+  renderJevPanel(data.law_classification, data.jev_error);
 
   let pipelineText =
     `Stichtag ${data.as_of} · ${data.vector_candidates} Kandidaten (Vektor) / ` +
@@ -77,6 +82,27 @@ async function runSearch() {
       `;
     })
     .join("");
+}
+
+function renderJevPanel(laws, error) {
+  if (error) {
+    jevChipsEl.innerHTML = `<div class="empty">Jev-Klassifikation nicht verfügbar: ${escapeHtml(error)}</div>`;
+    jevPanelEl.classList.remove("hidden");
+    return;
+  }
+  if (!laws || laws.length === 0) return;
+
+  jevChipsEl.innerHTML = laws
+    .map((l) => {
+      const pct = Math.round(l.probability * 100);
+      return `
+        <span class="jev-chip ${l.relevant ? "relevant" : ""}">
+          ${escapeHtml(l.law)} <span class="prob">${pct}%</span>
+        </span>
+      `;
+    })
+    .join("");
+  jevPanelEl.classList.remove("hidden");
 }
 
 function escapeHtml(str) {

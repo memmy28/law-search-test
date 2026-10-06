@@ -3,10 +3,12 @@ import subprocess
 from datetime import date
 
 import psycopg2
+from dotenv import load_dotenv
 from flask import Flask, Response, abort, jsonify, render_template, request
 from pgvector.psycopg2 import register_vector
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
+import jev
 from search import (
     DB_URL,
     EMBED_MODEL,
@@ -18,6 +20,8 @@ from search import (
     text_search,
     vector_search,
 )
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -33,6 +37,31 @@ reranker = CrossEncoder(RERANK_MODEL)
 
 conn = psycopg2.connect(DB_URL)
 register_vector(conn)
+
+
+def run_jev_classification(cur, query):
+    """Lässt Jev einschätzen, welche der in der Datenbank vorhandenen Gesetze für
+    die Anfrage einschlägig sind, und protokolliert das Ergebnis in
+    jev_classifications. Gibt (results, error) zurück - bei einem Jev-Fehler
+    bleibt die Suche selbst trotzdem funktionsfähig."""
+    cur.execute("SELECT DISTINCT law_short FROM norms ORDER BY law_short")
+    laws = [row[0] for row in cur.fetchall()]
+
+    try:
+        results = jev.classify_laws(query, laws)
+    except jev.JevError as e:
+        return None, str(e)
+
+    for r in results:
+        cur.execute(
+            """
+            INSERT INTO jev_classifications (query, law_short, probability, relevant)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (query, r["law"], r["probability"], r["relevant"]),
+        )
+    conn.commit()
+    return results, None
 
 
 def classify_validity(valid_from, valid_to, as_of):
@@ -152,6 +181,31 @@ def definitions():
     return render_template("definitions.html", active_page="definitions", definitions=defs)
 
 
+@app.route("/jev")
+def jev_view():
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT query, law_short, probability, relevant, created_at
+        FROM jev_classifications
+        ORDER BY created_at DESC
+        LIMIT 200
+        """
+    )
+    cols = ["query", "law_short", "probability", "relevant", "created_at"]
+    rows = [dict(zip(cols, r)) for r in cur.fetchall()]
+    cur.close()
+
+    queries = {}
+    for r in rows:
+        key = (r["created_at"], r["query"])
+        queries.setdefault(key, {"query": r["query"], "created_at": r["created_at"], "laws": []})
+        queries[key]["laws"].append(r)
+    runs = sorted(queries.values(), key=lambda q: q["created_at"], reverse=True)
+
+    return render_template("jev.html", active_page="jev", runs=runs)
+
+
 @app.route("/api/search")
 def api_search():
     query = request.args.get("query", "").strip()
@@ -169,6 +223,8 @@ def api_search():
 
     matched_defs = find_matching_definitions(cur, query)
     allowed_ids = linked_norm_ids(cur, [d["id"] for d in matched_defs]) if matched_defs else None
+
+    law_classification, jev_error = run_jev_classification(cur, query)
 
     vec_ids = vector_search(cur, qvec, as_of_str, candidates, allowed_ids)
     txt_ids = text_search(cur, query, as_of_str, candidates, allowed_ids)
@@ -209,6 +265,8 @@ def api_search():
             "fused_candidates": len(candidate_ids),
             "matched_definitions": [{"term": d["term"]} for d in matched_defs],
             "allowed_norm_count": len(allowed_ids) if allowed_ids is not None else None,
+            "law_classification": law_classification,
+            "jev_error": jev_error,
             "results": results,
         }
     )

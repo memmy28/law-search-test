@@ -226,6 +226,35 @@ button:hover { opacity: 0.9; }
 .badge.vergangen { background: #f3f4f6; color: var(--past); }
 .badge.aktuell { background: #dcfce7; color: var(--current); }
 .badge.zukuenftig { background: #dbeafe; color: var(--future); }
+.badge.jev-relevant { background: #dcfce7; color: var(--current); }
+.badge.jev-irrelevant { background: #f3f4f6; color: var(--past); }
+
+.jev-panel {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.jev-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: var(--muted);
+}
+
+.jev-chip.relevant {
+  background: #dcfce7;
+  color: var(--current);
+}
+
+.jev-chip .prob {
+  font-weight: 700;
+}
 
 .card-body {
   margin-top: 10px;

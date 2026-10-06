@@ -49,3 +49,16 @@ CREATE TABLE IF NOT EXISTS definition_links (
 
 CREATE INDEX IF NOT EXISTS definition_links_norm_idx ON definition_links (norm_id);
 CREATE INDEX IF NOT EXISTS definition_links_def_idx ON definition_links (definition_id);
+
+-- Protokoll der Jev-Klassifikationen: pro Suchanfrage und Gesetz, ob Jev
+-- (TypeSafe AI, "Noul"-Frage) das Gesetz als einschlägig eingestuft hat.
+CREATE TABLE IF NOT EXISTS jev_classifications (
+    id SERIAL PRIMARY KEY,
+    query TEXT NOT NULL,
+    law_short VARCHAR(50) NOT NULL,
+    probability REAL NOT NULL,
+    relevant BOOLEAN NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS jev_classifications_created_idx ON jev_classifications (created_at DESC);

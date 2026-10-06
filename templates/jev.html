@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jev-Klassifikation – Rechts-Wissensdatenbank</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  {% include "_navbar.html" %}
+  <header>
+    <h1>Jev-Klassifikation <span class="tag">{{ runs|length }} Anfragen protokolliert</span></h1>
+    <p class="subtitle">
+      Für jede Suchanfrage lässt die Anwendung das Jev-Modell (TypeSafe AI) per
+      Noul-Frage einschätzen, ob jedes in der Datenbank vorhandene Gesetz einschlägig
+      ist. Wahrscheinlichkeit ≥ 50&nbsp;% gilt als "relevant".
+    </p>
+  </header>
+
+  <main>
+    {% if not runs %}
+    <section class="panel">
+      <div class="empty">Noch keine Jev-Klassifikationen protokolliert. Stelle auf der <a href="/">Suchseite</a> eine Frage.</div>
+    </section>
+    {% endif %}
+
+    {% for run in runs %}
+    <section class="panel">
+      <h2>"{{ run.query }}"</h2>
+      <p class="subtitle">{{ run.created_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Gesetz</th>
+            <th>Einschätzung</th>
+            <th>Wahrscheinlichkeit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in run.laws|sort(attribute="probability", reverse=True) %}
+          <tr>
+            <td>{{ l.law_short }}</td>
+            <td>
+              <span class="badge {{ 'jev-relevant' if l.relevant else 'jev-irrelevant' }}">
+                {{ "relevant" if l.relevant else "nicht relevant" }}
+              </span>
+            </td>
+            <td>{{ "%.0f"|format(l.probability * 100) }}%</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    {% endfor %}
+  </main>
+</body>
+</html>
