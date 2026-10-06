@@ -27,30 +27,49 @@ pip install -r requirements.txt
 python ingest.py                  # embeddet und lädt die 10 Beispiel-Normen (lädt ~500MB Modell beim ersten Mal)
 ```
 
-## Web-Frontend (für Demos)
+## Web-Frontend (React + MUI)
+
+Das Frontend ist eine React-Single-Page-App (Vite, ausschließlich MUI-Material-Komponenten) in
+`frontend/`. Flask (`app.py`) ist ein reines JSON-Backend und liefert zusätzlich den gebauten
+Frontend-Stand aus `frontend/dist` aus.
 
 ```bash
-python app.py    # startet auf http://127.0.0.1:5050
+# einmalig
+cd frontend && npm install && cd ..
+
+# Variante A - Produktivbetrieb: Frontend bauen, Flask liefert alles auf einem Port aus
+cd frontend && npm run build && cd ..
+python app.py                    # http://127.0.0.1:5050
+
+# Variante B - Entwicklung mit Hot Reload: Flask + Vite parallel
+python app.py                    # Terminal 1, API auf :5050
+cd frontend && npm run dev       # Terminal 2, UI auf http://127.0.0.1:5173 (proxyt /api -> :5050)
 ```
 
-Einfache Ein-Seiten-Oberfläche: Frage eingeben, Stichtag wählen, Ergebnisse als Karten mit
-Score, Gültigkeitszeitraum, Status-Badge (vergangen/aktuell/zukünftig relativ zu heute) und Quelle.
-Über den Beispiel-Chips lassen sich die drei Kernszenarien (semantische Suche, Reranker-Test,
-Zeitraum-Filterung) mit einem Klick vorführen. Die Pipeline-Zeile über den Ergebnissen zeigt
-transparent, wie viele Kandidaten Volltext- und Vektorsuche jeweils gefunden haben und wie viele
-nach RRF-Fusion übrig bleiben.
+Nach Änderungen an `app.py` muss Flask neu gestartet werden (kein Auto-Reload); Änderungen im
+Frontend greifen in Variante B sofort, in Variante A nach erneutem `npm run build`.
 
-Über die Navbar erreichbar:
-- **Suche** (`/`) – die oben beschriebene Such-Oberfläche inkl. Zeitstrahl aller Normen.
+Oben rechts in der Navigation lässt sich der **Entwicklungsstand** umschalten (Cookie `app_state`):
+*Plain* (nur hybride Suche) → *+ Definitionen* (Begriffsfilter) → *+ Jev* (Klassifikation). Der Stand
+steuert, welche Navigationspunkte sichtbar sind, wie `/api/search` arbeitet und welche
+Diagrammversion die Architektur-Seite zeigt.
+
+Seiten:
+- **Suche** (`/`) – Frage + Stichtag, Beispiel-Chips (zwei pro Testfall aus `TESTFRAGEN.md`),
+  Pipeline-Zeile, Jev-Panel (Gesetze + einzelne Normen), Ergebnis-Karten, Jev-Laufzeit/Kosten-Karte
+  und der Zeitstrahl aller Normen.
 - **Datenbank** (`/datenbank`) – alle Normen gruppiert nach Gesetz, mit Gültigkeitszeitraum und Status.
-- **Definitionen** (`/definitionen`) – alle Begriffe der Definitionsbibliothek mit definierender Norm
-  und verwendenden Normen. Norm-Detailseiten zeigen unter "Verweise auf Definitionen" dieselbe
-  Verknüpfung aus Sicht der einzelnen Norm.
-- **Architektur** (`/architektur`) – die Such-Pipeline als Diagramm, farblich markiert nach
-  umgesetzt/teilweise/offen. Quelle ist `diagrams/search-pipeline.puml`; Flask rendert die Datei
-  bei jedem Aufruf von `/architektur/diagram.svg` live über den lokalen PlantUML-Docker-Container neu
-  (gecacht anhand der Datei-Änderungszeit). Einfach die `.puml`-Datei bearbeiten und die Seite neu
-  laden – kein manuelles Re-Rendern nötig, Docker muss dafür laufen.
+- **Definitionen** (`/definitionen`, ab Stand *+ Definitionen*) – Begriffe der Definitionsbibliothek
+  mit definierender Norm und verwendenden Normen.
+- **Architektur** (`/architektur`) – die Such-Pipeline als PlantUML-Diagramm passend zum Stand.
+  Quelle ist `diagrams/search-pipeline[-2|-3].puml`; `/api/diagram.svg` rendert live über den
+  lokalen PlantUML-Docker-Container (gecacht anhand der Datei-Änderungszeit). Docker muss laufen.
+- **Jev-Klassifikation** (`/jev`, nur Stand *+ Jev*) – Verlauf aller Klassifikationen inkl.
+  aufklappbarer Normebene.
+- **Norm-Detail** (`/norm/<id>`) – Volltext, alle Fassungen, Verweise auf Definitionen.
+
+JSON-API: `GET/POST /api/state`, `GET /api/search`, `GET /api/norms`, `GET /api/norms/<id>`,
+`GET /api/definitions`, `GET /api/jev/runs`, `GET /api/diagram.svg?v=1|2|3`.
 
 ## Suche testen (CLI)
 

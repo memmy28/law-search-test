@@ -5,7 +5,7 @@ from datetime import date
 
 import psycopg2
 from dotenv import load_dotenv
-from flask import Flask, Response, abort, jsonify, redirect, render_template, request
+from flask import Flask, Response, abort, jsonify, request, send_from_directory
 from pgvector.psycopg2 import register_vector
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -24,12 +24,17 @@ from search import (
 
 load_dotenv()
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIST = os.path.join(BASE_DIR, "frontend", "dist")
+
+# Reines JSON-Backend; das React-Frontend (frontend/) wird im Produktivbetrieb aus
+# frontend/dist ausgeliefert, im Dev-Modus übernimmt der Vite-Dev-Server mit Proxy.
+app = Flask(__name__, static_folder=None)
 
 DIAGRAM_PATHS = {
-    "1": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline.puml"),
-    "2": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline-2.puml"),
-    "3": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline-3.puml"),
+    "1": os.path.join(BASE_DIR, "diagrams", "search-pipeline.puml"),
+    "2": os.path.join(BASE_DIR, "diagrams", "search-pipeline-2.puml"),
+    "3": os.path.join(BASE_DIR, "diagrams", "search-pipeline-3.puml"),
 }
 _diagram_cache = {}
 
@@ -46,21 +51,29 @@ def current_app_state():
     return state if state in APP_STATES else DEFAULT_APP_STATE
 
 
-@app.context_processor
-def inject_app_state():
-    return {"app_state": current_app_state()}
+def state_payload(state):
+    return {
+        "state": state,
+        "states": list(APP_STATES),
+        "diagram_version": DIAGRAM_VERSION_FOR_STATE[state],
+    }
 
 
-@app.route("/set-state/<state>")
-def set_state(state):
+@app.route("/api/state", methods=["GET"])
+def api_get_state():
+    return jsonify(state_payload(current_app_state()))
+
+
+@app.route("/api/state", methods=["POST"])
+def api_set_state():
+    body = request.get_json(silent=True) or {}
+    state = body.get("state")
     if state not in APP_STATES:
-        abort(404)
-    next_url = request.args.get("next", "/")
-    if not next_url.startswith("/") or next_url.startswith("//"):
-        next_url = "/"
-    resp = redirect(next_url)
-    resp.set_cookie("app_state", state, max_age=60 * 60 * 24 * 365)
+        return jsonify({"error": f"Unbekannter Stand: {state!r}"}), 400
+    resp = jsonify(state_payload(state))
+    resp.set_cookie("app_state", state, max_age=60 * 60 * 24 * 365, samesite="Lax")
     return resp
+
 
 print(f"Lade Modelle ({EMBED_MODEL}, {RERANK_MODEL}) ...")
 embed_model = SentenceTransformer(EMBED_MODEL)
@@ -158,13 +171,12 @@ def classify_validity(valid_from, valid_to, as_of):
     return "aktuell"
 
 
-@app.route("/")
-def index():
-    return render_template("index.html", active_page="search")
+def iso_date(value):
+    return str(value) if value else None
 
 
 def render_diagram_svg(version):
-    """Rendert diagrams/search-pipeline[-2].puml live über den lokalen PlantUML-Docker-Container.
+    """Rendert diagrams/search-pipeline[-N].puml live über den lokalen PlantUML-Docker-Container.
     Ergebnis wird pro Version anhand der Datei-mtime gecacht, damit Änderungen an der .puml-Datei
     ohne manuellen Zwischenschritt beim nächsten Seitenaufruf sichtbar werden."""
     puml_path = DIAGRAM_PATHS.get(version)
@@ -199,54 +211,17 @@ def render_diagram_svg(version):
     return result.stdout, None
 
 
-@app.route("/architektur")
-def architecture():
-    default_version = DIAGRAM_VERSION_FOR_STATE[current_app_state()]
-    return render_template(
-        "architecture.html", active_page="architecture", default_version=default_version
-    )
-
-
-@app.route("/architektur/diagram.svg")
-def architecture_diagram():
-    version = request.args.get("v", "1")
+@app.route("/api/diagram.svg")
+def api_diagram():
+    version = request.args.get("v") or DIAGRAM_VERSION_FOR_STATE[current_app_state()]
     svg, error = render_diagram_svg(version)
     if error:
         return Response(f"PlantUML-Renderfehler:\n\n{error}", status=500, mimetype="text/plain")
     return Response(svg, mimetype="image/svg+xml")
 
 
-@app.route("/datenbank")
-def database():
-    cur = conn.cursor()
-    cur.execute(
-        """
-        SELECT id, law_short, norm_ref, title, valid_from, valid_to
-        FROM norms
-        ORDER BY law_short, norm_ref, valid_from
-        """
-    )
-    cols = ["id", "law_short", "norm_ref", "title", "valid_from", "valid_to"]
-    rows = [dict(zip(cols, r)) for r in cur.fetchall()]
-    cur.close()
-
-    today = date.today()
-    groups = {}
-    for r in rows:
-        r["status"] = classify_validity(r["valid_from"], r["valid_to"], today)
-        groups.setdefault(r["law_short"], []).append(r)
-
-    return render_template(
-        "database.html",
-        active_page="database",
-        groups=groups,
-        total_norms=len(rows),
-        total_laws=len(groups),
-    )
-
-
-@app.route("/definitionen")
-def definitions():
+@app.route("/api/definitions")
+def api_definitions():
     cur = conn.cursor()
     cur.execute("SELECT id, term, definition_text FROM definitions ORDER BY term")
     defs = [dict(zip(["id", "term", "definition_text"], r)) for r in cur.fetchall()]
@@ -267,11 +242,11 @@ def definitions():
         d["used_by"] = [l for l in links if l["role"] == "verwendet"]
 
     cur.close()
-    return render_template("definitions.html", active_page="definitions", definitions=defs)
+    return jsonify({"definitions": defs})
 
 
-@app.route("/jev")
-def jev_view():
+@app.route("/api/jev/runs")
+def api_jev_runs():
     cur = conn.cursor()
     cur.execute(
         """
@@ -301,8 +276,15 @@ def jev_view():
     law_index = {}
     for r in law_rows:
         key = (r["created_at"], r["query"])
-        run = runs.setdefault(key, {"query": r["query"], "created_at": r["created_at"], "laws": []})
-        law_entry = dict(r, norms=[])
+        run = runs.setdefault(
+            key, {"query": r["query"], "created_at": r["created_at"].isoformat(), "laws": []}
+        )
+        law_entry = {
+            "law_short": r["law_short"],
+            "probability": r["probability"],
+            "relevant": r["relevant"],
+            "norms": [],
+        }
         run["laws"].append(law_entry)
         law_index[(key, r["law_short"])] = law_entry
 
@@ -310,10 +292,17 @@ def jev_view():
         key = (r["created_at"], r["query"])
         law_entry = law_index.get((key, r["law_short"]))
         if law_entry is not None:
-            law_entry["norms"].append(r)
+            law_entry["norms"].append(
+                {
+                    "norm_ref": r["norm_ref"],
+                    "title": r["title"],
+                    "probability": r["probability"],
+                    "relevant": r["relevant"],
+                }
+            )
 
-    runs = sorted(runs.values(), key=lambda q: q["created_at"], reverse=True)
-    return render_template("jev.html", active_page="jev", runs=runs)
+    ordered = sorted(runs.values(), key=lambda q: q["created_at"], reverse=True)
+    return jsonify({"runs": ordered})
 
 
 @app.route("/api/search")
@@ -376,8 +365,8 @@ def api_search():
                     "norm_ref": r["norm_ref"],
                     "title": r["title"],
                     "body": r["body"],
-                    "valid_from": str(r["valid_from"]),
-                    "valid_to": str(r["valid_to"]) if r["valid_to"] else None,
+                    "valid_from": iso_date(r["valid_from"]),
+                    "valid_to": iso_date(r["valid_to"]),
                     "source_url": r["source_url"],
                     "status": classify_validity(r["valid_from"], r["valid_to"], today),
                 }
@@ -387,6 +376,7 @@ def api_search():
         {
             "query": query,
             "as_of": as_of_str,
+            "state": state,
             "vector_candidates": len(vec_ids),
             "text_candidates": len(txt_ids),
             "fused_candidates": len(candidate_ids),
@@ -426,8 +416,8 @@ def api_norms():
             "law_short": r["law_short"],
             "norm_ref": r["norm_ref"],
             "title": r["title"],
-            "valid_from": str(r["valid_from"]),
-            "valid_to": str(r["valid_to"]) if r["valid_to"] else None,
+            "valid_from": iso_date(r["valid_from"]),
+            "valid_to": iso_date(r["valid_to"]),
             "status": classify_validity(r["valid_from"], r["valid_to"], today),
         }
         for r in rows
@@ -435,8 +425,8 @@ def api_norms():
     return jsonify({"norms": norms, "today": str(today)})
 
 
-@app.route("/norm/<int:norm_id>")
-def norm_detail(norm_id):
+@app.route("/api/norms/<int:norm_id>")
+def api_norm_detail(norm_id):
     cur = conn.cursor()
     cur.execute(
         """
@@ -475,19 +465,42 @@ def norm_detail(norm_id):
         (norm_id,),
     )
     def_links = [dict(zip(["id", "term", "role"], r)) for r in cur.fetchall()]
-    defines = [l for l in def_links if l["role"] == "definiert"]
-    uses = [l for l in def_links if l["role"] == "verwendet"]
-
     cur.close()
 
     today = date.today()
     norm["status"] = classify_validity(norm["valid_from"], norm["valid_to"], today)
+    norm["valid_from"] = iso_date(norm["valid_from"])
+    norm["valid_to"] = iso_date(norm["valid_to"])
     for v in versions:
         v["status"] = classify_validity(v["valid_from"], v["valid_to"], today)
+        v["valid_from"] = iso_date(v["valid_from"])
+        v["valid_to"] = iso_date(v["valid_to"])
 
-    return render_template(
-        "norm_detail.html", norm=norm, versions=versions, defines=defines, uses=uses
+    return jsonify(
+        {
+            "norm": norm,
+            "versions": versions,
+            "defines": [l for l in def_links if l["role"] == "definiert"],
+            "uses": [l for l in def_links if l["role"] == "verwendet"],
+        }
     )
+
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def spa(path):
+    """Liefert das gebaute React-Frontend aus. Alle Nicht-API-Pfade fallen auf
+    index.html zurück, damit der Client-Router (react-router) die Route übernimmt."""
+    if path and os.path.isfile(os.path.join(FRONTEND_DIST, path)):
+        return send_from_directory(FRONTEND_DIST, path)
+    if not os.path.isfile(os.path.join(FRONTEND_DIST, "index.html")):
+        return Response(
+            "Frontend ist nicht gebaut. Entweder `cd frontend && npm run build` ausführen "
+            "oder im Dev-Modus `npm run dev` starten und http://127.0.0.1:5173 öffnen.",
+            status=503,
+            mimetype="text/plain; charset=utf-8",
+        )
+    return send_from_directory(FRONTEND_DIST, "index.html")
 
 
 if __name__ == "__main__":
