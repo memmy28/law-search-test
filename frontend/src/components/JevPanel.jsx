@@ -1,4 +1,12 @@
-import { Alert, Card, CardContent, Divider, Link, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Card,
+  CardContent,
+  Divider,
+  Link,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
 import { ProbabilityChip } from "./RelevanceChip";
@@ -21,11 +29,18 @@ export default function JevPanel({ laws, error, norms, normError }) {
         </Typography>
 
         {error ? (
-          <Alert severity="warning">Jev-Klassifikation nicht verfügbar: {error}</Alert>
+          <Alert severity="warning">
+            Jev-Klassifikation nicht verfügbar: {error}
+          </Alert>
         ) : (
           <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
             {laws.map((l) => (
-              <ProbabilityChip key={l.law} label={l.law} probability={l.probability} relevant={l.relevant} />
+              <ProbabilityChip
+                key={l.law}
+                label={l.law}
+                probability={l.probability}
+                relevant={l.relevant}
+              />
             ))}
           </Stack>
         )}
@@ -41,7 +56,10 @@ export default function JevPanel({ laws, error, norms, normError }) {
             {groupByLaw(norms).map(([lawShort, list]) => (
               <Stack key={lawShort} spacing={1}>
                 <Divider />
-                <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ fontWeight: 700, color: "text.secondary" }}
+                >
                   {lawShort} – einzelne Normen:
                 </Typography>
                 <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>

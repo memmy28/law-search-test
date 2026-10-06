@@ -11,15 +11,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import { getJSON, todayISO, useApi } from "../api";
+import { getJSON, todayISO } from "../api";
 import { useAppState } from "../state/AppStateContext";
-import { STATUS_COLORS, STATUS_LABEL_LONG } from "../theme";
 import PageHeader from "../components/PageHeader";
 import ExampleChips from "../components/ExampleChips";
 import JevPanel from "../components/JevPanel";
 import JevCostCard from "../components/JevCostCard";
 import ResultCard from "../components/ResultCard";
-import NormTimeline from "../components/NormTimeline";
 import Loading from "../components/Loading";
 
 function pipelineSummary(data) {
@@ -41,7 +39,6 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const norms = useApi("/api/norms");
 
   async function runSearch(q = query, date = asOf) {
     const trimmed = q.trim();
@@ -66,7 +63,8 @@ export default function SearchPage() {
     runSearch(exampleQuery, date);
   }
 
-  const showJev = hasClassification && data && (data.law_classification || data.jev_error);
+  const showJev =
+    hasClassification && data && (data.law_classification || data.jev_error);
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
@@ -104,7 +102,11 @@ export default function SearchPage() {
                     onChange={(e) => setAsOf(e.target.value)}
                     slotProps={{ inputLabel: { shrink: true } }}
                   />
-                  <Button type="submit" variant="contained" disabled={loading || !query.trim()}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={loading || !query.trim()}
+                  >
                     Suchen
                   </Button>
                 </Stack>
@@ -133,7 +135,11 @@ export default function SearchPage() {
             )}
 
             {data.results.length === 0 ? (
-              <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", py: 2 }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ textAlign: "center", py: 2 }}
+              >
                 Keine an diesem Stichtag gültigen Treffer.
               </Typography>
             ) : (
@@ -154,28 +160,6 @@ export default function SearchPage() {
             )}
           </>
         )}
-
-        <Card sx={{ mt: 2 }}>
-          <CardContent>
-            <Typography variant="h6">Zeitliche Übersicht aller Normen</Typography>
-            <Typography variant="body2" color="text.secondary">
-              Jede Zeile ist eine Norm, jeder Balken eine Fassung. Die gestrichelte Linie markiert heute.
-            </Typography>
-            <Stack direction="row" spacing={2} sx={{ mt: 1.5 }} flexWrap="wrap" useFlexGap>
-              {Object.entries(STATUS_LABEL_LONG).map(([status, label]) => (
-                <Stack key={status} direction="row" spacing={0.75} alignItems="center">
-                  <Box sx={{ width: 12, height: 12, borderRadius: 0.5, bgcolor: STATUS_COLORS[status].bar }} />
-                  <Typography variant="caption" color="text.secondary">
-                    {label}
-                  </Typography>
-                </Stack>
-              ))}
-            </Stack>
-            {norms.loading && <Loading />}
-            {norms.error && <Alert severity="error">Zeitstrahl konnte nicht geladen werden.</Alert>}
-            {norms.data && <NormTimeline norms={norms.data.norms} today={norms.data.today} />}
-          </CardContent>
-        </Card>
       </Stack>
     </Container>
   );

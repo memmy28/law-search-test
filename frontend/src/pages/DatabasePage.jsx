@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Card,
   CardContent,
   Container,
@@ -19,6 +20,8 @@ import { useApi } from "../api";
 import PageHeader from "../components/PageHeader";
 import StatusChip from "../components/StatusChip";
 import Loading from "../components/Loading";
+import NormTimeline from "../components/NormTimeline";
+import { STATUS_COLORS, STATUS_LABEL_LONG } from "../theme";
 
 export default function DatabasePage() {
   const { data, error, loading } = useApi("/api/norms");
@@ -33,7 +36,9 @@ export default function DatabasePage() {
     <Container maxWidth="md" sx={{ py: 4 }}>
       <PageHeader
         title="Datenbank"
-        tag={data ? `${data.norms.length} Normen · ${groups.size} Gesetze` : null}
+        tag={
+          data ? `${data.norms.length} Normen · ${groups.size} Gesetze` : null
+        }
         subtitle="Alle Gesetze, Normen und Fassungen, die aktuell in der Wissensdatenbank enthalten sind."
       />
 
@@ -41,13 +46,17 @@ export default function DatabasePage() {
       {error && <Alert severity="error">{error.message}</Alert>}
 
       <Stack spacing={2}>
-        {[...groups.entries()].map(([law, norms]) => (
+        {[...groups.entries()].map(([law, lawNorms]) => (
           <Card key={law}>
             <CardContent>
               <Typography variant="h6">
                 {law}{" "}
-                <Typography component="span" variant="body2" color="text.secondary">
-                  ({norms.length} Fassung{norms.length === 1 ? "" : "en"})
+                <Typography
+                  component="span"
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  ({lawNorms.length} Fassung{lawNorms.length === 1 ? "" : "en"})
                 </Typography>
               </Typography>
               <TableContainer>
@@ -62,10 +71,15 @@ export default function DatabasePage() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {norms.map((n) => (
+                    {lawNorms.map((n) => (
                       <TableRow key={n.id} hover>
                         <TableCell>
-                          <Link component={RouterLink} to={`/norm/${n.id}`} fontWeight={600} underline="hover">
+                          <Link
+                            component={RouterLink}
+                            to={`/norm/${n.id}`}
+                            fontWeight={600}
+                            underline="hover"
+                          >
                             {n.norm_ref}
                           </Link>
                         </TableCell>
@@ -95,9 +109,11 @@ export default function DatabasePage() {
                 <Link component={RouterLink} to="/definitionen">
                   Definitionsbibliothek
                 </Link>{" "}
-                verknüpft Rechtsbegriffe mit der sie definierenden Norm und den Normen, die sie verwenden.
-                Andere Beziehungsarten wie "verweist auf", "setzt um" oder "ändert" sind in diesem Prototyp
-                weiterhin nicht als Daten hinterlegt — das wäre die vollständige Graph-Schicht aus Schritt 6 der{" "}
+                verknüpft Rechtsbegriffe mit der sie definierenden Norm und den
+                Normen, die sie verwenden. Andere Beziehungsarten wie "verweist
+                auf", "setzt um" oder "ändert" sind in diesem Prototyp weiterhin
+                nicht als Daten hinterlegt — das wäre die vollständige
+                Graph-Schicht aus Schritt 6 der{" "}
                 <Link component={RouterLink} to="/architektur">
                   Architektur
                 </Link>
@@ -106,6 +122,52 @@ export default function DatabasePage() {
             </CardContent>
           </Card>
         )}
+        <Card sx={{ mt: 2 }}>
+          <CardContent>
+            <Typography variant="h6">
+              Zeitliche Übersicht aller Normen
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Jede Zeile ist eine Norm, jeder Balken eine Fassung. Die
+              gestrichelte Linie markiert heute.
+            </Typography>
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{ mt: 1.5 }}
+              flexWrap="wrap"
+              useFlexGap
+            >
+              {Object.entries(STATUS_LABEL_LONG).map(([status, label]) => (
+                <Stack
+                  key={status}
+                  direction="row"
+                  spacing={0.75}
+                  alignItems="center"
+                >
+                  <Box
+                    sx={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: 0.5,
+                      bgcolor: STATUS_COLORS[status].bar,
+                    }}
+                  />
+                  <Typography variant="caption" color="text.secondary">
+                    {label}
+                  </Typography>
+                </Stack>
+              ))}
+            </Stack>
+            {loading && <Loading />}
+            {error && (
+              <Alert severity="error">
+                Zeitstrahl konnte nicht geladen werden.
+              </Alert>
+            )}
+            {data && <NormTimeline norms={data.norms} today={data.today} />}
+          </CardContent>
+        </Card>
       </Stack>
     </Container>
   );

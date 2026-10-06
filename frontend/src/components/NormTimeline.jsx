@@ -17,7 +17,11 @@ function yearStep(span) {
 export default function NormTimeline({ norms, today: todayStr }) {
   if (!norms?.length) {
     return (
-      <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ py: 2, textAlign: "center" }}
+      >
         Keine Normen in der Datenbank.
       </Typography>
     );
@@ -29,7 +33,9 @@ export default function NormTimeline({ norms, today: todayStr }) {
     if (!groups.has(key)) groups.set(key, { label: key, items: [] });
     groups.get(key).items.push(n);
   });
-  const rows = [...groups.values()].sort((a, b) => a.label.localeCompare(b.label, "de"));
+  const rows = [...groups.values()].sort((a, b) =>
+    a.label.localeCompare(b.label, "de"),
+  );
 
   const today = new Date(todayStr);
   const openEndedFallback = new Date(today.getFullYear() + 2, 0, 1);
@@ -46,13 +52,22 @@ export default function NormTimeline({ norms, today: todayStr }) {
   const endYear = new Date(maxDate).getFullYear();
   const step = yearStep(endYear - startYear);
   const years = [];
-  for (let y = Math.ceil(startYear / step) * step; y <= endYear; y += step) years.push(y);
+  for (let y = Math.ceil(startYear / step) * step; y <= endYear; y += step)
+    years.push(y);
 
   return (
-    <Box sx={{ position: "relative", pt: `${AXIS_PAD}px`, pb: `${AXIS_PAD}px` }}>
+    <Box
+      sx={{ position: "relative", pt: `${AXIS_PAD}px`, pb: `${AXIS_PAD}px` }}
+    >
       <Box
         aria-hidden
-        sx={{ position: "absolute", left: LABEL_WIDTH, right: 0, top: AXIS_PAD, bottom: AXIS_PAD }}
+        sx={{
+          position: "absolute",
+          left: LABEL_WIDTH,
+          right: 0,
+          top: AXIS_PAD,
+          bottom: AXIS_PAD,
+        }}
       >
         {years.map((year) => {
           const x = pct(new Date(year, 0, 1));
@@ -60,11 +75,24 @@ export default function NormTimeline({ norms, today: todayStr }) {
           return (
             <Box
               key={year}
-              sx={{ position: "absolute", left: `${x}%`, top: 0, bottom: 0, borderLeft: 1, borderColor: "divider" }}
+              sx={{
+                position: "absolute",
+                left: `${x}%`,
+                top: 0,
+                bottom: 0,
+                borderLeft: 1,
+                borderColor: "divider",
+              }}
             >
               <Typography
                 variant="caption"
-                sx={{ position: "absolute", top: -20, transform: "translateX(-50%)", fontSize: 10, color: "text.secondary" }}
+                sx={{
+                  position: "absolute",
+                  top: -20,
+                  transform: "translateX(-50%)",
+                  fontSize: 10,
+                  color: "text.secondary",
+                }}
               >
                 {year}
               </Typography>
@@ -83,7 +111,12 @@ export default function NormTimeline({ norms, today: todayStr }) {
         >
           <Typography
             variant="caption"
-            sx={{ position: "absolute", bottom: -20, transform: "translateX(-50%)", fontSize: 10 }}
+            sx={{
+              position: "absolute",
+              bottom: -20,
+              transform: "translateX(-50%)",
+              fontSize: 10,
+            }}
           >
             heute
           </Typography>
@@ -92,7 +125,12 @@ export default function NormTimeline({ norms, today: todayStr }) {
 
       <Stack sx={{ position: "relative" }}>
         {rows.map((group) => (
-          <Stack key={group.label} direction="row" alignItems="center" sx={{ height: ROW_HEIGHT }}>
+          <Stack
+            key={group.label}
+            direction="row"
+            alignItems="center"
+            sx={{ height: ROW_HEIGHT }}
+          >
             <Typography
               variant="body2"
               noWrap

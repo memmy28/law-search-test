@@ -4,6 +4,7 @@ import { Alert, Box, Card, CardContent, Container } from "@mui/material";
 import { useAppState } from "../state/AppStateContext";
 import PageHeader from "../components/PageHeader";
 
+/** @type {Record<string, string>} */
 const SUBTITLES = {
   1: "Hybride Suche mit Zeitfilter, RRF und Reranking — grün markiert, was im Prototyp bereits umgesetzt ist, gelb teilweise, rot noch offen.",
   2: "Erweiterung um eine Definitionsbibliothek (gelb markiert) — Begriffe aus der Anfrage schränken die Kandidatennormen vor der eigentlichen Suche hart ein.",
@@ -26,8 +27,8 @@ export default function ArchitecturePage() {
         <CardContent sx={{ overflowX: "auto", p: 3 }}>
           {failed ? (
             <Alert severity="error">
-              Das Diagramm konnte nicht gerendert werden. PlantUML läuft über Docker (
-              <code>docker run plantuml/plantuml</code>) — läuft Docker?
+              Das Diagramm konnte nicht gerendert werden. PlantUML läuft über
+              Docker (<code>docker run plantuml/plantuml</code>) — läuft Docker?
             </Alert>
           ) : (
             <Box

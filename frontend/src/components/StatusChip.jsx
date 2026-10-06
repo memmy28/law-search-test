@@ -4,7 +4,8 @@ import { STATUS_COLORS, STATUS_LABEL_LONG, STATUS_LABEL_SHORT } from "../theme";
 
 export default function StatusChip({ status, long = false }) {
   const colors = STATUS_COLORS[status] ?? STATUS_COLORS.vergangen;
-  const label = (long ? STATUS_LABEL_LONG : STATUS_LABEL_SHORT)[status] ?? status;
+  const label =
+    (long ? STATUS_LABEL_LONG : STATUS_LABEL_SHORT)[status] ?? status;
   return (
     <Chip
       size="small"

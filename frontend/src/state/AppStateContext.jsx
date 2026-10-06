@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { getJSON, postJSON } from "../api";
 
@@ -17,8 +23,24 @@ export const STATE_DESCRIPTIONS = {
   classification: "+ Jev-Klassifikation pro Gesetz und Norm",
 };
 
-const FALLBACK = { state: "classification", states: Object.keys(STATE_LABELS), diagram_version: "3" };
+const FALLBACK = {
+  state: "classification",
+  states: Object.keys(STATE_LABELS),
+  diagram_version: "3",
+};
 
+/**
+ * @typedef {Object} AppStateValue
+ * @property {boolean} ready
+ * @property {string|null} state
+ * @property {string[]} states
+ * @property {string} diagramVersion
+ * @property {boolean} hasDefinitions
+ * @property {boolean} hasClassification
+ * @property {(state: string) => Promise<void>} setState
+ */
+
+/** @type {import("react").Context<AppStateValue|null>} */
 const AppStateContext = createContext(null);
 
 export function AppStateProvider({ children }) {
@@ -46,9 +68,19 @@ export function AppStateProvider({ children }) {
     setState,
   };
 
-  return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;
+  return (
+    <AppStateContext.Provider value={value}>
+      {children}
+    </AppStateContext.Provider>
+  );
 }
 
 export function useAppState() {
-  return useContext(AppStateContext);
+  const value = useContext(AppStateContext);
+  if (value === null) {
+    throw new Error(
+      "useAppState() muss innerhalb von <AppStateProvider> aufgerufen werden.",
+    );
+  }
+  return value;
 }

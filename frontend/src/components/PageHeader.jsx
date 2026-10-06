@@ -1,6 +1,6 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
 
-export default function PageHeader({ title, tag, subtitle, children }) {
+export default function PageHeader({ title, tag, subtitle, children = null }) {
   return (
     <Box sx={{ mb: 2.5 }}>
       <Stack direction="row" alignItems="center" spacing={1.5} flexWrap="wrap">

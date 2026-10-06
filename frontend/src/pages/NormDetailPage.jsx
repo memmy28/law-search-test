@@ -23,7 +23,11 @@ function DefinitionChips({ label, definitions }) {
   if (!definitions.length) return null;
   return (
     <>
-      <Typography variant="overline" color="text.secondary" sx={{ display: "block", mt: 1 }}>
+      <Typography
+        variant="overline"
+        color="text.secondary"
+        sx={{ display: "block", mt: 1 }}
+      >
         {label}
       </Typography>
       <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
@@ -74,7 +78,11 @@ export default function NormDetailPage() {
       <Button component={RouterLink} to="/" size="small" sx={{ mb: 1, ml: -1 }}>
         ← Zurück zur Suche
       </Button>
-      <PageHeader title={`${norm.law_short} ${norm.norm_ref}`} tag="Detail" subtitle={norm.heading_context} />
+      <PageHeader
+        title={`${norm.law_short} ${norm.norm_ref}`}
+        tag="Detail"
+        subtitle={norm.heading_context}
+      />
 
       <Stack spacing={2}>
         <Card>
@@ -86,12 +94,20 @@ export default function NormDetailPage() {
             <Stack direction="row" sx={{ mt: 1 }}>
               <StatusChip status={norm.status} long />
             </Stack>
-            <Typography variant="body1" sx={{ mt: 2, lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
+            <Typography
+              variant="body1"
+              sx={{ mt: 2, lineHeight: 1.7, whiteSpace: "pre-wrap" }}
+            >
               {norm.body}
             </Typography>
           </CardContent>
           <CardActions>
-            <Button href={norm.source_url} target="_blank" rel="noopener" size="small">
+            <Button
+              href={norm.source_url}
+              target="_blank"
+              rel="noopener"
+              size="small"
+            >
               Offizielle Quelle ansehen ↗
             </Button>
           </CardActions>
@@ -115,7 +131,10 @@ export default function NormDetailPage() {
                   <ListItemText
                     primary={v.title}
                     secondary={`${v.valid_from} – ${v.valid_to ?? "offen"}`}
-                    slotProps={{ primary: { variant: "body2" }, secondary: { variant: "caption" } }}
+                    slotProps={{
+                      primary: { variant: "body2" },
+                      secondary: { variant: "caption" },
+                    }}
                   />
                 </ListItemButton>
               ))}

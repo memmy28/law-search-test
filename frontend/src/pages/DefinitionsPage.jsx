@@ -25,7 +25,12 @@ function NormLinkList({ norms }) {
             slotProps={{ primary: { variant: "body2" } }}
             primary={
               <>
-                <Link component={RouterLink} to={`/norm/${n.id}`} fontWeight={600} underline="hover">
+                <Link
+                  component={RouterLink}
+                  to={`/norm/${n.id}`}
+                  fontWeight={600}
+                  underline="hover"
+                >
                   {n.law_short} {n.norm_ref}
                 </Link>{" "}
                 – {n.title}
@@ -48,9 +53,9 @@ export default function DefinitionsPage() {
         tag={data ? `${data.definitions.length} Begriffe` : null}
         subtitle={
           <>
-            Rechtsbegriffe, die eine Norm definiert und die andere Normen verwenden. Enthält die Anfrage
-            einen dieser Begriffe, schränkt die Suche die Kandidaten hart auf die verknüpften Normen ein
-            (siehe{" "}
+            Rechtsbegriffe, die eine Norm definiert und die andere Normen
+            verwenden. Enthält die Anfrage einen dieser Begriffe, schränkt die
+            Suche die Kandidaten hart auf die verknüpften Normen ein (siehe{" "}
             <Link component={RouterLink} to="/architektur">
               Architektur
             </Link>
@@ -73,12 +78,20 @@ export default function DefinitionsPage() {
                 {d.definition_text}
               </Typography>
 
-              <Typography variant="overline" color="text.secondary" sx={{ display: "block", mt: 2 }}>
+              <Typography
+                variant="overline"
+                color="text.secondary"
+                sx={{ display: "block", mt: 2 }}
+              >
                 Definiert von
               </Typography>
               <NormLinkList norms={d.defined_by} />
 
-              <Typography variant="overline" color="text.secondary" sx={{ display: "block", mt: 1.5 }}>
+              <Typography
+                variant="overline"
+                color="text.secondary"
+                sx={{ display: "block", mt: 1.5 }}
+              >
                 Verwendet von
               </Typography>
               {d.used_by.length ? (

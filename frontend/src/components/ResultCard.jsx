@@ -1,4 +1,11 @@
-import { Button, Card, CardActions, CardContent, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
 import StatusChip from "./StatusChip";
@@ -7,11 +14,20 @@ export default function ResultCard({ rank, result }) {
   return (
     <Card>
       <CardContent sx={{ pb: 0 }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={2}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="baseline"
+          spacing={2}
+        >
           <Typography variant="subtitle1">
             {rank}. {result.law_short} {result.norm_ref} – {result.title}
           </Typography>
-          <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ whiteSpace: "nowrap" }}
+          >
             Score {result.score.toFixed(3)}
           </Typography>
         </Stack>

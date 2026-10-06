@@ -11,7 +11,11 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
-import { STATE_DESCRIPTIONS, STATE_LABELS, useAppState } from "../state/AppStateContext";
+import {
+  STATE_DESCRIPTIONS,
+  STATE_LABELS,
+  useAppState,
+} from "../state/AppStateContext";
 
 const NAV_ITEMS = [
   { to: "/", label: "Suche" },
@@ -22,7 +26,8 @@ const NAV_ITEMS = [
 ];
 
 export default function NavBar() {
-  const { state, states, setState, hasDefinitions, hasClassification } = useAppState();
+  const { state, states, setState, hasDefinitions, hasClassification } =
+    useAppState();
   const { pathname } = useLocation();
 
   const visibleItems = NAV_ITEMS.filter((item) => {
@@ -32,16 +37,28 @@ export default function NavBar() {
   });
 
   const isActive = (to) =>
-    to === "/" ? pathname === "/" || pathname.startsWith("/norm/") : pathname.startsWith(to);
+    to === "/"
+      ? pathname === "/" || pathname.startsWith("/norm/")
+      : pathname.startsWith(to);
 
   return (
-    <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <AppBar
+      position="sticky"
+      color="inherit"
+      elevation={0}
+      sx={{ borderBottom: 1, borderColor: "divider" }}
+    >
       <Toolbar sx={{ gap: 3, flexWrap: "wrap", px: { xs: 2, md: 4 } }}>
         <Typography
           component={RouterLink}
           to="/"
           variant="subtitle2"
-          sx={{ fontWeight: 700, color: "text.primary", textDecoration: "none", mr: "auto" }}
+          sx={{
+            fontWeight: 700,
+            color: "text.primary",
+            textDecoration: "none",
+            mr: "auto",
+          }}
         >
           Rechts-Wissensdatenbank
         </Typography>
@@ -78,7 +95,11 @@ export default function NavBar() {
             aria-label="Entwicklungsstand"
           >
             {states.map((s) => (
-              <ToggleButton key={s} value={s} aria-label={STATE_DESCRIPTIONS[s]}>
+              <ToggleButton
+                key={s}
+                value={s}
+                aria-label={STATE_DESCRIPTIONS[s]}
+              >
                 <Tooltip title={STATE_DESCRIPTIONS[s]}>
                   <Box component="span">{STATE_LABELS[s]}</Box>
                 </Tooltip>
