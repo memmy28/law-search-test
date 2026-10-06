@@ -1,21 +1,80 @@
 import os
 import subprocess
+import time
 from datetime import date
 
 import psycopg2
-from flask import Flask, Response, abort, jsonify, render_template, request
+from dotenv import load_dotenv
+from flask import Flask, Response, abort, jsonify, request, send_from_directory
 from pgvector.psycopg2 import register_vector
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from search import DB_URL, EMBED_MODEL, RERANK_MODEL, fetch_rows, rrf_fuse, text_search, vector_search
+import jev
+from search import (
+    DB_URL,
+    EMBED_MODEL,
+    RERANK_MODEL,
+    fetch_rows,
+    find_matching_definitions,
+    jev_norm_ids,
+    linked_norm_ids,
+    rrf_fuse,
+    text_search,
+    vector_search,
+)
 
-app = Flask(__name__)
+load_dotenv()
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIST = os.path.join(BASE_DIR, "frontend", "dist")
+
+# Reines JSON-Backend; das React-Frontend (frontend/) wird im Produktivbetrieb aus
+# frontend/dist ausgeliefert, im Dev-Modus übernimmt der Vite-Dev-Server mit Proxy.
+app = Flask(__name__, static_folder=None)
 
 DIAGRAM_PATHS = {
-    "1": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline.puml"),
-    "2": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline-2.puml"),
+    "1": os.path.join(BASE_DIR, "diagrams", "search-pipeline.puml"),
+    "2": os.path.join(BASE_DIR, "diagrams", "search-pipeline-2.puml"),
+    "3": os.path.join(BASE_DIR, "diagrams", "search-pipeline-3.puml"),
 }
 _diagram_cache = {}
+
+# Die drei Entwicklungsstände (ursprünglich eigene Branches), zwischen denen sich die
+# Anwendung zur Laufzeit per Cookie umschalten lässt - jeder Stand baut auf dem
+# vorherigen auf (kumulativ), analog zu den Diagrammversionen 1/2/3.
+APP_STATES = ("plain", "definition", "classification")
+DEFAULT_APP_STATE = "classification"
+DIAGRAM_VERSION_FOR_STATE = {"plain": "1", "definition": "2", "classification": "3"}
+
+
+def current_app_state():
+    state = request.cookies.get("app_state", DEFAULT_APP_STATE)
+    return state if state in APP_STATES else DEFAULT_APP_STATE
+
+
+def state_payload(state):
+    return {
+        "state": state,
+        "states": list(APP_STATES),
+        "diagram_version": DIAGRAM_VERSION_FOR_STATE[state],
+    }
+
+
+@app.route("/api/state", methods=["GET"])
+def api_get_state():
+    return jsonify(state_payload(current_app_state()))
+
+
+@app.route("/api/state", methods=["POST"])
+def api_set_state():
+    body = request.get_json(silent=True) or {}
+    state = body.get("state")
+    if state not in APP_STATES:
+        return jsonify({"error": f"Unbekannter Stand: {state!r}"}), 400
+    resp = jsonify(state_payload(state))
+    resp.set_cookie("app_state", state, max_age=60 * 60 * 24 * 365, samesite="Lax")
+    return resp
+
 
 print(f"Lade Modelle ({EMBED_MODEL}, {RERANK_MODEL}) ...")
 embed_model = SentenceTransformer(EMBED_MODEL)
@@ -23,6 +82,110 @@ reranker = CrossEncoder(RERANK_MODEL)
 
 conn = psycopg2.connect(DB_URL)
 register_vector(conn)
+
+
+def run_jev_classification(cur, query, allowed_ids=None):
+    """Zweistufige Jev-Klassifikation: erst pro Gesetz, dann zusätzlich pro
+    einzelner Norm. Welche Normen in Stufe 2 klassifiziert werden, hängt davon
+    ab, ob die Definitionsbibliothek die Kandidatenmenge schon eingeschränkt hat:
+
+    - allowed_ids gesetzt (Begriff erkannt): Stufe 2 klassifiziert NUR diese
+      Normen - die Definitionsbibliothek ist ein präziseres, deterministisches
+      Signal als Jevs eigene Gesetz-Einschätzung, daher entfällt hier die
+      sonst übliche >= 50 %-Hürde pro Gesetz.
+    - kein allowed_ids: Stufe 2 läuft wie bisher nur für Gesetze, die Stufe 1
+      mit >= 50 % als relevant einstuft (Kostenkontrolle ohne Begriffsfilter).
+
+    Protokolliert beide Stufen (jev_classifications / jev_norm_classifications)
+    in einer gemeinsamen Transaktion, damit sie denselben created_at-Zeitstempel
+    tragen und sich später als ein Lauf zusammenführen lassen.
+
+    Gibt ein Dict zurück: {laws, norms, law_error, norm_error, duration_ms,
+    question_count, estimated_cost_usd}. Ein Fehler in Stufe 2 verwirft nicht
+    das Ergebnis von Stufe 1 - die Suche bleibt in jedem Fall funktionsfähig."""
+    cur.execute("SELECT DISTINCT law_short FROM norms ORDER BY law_short")
+    all_laws = [row[0] for row in cur.fetchall()]
+
+    started = time.monotonic()
+
+    try:
+        law_results = jev.classify_laws(query, all_laws)
+    except jev.JevError as e:
+        duration_ms = (time.monotonic() - started) * 1000
+        return {
+            "laws": None, "norms": [], "law_error": str(e), "norm_error": None,
+            "duration_ms": duration_ms, "question_count": 0, "estimated_cost_usd": 0.0,
+            "cost_per_question_usd": jev.JEV_ESTIMATED_COST_PER_QUESTION_USD,
+        }
+
+    relevant_laws = [r["law"] for r in law_results if r["relevant"]]
+    question_count = len(all_laws)
+
+    norm_results = []
+    norm_error = None
+    cols = ["id", "law_short", "norm_ref", "title"]
+    if allowed_ids:
+        cur.execute(
+            """
+            SELECT id, law_short, norm_ref, title FROM norms
+            WHERE id = ANY(%s)
+            ORDER BY law_short, norm_ref
+            """,
+            (allowed_ids,),
+        )
+        candidate_norms = [dict(zip(cols, r)) for r in cur.fetchall()]
+        question_count += len(candidate_norms)
+        try:
+            norm_results = jev.classify_norms(query, candidate_norms)
+        except jev.JevError as e:
+            norm_error = str(e)
+    elif relevant_laws:
+        cur.execute(
+            """
+            SELECT id, law_short, norm_ref, title FROM norms
+            WHERE law_short = ANY(%s)
+            ORDER BY law_short, norm_ref
+            """,
+            (relevant_laws,),
+        )
+        candidate_norms = [dict(zip(cols, r)) for r in cur.fetchall()]
+        question_count += len(candidate_norms)
+        try:
+            norm_results = jev.classify_norms(query, candidate_norms)
+        except jev.JevError as e:
+            norm_error = str(e)
+
+    duration_ms = (time.monotonic() - started) * 1000
+    estimated_cost_usd = question_count * jev.JEV_ESTIMATED_COST_PER_QUESTION_USD
+
+    for r in law_results:
+        cur.execute(
+            """
+            INSERT INTO jev_classifications (query, law_short, probability, relevant)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (query, r["law"], r["probability"], r["relevant"]),
+        )
+    for r in norm_results:
+        cur.execute(
+            """
+            INSERT INTO jev_norm_classifications (query, norm_id, probability, relevant)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (query, r["norm_id"], r["probability"], r["relevant"]),
+        )
+    conn.commit()
+
+    return {
+        "laws": law_results,
+        "norms": norm_results,
+        "law_error": None,
+        "norm_error": norm_error,
+        "duration_ms": duration_ms,
+        "question_count": question_count,
+        "estimated_cost_usd": estimated_cost_usd,
+        "cost_per_question_usd": jev.JEV_ESTIMATED_COST_PER_QUESTION_USD,
+    }
 
 
 def classify_validity(valid_from, valid_to, as_of):
@@ -33,13 +196,12 @@ def classify_validity(valid_from, valid_to, as_of):
     return "aktuell"
 
 
-@app.route("/")
-def index():
-    return render_template("index.html", active_page="search")
+def iso_date(value):
+    return str(value) if value else None
 
 
 def render_diagram_svg(version):
-    """Rendert diagrams/search-pipeline[-2].puml live über den lokalen PlantUML-Docker-Container.
+    """Rendert diagrams/search-pipeline[-N].puml live über den lokalen PlantUML-Docker-Container.
     Ergebnis wird pro Version anhand der Datei-mtime gecacht, damit Änderungen an der .puml-Datei
     ohne manuellen Zwischenschritt beim nächsten Seitenaufruf sichtbar werden."""
     puml_path = DIAGRAM_PATHS.get(version)
@@ -74,47 +236,98 @@ def render_diagram_svg(version):
     return result.stdout, None
 
 
-@app.route("/architektur")
-def architecture():
-    return render_template("architecture.html", active_page="architecture")
-
-
-@app.route("/architektur/diagram.svg")
-def architecture_diagram():
-    version = request.args.get("v", "1")
+@app.route("/api/diagram.svg")
+def api_diagram():
+    version = request.args.get("v") or DIAGRAM_VERSION_FOR_STATE[current_app_state()]
     svg, error = render_diagram_svg(version)
     if error:
         return Response(f"PlantUML-Renderfehler:\n\n{error}", status=500, mimetype="text/plain")
     return Response(svg, mimetype="image/svg+xml")
 
 
-@app.route("/datenbank")
-def database():
+@app.route("/api/definitions")
+def api_definitions():
+    cur = conn.cursor()
+    cur.execute("SELECT id, term, definition_text FROM definitions ORDER BY term")
+    defs = [dict(zip(["id", "term", "definition_text"], r)) for r in cur.fetchall()]
+
+    for d in defs:
+        cur.execute(
+            """
+            SELECT n.id, n.law_short, n.norm_ref, n.title, dl.role
+            FROM definition_links dl
+            JOIN norms n ON n.id = dl.norm_id
+            WHERE dl.definition_id = %s
+            ORDER BY dl.role, n.law_short, n.norm_ref
+            """,
+            (d["id"],),
+        )
+        links = [dict(zip(["id", "law_short", "norm_ref", "title", "role"], r)) for r in cur.fetchall()]
+        d["defined_by"] = [l for l in links if l["role"] == "definiert"]
+        d["used_by"] = [l for l in links if l["role"] == "verwendet"]
+
+    cur.close()
+    return jsonify({"definitions": defs})
+
+
+@app.route("/api/jev/runs")
+def api_jev_runs():
     cur = conn.cursor()
     cur.execute(
         """
-        SELECT id, law_short, norm_ref, title, valid_from, valid_to
-        FROM norms
-        ORDER BY law_short, norm_ref, valid_from
+        SELECT query, law_short, probability, relevant, created_at
+        FROM jev_classifications
+        ORDER BY created_at DESC
+        LIMIT 200
         """
     )
-    cols = ["id", "law_short", "norm_ref", "title", "valid_from", "valid_to"]
-    rows = [dict(zip(cols, r)) for r in cur.fetchall()]
+    law_cols = ["query", "law_short", "probability", "relevant", "created_at"]
+    law_rows = [dict(zip(law_cols, r)) for r in cur.fetchall()]
+
+    cur.execute(
+        """
+        SELECT jnc.query, n.law_short, n.norm_ref, n.title, jnc.probability, jnc.relevant, jnc.created_at
+        FROM jev_norm_classifications jnc
+        JOIN norms n ON n.id = jnc.norm_id
+        ORDER BY jnc.created_at DESC
+        LIMIT 2000
+        """
+    )
+    norm_cols = ["query", "law_short", "norm_ref", "title", "probability", "relevant", "created_at"]
+    norm_rows = [dict(zip(norm_cols, r)) for r in cur.fetchall()]
     cur.close()
 
-    today = date.today()
-    groups = {}
-    for r in rows:
-        r["status"] = classify_validity(r["valid_from"], r["valid_to"], today)
-        groups.setdefault(r["law_short"], []).append(r)
+    runs = {}
+    law_index = {}
+    for r in law_rows:
+        key = (r["created_at"], r["query"])
+        run = runs.setdefault(
+            key, {"query": r["query"], "created_at": r["created_at"].isoformat(), "laws": []}
+        )
+        law_entry = {
+            "law_short": r["law_short"],
+            "probability": r["probability"],
+            "relevant": r["relevant"],
+            "norms": [],
+        }
+        run["laws"].append(law_entry)
+        law_index[(key, r["law_short"])] = law_entry
 
-    return render_template(
-        "database.html",
-        active_page="database",
-        groups=groups,
-        total_norms=len(rows),
-        total_laws=len(groups),
-    )
+    for r in norm_rows:
+        key = (r["created_at"], r["query"])
+        law_entry = law_index.get((key, r["law_short"]))
+        if law_entry is not None:
+            law_entry["norms"].append(
+                {
+                    "norm_ref": r["norm_ref"],
+                    "title": r["title"],
+                    "probability": r["probability"],
+                    "relevant": r["relevant"],
+                }
+            )
+
+    ordered = sorted(runs.values(), key=lambda q: q["created_at"], reverse=True)
+    return jsonify({"runs": ordered})
 
 
 @app.route("/api/search")
@@ -129,11 +342,36 @@ def api_search():
 
     today = date.today()
     cur = conn.cursor()
+    state = current_app_state()
 
     qvec = embed_model.encode(f"query: {query}", normalize_embeddings=True)
-    vec_ids = vector_search(cur, qvec, as_of_str, candidates)
-    txt_ids = text_search(cur, query, as_of_str, candidates)
-    fused = rrf_fuse([vec_ids, txt_ids])
+
+    matched_defs = []
+    allowed_ids = None
+    if state in ("definition", "classification"):
+        matched_defs = find_matching_definitions(cur, query)
+        allowed_ids = linked_norm_ids(cur, [d["id"] for d in matched_defs]) if matched_defs else None
+
+    law_classification, jev_error = None, None
+    norm_classification, norm_jev_error = [], None
+    jev_duration_ms, jev_question_count, jev_estimated_cost_usd = None, None, None
+    jev_cost_per_question_usd = None
+    if state == "classification":
+        classification = run_jev_classification(cur, query, allowed_ids)
+        law_classification = classification["laws"]
+        jev_error = classification["law_error"]
+        norm_classification = classification["norms"]
+        norm_jev_error = classification["norm_error"]
+        jev_duration_ms = classification["duration_ms"]
+        jev_question_count = classification["question_count"]
+        jev_estimated_cost_usd = classification["estimated_cost_usd"]
+        jev_cost_per_question_usd = classification["cost_per_question_usd"]
+
+    jev_ids = jev_norm_ids(cur, norm_classification, as_of_str, candidates, allowed_ids)
+
+    vec_ids = vector_search(cur, qvec, as_of_str, candidates, allowed_ids)
+    txt_ids = text_search(cur, query, as_of_str, candidates, allowed_ids)
+    fused = rrf_fuse([vec_ids, txt_ids, jev_ids])
     candidate_ids = [doc_id for doc_id, _ in fused[:candidates]]
     rows = fetch_rows(cur, candidate_ids)
     cur.close()
@@ -154,8 +392,8 @@ def api_search():
                     "norm_ref": r["norm_ref"],
                     "title": r["title"],
                     "body": r["body"],
-                    "valid_from": str(r["valid_from"]),
-                    "valid_to": str(r["valid_to"]) if r["valid_to"] else None,
+                    "valid_from": iso_date(r["valid_from"]),
+                    "valid_to": iso_date(r["valid_to"]),
                     "source_url": r["source_url"],
                     "status": classify_validity(r["valid_from"], r["valid_to"], today),
                 }
@@ -165,9 +403,21 @@ def api_search():
         {
             "query": query,
             "as_of": as_of_str,
+            "state": state,
             "vector_candidates": len(vec_ids),
             "text_candidates": len(txt_ids),
+            "jev_candidates": len(jev_ids),
             "fused_candidates": len(candidate_ids),
+            "matched_definitions": [{"term": d["term"]} for d in matched_defs],
+            "allowed_norm_count": len(allowed_ids) if allowed_ids is not None else None,
+            "law_classification": law_classification,
+            "jev_error": jev_error,
+            "norm_classification": norm_classification,
+            "norm_jev_error": norm_jev_error,
+            "jev_duration_ms": jev_duration_ms,
+            "jev_question_count": jev_question_count,
+            "jev_estimated_cost_usd": jev_estimated_cost_usd,
+            "jev_cost_per_question_usd": jev_cost_per_question_usd,
             "results": results,
         }
     )
@@ -194,8 +444,8 @@ def api_norms():
             "law_short": r["law_short"],
             "norm_ref": r["norm_ref"],
             "title": r["title"],
-            "valid_from": str(r["valid_from"]),
-            "valid_to": str(r["valid_to"]) if r["valid_to"] else None,
+            "valid_from": iso_date(r["valid_from"]),
+            "valid_to": iso_date(r["valid_to"]),
             "status": classify_validity(r["valid_from"], r["valid_to"], today),
         }
         for r in rows
@@ -203,8 +453,8 @@ def api_norms():
     return jsonify({"norms": norms, "today": str(today)})
 
 
-@app.route("/norm/<int:norm_id>")
-def norm_detail(norm_id):
+@app.route("/api/norms/<int:norm_id>")
+def api_norm_detail(norm_id):
     cur = conn.cursor()
     cur.execute(
         """
@@ -231,14 +481,54 @@ def norm_detail(norm_id):
         (norm["law_short"], norm["norm_ref"]),
     )
     versions = [dict(zip(["id", "valid_from", "valid_to", "title"], r)) for r in cur.fetchall()]
+
+    cur.execute(
+        """
+        SELECT d.id, d.term, dl.role
+        FROM definition_links dl
+        JOIN definitions d ON d.id = dl.definition_id
+        WHERE dl.norm_id = %s
+        ORDER BY dl.role, d.term
+        """,
+        (norm_id,),
+    )
+    def_links = [dict(zip(["id", "term", "role"], r)) for r in cur.fetchall()]
     cur.close()
 
     today = date.today()
     norm["status"] = classify_validity(norm["valid_from"], norm["valid_to"], today)
+    norm["valid_from"] = iso_date(norm["valid_from"])
+    norm["valid_to"] = iso_date(norm["valid_to"])
     for v in versions:
         v["status"] = classify_validity(v["valid_from"], v["valid_to"], today)
+        v["valid_from"] = iso_date(v["valid_from"])
+        v["valid_to"] = iso_date(v["valid_to"])
 
-    return render_template("norm_detail.html", norm=norm, versions=versions)
+    return jsonify(
+        {
+            "norm": norm,
+            "versions": versions,
+            "defines": [l for l in def_links if l["role"] == "definiert"],
+            "uses": [l for l in def_links if l["role"] == "verwendet"],
+        }
+    )
+
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def spa(path):
+    """Liefert das gebaute React-Frontend aus. Alle Nicht-API-Pfade fallen auf
+    index.html zurück, damit der Client-Router (react-router) die Route übernimmt."""
+    if path and os.path.isfile(os.path.join(FRONTEND_DIST, path)):
+        return send_from_directory(FRONTEND_DIST, path)
+    if not os.path.isfile(os.path.join(FRONTEND_DIST, "index.html")):
+        return Response(
+            "Frontend ist nicht gebaut. Entweder `cd frontend && npm run build` ausführen "
+            "oder im Dev-Modus `npm run dev` starten und http://127.0.0.1:5173 öffnen.",
+            status=503,
+            mimetype="text/plain; charset=utf-8",
+        )
+    return send_from_directory(FRONTEND_DIST, "index.html")
 
 
 if __name__ == "__main__":

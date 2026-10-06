@@ -11,10 +11,90 @@
   },
   {
     "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 11",
+    "title": "Begriffsbestimmungen – Einwilligung",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Begriffsbestimmungen",
+    "body": "'Einwilligung' der betroffenen Person jede freiwillig für den bestimmten Fall, in informierter Weise und unmissverständlich abgegebene Willensbekundung in Form einer Erklärung oder einer sonstigen eindeutigen bestätigenden Handlung, mit der die betroffene Person zu verstehen gibt, dass sie mit der Verarbeitung der sie betreffenden personenbezogenen Daten einverstanden ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 12",
+    "title": "Begriffsbestimmungen – Verletzung des Schutzes personenbezogener Daten",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Begriffsbestimmungen",
+    "body": "'Verletzung des Schutzes personenbezogener Daten' eine Verletzung der Sicherheit, die, ob unbeabsichtigt oder unrechtmäßig, zur Vernichtung, zum Verlust, zur Veränderung, oder zur unbefugten Offenlegung von beziehungsweise zum unbefugten Zugang zu personenbezogenen Daten führt, die übermittelt, gespeichert oder auf sonstige Weise verarbeitet wurden.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 5 Abs. 1 lit. f",
+    "title": "Grundsätze für die Verarbeitung – Integrität und Vertraulichkeit",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 5 Grundsätze für die Verarbeitung personenbezogener Daten",
+    "body": "Personenbezogene Daten müssen in einer Weise verarbeitet werden, die eine angemessene Sicherheit der personenbezogenen Daten gewährleistet, einschließlich Schutz vor unbefugter oder unrechtmäßiger Verarbeitung und vor unbeabsichtigtem Verlust durch geeignete technische und organisatorische Maßnahmen ('Integrität und Vertraulichkeit').",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 6 Abs. 1 lit. a",
+    "title": "Rechtmäßigkeit der Verarbeitung – Einwilligung",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 6 Rechtmäßigkeit der Verarbeitung",
+    "body": "Die Verarbeitung ist nur rechtmäßig, wenn die betroffene Person ihre Einwilligung zu der Verarbeitung der sie betreffenden personenbezogenen Daten für einen oder mehrere bestimmte Zwecke gegeben hat.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 6 Abs. 1 lit. b",
+    "title": "Rechtmäßigkeit der Verarbeitung – Vertragserfüllung",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 6 Rechtmäßigkeit der Verarbeitung",
+    "body": "Die Verarbeitung ist rechtmäßig, wenn sie für die Erfüllung eines Vertrags, dessen Vertragspartei die betroffene Person ist, oder zur Durchführung vorvertraglicher Maßnahmen erforderlich ist, die auf Anfrage der betroffenen Person erfolgen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 17 Abs. 1",
+    "title": "Recht auf Löschung (\"Recht auf Vergessenwerden\")",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 17 Recht auf Löschung",
+    "body": "Die betroffene Person hat das Recht, von dem Verantwortlichen zu verlangen, dass sie betreffende personenbezogene Daten unverzüglich gelöscht werden, sofern einer der in dieser Vorschrift genannten Gründe zutrifft, etwa wenn die Daten für die Zwecke, für die sie erhoben wurden, nicht mehr notwendig sind.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 33 Abs. 1",
+    "title": "Meldung von Verletzungen des Schutzes personenbezogener Daten",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 33 Meldung von Verletzungen des Schutzes personenbezogener Daten an die Aufsichtsbehörde",
+    "body": "Im Falle einer Verletzung des Schutzes personenbezogener Daten meldet der Verantwortliche diese unverzüglich und möglichst binnen 72 Stunden der zuständigen Aufsichtsbehörde, es sei denn, die Verletzung führt voraussichtlich nicht zu einem Risiko für die Rechte und Freiheiten natürlicher Personen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 83 Abs. 5",
+    "title": "Allgemeine Bedingungen für die Verhängung von Geldbußen",
+    "heading_context": "DSGVO – Kapitel VIII: Rechtsbehelfe, Haftung und Sanktionen – Art. 83 Allgemeine Bedingungen für die Verhängung von Geldbußen",
+    "body": "Bei Verstößen gegen die in diesem Absatz genannten Bestimmungen werden Geldbußen von bis zu 20 000 000 EUR oder im Falle eines Unternehmens von bis zu 4 % seines gesamten weltweit erzielten Jahresumsatzes des vorangegangenen Geschäftsjahrs verhängt, je nachdem, welcher Betrag höher ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
     "norm_ref": "Art. 26 Abs. 1",
     "title": "Gemeinsam für die Verarbeitung Verantwortliche",
     "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 26 Gemeinsam Verantwortliche",
-    "body": "Legen zwei oder mehr Verantwortliche gemeinsam die Zwecke der und die Mittel zur Verarbeitung fest, so sind sie gemeinsam Verantwortliche. Sie legen in einer Vereinbarung untereinander in transparenter Form insbesondere fest, wer von ihnen welche Verpflichtung gemäß dieser Verordnung erfüllt, es sei denn und soweit die jeweiligen Pflichten der Verantwortlichen durch Rechtsvorschriften der Union oder der Mitgliedstaaten, denen die Verantwortlichen unterliegen, festgelegt sind.",
+    "body": "Legen zwei oder mehr Verantwortliche gemeinsam die Zwecke der und die Mittel zur Verarbeitung fest, so sind sie gemeinsam Verantwortliche. Sie legen in einer Vereinbarung untereinander in transparenter Form insbesondere fest, wer von ihnen welche Verpflichtung gemäß dieser Verordnung erfüllt.",
     "valid_from": "2018-05-25",
     "valid_to": null,
     "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
@@ -24,7 +104,7 @@
     "norm_ref": "Art. 28 Abs. 1",
     "title": "Auftragsverarbeiter – Pflicht zur Auswahl geeigneter Auftragsverarbeiter",
     "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 28 Auftragsverarbeiter",
-    "body": "Erfolgt eine Verarbeitung im Auftrag eines Verantwortlichen, so arbeitet dieser nur mit Auftragsverarbeitern, die hinreichend Garantien dafür bieten, dass geeignete technische und organisatorische Maßnahmen so durchgeführt werden, dass die Verarbeitung im Einklang mit den Anforderungen dieser Verordnung erfolgt und den Schutz der Rechte der betroffenen Person gewährleistet.",
+    "body": "Erfolgt eine Verarbeitung im Auftrag eines Verantwortlichen, so arbeitet dieser nur mit Auftragsverarbeitern, die hinreichend Garantien dafür bieten, dass geeignete technische und organisatorische Maßnahmen so durchgeführt werden, dass die Verarbeitung im Einklang mit den Anforderungen dieser Verordnung erfolgt.",
     "valid_from": "2018-05-25",
     "valid_to": null,
     "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
@@ -34,7 +114,7 @@
     "norm_ref": "Art. 28 Abs. 3",
     "title": "Auftragsverarbeiter – erforderliche Vertragsinhalte",
     "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 28 Auftragsverarbeiter",
-    "body": "Die Verarbeitung durch einen Auftragsverarbeiter erfolgt auf der Grundlage eines Vertrags oder eines anderen Rechtsinstruments nach dem Unionsrecht oder dem Recht der Mitgliedstaaten, der bzw. das den Auftragsverarbeiter in Bezug auf den Verantwortlichen bindet und in dem Gegenstand und Dauer der Verarbeitung, Art und Zweck der Verarbeitung, die Art der personenbezogenen Daten und die Kategorien betroffener Personen sowie die Pflichten und Rechte des Verantwortlichen festgelegt sind.",
+    "body": "Die Verarbeitung durch einen Auftragsverarbeiter erfolgt auf der Grundlage eines Vertrags, der den Auftragsverarbeiter in Bezug auf den Verantwortlichen bindet und in dem Gegenstand und Dauer der Verarbeitung, Art und Zweck der Verarbeitung, die Art der personenbezogenen Daten und die Kategorien betroffener Personen sowie die Pflichten und Rechte des Verantwortlichen festgelegt sind.",
     "valid_from": "2018-05-25",
     "valid_to": null,
     "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
@@ -44,7 +124,7 @@
     "norm_ref": "Art. 32 Abs. 1",
     "title": "Sicherheit der Verarbeitung",
     "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 32 Sicherheit der Verarbeitung",
-    "body": "Unter Berücksichtigung des Stands der Technik, der Implementierungskosten und der Art, des Umfangs, der Umstände und der Zwecke der Verarbeitung sowie der unterschiedlichen Eintrittswahrscheinlichkeit und Schwere des Risikos für die Rechte und Freiheiten natürlicher Personen treffen der Verantwortliche und der Auftragsverarbeiter geeignete technische und organisatorische Maßnahmen, um ein dem Risiko angemessenes Schutzniveau zu gewährleisten.",
+    "body": "Unter Berücksichtigung des Stands der Technik, der Implementierungskosten und der Art, des Umfangs, der Umstände und der Zwecke der Verarbeitung treffen der Verantwortliche und der Auftragsverarbeiter geeignete technische und organisatorische Maßnahmen, um ein dem Risiko angemessenes Schutzniveau zu gewährleisten.",
     "valid_from": "2018-05-25",
     "valid_to": null,
     "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
@@ -54,7 +134,7 @@
     "norm_ref": "Art. 88 Abs. 1",
     "title": "Datenverarbeitung im Beschäftigungskontext",
     "heading_context": "DSGVO – Kapitel IX: Vorschriften für besondere Verarbeitungssituationen – Art. 88 Datenverarbeitung im Beschäftigungskontext",
-    "body": "Die Mitgliedstaaten können durch Rechtsvorschriften oder durch Kollektivvereinbarungen spezifischere Vorschriften zur Gewährleistung des Schutzes der Rechte und Freiheiten hinsichtlich der Verarbeitung personenbezogener Daten von Beschäftigten im Beschäftigungskontext vorsehen, insbesondere für Zwecke der Einstellung, der Erfüllung des Arbeitsvertrags und der Beendigung des Beschäftigungsverhältnisses.",
+    "body": "Die Mitgliedstaaten können durch Rechtsvorschriften oder durch Kollektivvereinbarungen spezifischere Vorschriften zur Gewährleistung des Schutzes der Rechte und Freiheiten hinsichtlich der Verarbeitung personenbezogener Daten von Beschäftigten im Beschäftigungskontext vorsehen.",
     "valid_from": "2018-05-25",
     "valid_to": null,
     "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
@@ -64,7 +144,7 @@
     "norm_ref": "§ 26 Abs. 1",
     "title": "Datenverarbeitung für Zwecke des Beschäftigungsverhältnisses",
     "heading_context": "BDSG – Teil 2, Kapitel 2 – § 26 Datenverarbeitung für Zwecke des Beschäftigungsverhältnisses",
-    "body": "Personenbezogene Daten von Beschäftigten dürfen für Zwecke des Beschäftigungsverhältnisses verarbeitet werden, wenn dies für die Entscheidung über die Begründung eines Beschäftigungsverhältnisses oder nach Begründung des Beschäftigungsverhältnisses für dessen Durchführung oder Beendigung oder zur Ausübung oder Erfüllung der sich aus einem Gesetz oder einem Tarifvertrag, einer Betriebs- oder Dienstvereinbarung ergebenden Rechte und Pflichten der Interessenvertretung der Beschäftigten erforderlich ist.",
+    "body": "Personenbezogene Daten von Beschäftigten dürfen für Zwecke des Beschäftigungsverhältnisses verarbeitet werden, wenn dies für die Entscheidung über die Begründung eines Beschäftigungsverhältnisses oder nach Begründung des Beschäftigungsverhältnisses für dessen Durchführung oder Beendigung erforderlich ist.",
     "valid_from": "2018-05-25",
     "valid_to": null,
     "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__26.html"
@@ -98,5 +178,825 @@
     "valid_from": "2027-01-01",
     "valid_to": null,
     "source_url": "https://example.invalid/beispielgesetz/§5/fassung-3"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 1 Abs. 1",
+    "title": "Gegenstand der Verordnung",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 1 Abs. 1 Gegenstand der Verordnung",
+    "body": "Diese Verordnung enthält Vorschriften zum Schutz natürlicher Personen bei der Verarbeitung personenbezogener Daten sowie Vorschriften zum freien Verkehr personenbezogener Daten.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 2 Abs. 1",
+    "title": "Sachlicher Anwendungsbereich",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 2 Abs. 1 Sachlicher Anwendungsbereich",
+    "body": "Diese Verordnung gilt für die ganz oder teilweise automatisierte Verarbeitung personenbezogener Daten sowie für die nichtautomatisierte Verarbeitung personenbezogener Daten, die in einem Dateisystem gespeichert sind oder gespeichert werden sollen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 3 Abs. 1",
+    "title": "Räumlicher Anwendungsbereich – Niederlassung in der Union",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 3 Abs. 1 Räumlicher Anwendungsbereich – Niederlassung in der Union",
+    "body": "Diese Verordnung findet Anwendung auf die Verarbeitung personenbezogener Daten, soweit diese im Rahmen der Tätigkeiten einer Niederlassung eines Verantwortlichen oder eines Auftragsverarbeiters in der Union erfolgt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 3 Abs. 2",
+    "title": "Räumlicher Anwendungsbereich – Marktortprinzip",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 3 Abs. 2 Räumlicher Anwendungsbereich – Marktortprinzip",
+    "body": "Diese Verordnung findet auch auf nicht in der Union niedergelassene Verantwortliche Anwendung, wenn die Verarbeitung im Zusammenhang damit steht, betroffenen Personen in der Union Waren oder Dienstleistungen anzubieten oder ihr Verhalten zu beobachten.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 1",
+    "title": "Begriffsbestimmungen – personenbezogene Daten",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Nr. 1 Begriffsbestimmungen – personenbezogene Daten",
+    "body": "'Personenbezogene Daten' sind alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 2",
+    "title": "Begriffsbestimmungen – Verarbeitung",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Nr. 2 Begriffsbestimmungen – Verarbeitung",
+    "body": "'Verarbeitung' ist jeder mit oder ohne Hilfe automatisierter Verfahren ausgeführte Vorgang im Zusammenhang mit personenbezogenen Daten wie das Erheben, das Erfassen, die Organisation, das Ordnen, die Speicherung, die Anpassung oder Veränderung, das Auslesen, das Abfragen, die Verwendung, die Offenlegung durch Übermittlung, Verbreitung oder eine andere Form der Bereitstellung, den Abgleich oder die Verknüpfung, die Einschränkung, das Löschen oder die Vernichtung.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 7",
+    "title": "Begriffsbestimmungen – Verantwortlicher",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Nr. 7 Begriffsbestimmungen – Verantwortlicher",
+    "body": "'Verantwortlicher' ist die natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten entscheidet.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 13",
+    "title": "Begriffsbestimmungen – genetische Daten",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Nr. 13 Begriffsbestimmungen – genetische Daten",
+    "body": "'Genetische Daten' sind personenbezogene Daten zu den vererbten oder erworbenen genetischen Eigenschaften einer natürlichen Person, die eindeutige Informationen über die Physiologie oder die Gesundheit dieser natürlichen Person liefern.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 14",
+    "title": "Begriffsbestimmungen – biometrische Daten",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Nr. 14 Begriffsbestimmungen – biometrische Daten",
+    "body": "'Biometrische Daten' sind mit speziellen technischen Verfahren gewonnene personenbezogene Daten zu den physischen, physiologischen oder verhaltenstypischen Merkmalen einer natürlichen Person, die die eindeutige Identifizierung dieser natürlichen Person ermöglichen oder bestätigen, wie Gesichtsbilder oder dactyloskopische Daten.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 4 Nr. 15",
+    "title": "Begriffsbestimmungen – Gesundheitsdaten",
+    "heading_context": "DSGVO – Kapitel I: Allgemeine Bestimmungen – Art. 4 Nr. 15 Begriffsbestimmungen – Gesundheitsdaten",
+    "body": "'Gesundheitsdaten' sind personenbezogene Daten, die sich auf die körperliche oder geistige Gesundheit einer natürlichen Person, einschließlich der Erbringung von Gesundheitsdienstleistungen, beziehen und aus denen Informationen über deren Gesundheitszustand hervorgehen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 5 Abs. 1 lit. a",
+    "title": "Grundsätze – Rechtmäßigkeit, Verarbeitung nach Treu und Glauben, Transparenz",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 5 Abs. 1 lit. a Grundsätze – Rechtmäßigkeit, Verarbeitung nach Treu und Glauben, Transparenz",
+    "body": "Personenbezogene Daten müssen auf rechtmäßige Weise, nach Treu und Glauben und in einer für die betroffene Person nachvollziehbaren Weise verarbeitet werden.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 5 Abs. 1 lit. b",
+    "title": "Grundsätze – Zweckbindung",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 5 Abs. 1 lit. b Grundsätze – Zweckbindung",
+    "body": "Personenbezogene Daten müssen für festgelegte, eindeutige und legitime Zwecke erhoben werden und dürfen nicht in einer mit diesen Zwecken nicht zu vereinbarenden Weise weiterverarbeitet werden.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 5 Abs. 1 lit. c",
+    "title": "Grundsätze – Datenminimierung",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 5 Abs. 1 lit. c Grundsätze – Datenminimierung",
+    "body": "Personenbezogene Daten müssen dem Zweck der Verarbeitung angemessen und auf das für die Zwecke der Verarbeitung notwendige Maß beschränkt sein.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 5 Abs. 1 lit. d",
+    "title": "Grundsätze – Richtigkeit",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 5 Abs. 1 lit. d Grundsätze – Richtigkeit",
+    "body": "Personenbezogene Daten müssen sachlich richtig und erforderlichenfalls auf dem neuesten Stand sein; es sind alle angemessenen Maßnahmen zu treffen, damit unrichtige Daten unverzüglich gelöscht oder berichtigt werden.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 5 Abs. 1 lit. e",
+    "title": "Grundsätze – Speicherbegrenzung",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 5 Abs. 1 lit. e Grundsätze – Speicherbegrenzung",
+    "body": "Personenbezogene Daten müssen in einer Form gespeichert werden, die die Identifizierung der betroffenen Personen nur so lange ermöglicht, wie es für die Zwecke, für die sie verarbeitet werden, erforderlich ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 5 Abs. 2",
+    "title": "Grundsätze – Rechenschaftspflicht",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 5 Abs. 2 Grundsätze – Rechenschaftspflicht",
+    "body": "Der Verantwortliche ist für die Einhaltung der Grundsätze der Datenverarbeitung verantwortlich und muss deren Einhaltung nachweisen können.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 6 Abs. 1 lit. c",
+    "title": "Rechtmäßigkeit der Verarbeitung – rechtliche Verpflichtung",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 6 Abs. 1 lit. c Rechtmäßigkeit der Verarbeitung – rechtliche Verpflichtung",
+    "body": "Die Verarbeitung ist rechtmäßig, wenn sie zur Erfüllung einer rechtlichen Verpflichtung erforderlich ist, der der Verantwortliche unterliegt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 6 Abs. 1 lit. d",
+    "title": "Rechtmäßigkeit der Verarbeitung – lebenswichtige Interessen",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 6 Abs. 1 lit. d Rechtmäßigkeit der Verarbeitung – lebenswichtige Interessen",
+    "body": "Die Verarbeitung ist rechtmäßig, wenn sie erforderlich ist, um lebenswichtige Interessen der betroffenen Person oder einer anderen natürlichen Person zu schützen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 6 Abs. 1 lit. f",
+    "title": "Rechtmäßigkeit der Verarbeitung – berechtigte Interessen",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 6 Abs. 1 lit. f Rechtmäßigkeit der Verarbeitung – berechtigte Interessen",
+    "body": "Die Verarbeitung ist rechtmäßig, wenn sie zur Wahrung der berechtigten Interessen des Verantwortlichen oder eines Dritten erforderlich ist, sofern nicht die Interessen oder Grundrechte der betroffenen Person überwiegen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 7 Abs. 3",
+    "title": "Bedingungen für die Einwilligung – Widerruf",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 7 Abs. 3 Bedingungen für die Einwilligung – Widerruf",
+    "body": "Die betroffene Person hat das Recht, ihre Einwilligung jederzeit zu widerrufen. Der Widerruf der Einwilligung berührt nicht die Rechtmäßigkeit der aufgrund der Einwilligung bis zum Widerruf erfolgten Verarbeitung.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 8 Abs. 1",
+    "title": "Bedingungen für die Einwilligung eines Kindes bei Diensten der Informationsgesellschaft",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 8 Abs. 1 Bedingungen für die Einwilligung eines Kindes bei Diensten der Informationsgesellschaft",
+    "body": "Gilt Art. 6 Abs. 1 lit. a für ein Kind unter 16 Jahren, ist die Verarbeitung nur rechtmäßig, wenn und soweit die Einwilligung durch den Träger der elterlichen Verantwortung für das Kind erteilt oder genehmigt wird.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 9 Abs. 1",
+    "title": "Verarbeitung besonderer Kategorien personenbezogener Daten",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 9 Abs. 1 Verarbeitung besonderer Kategorien personenbezogener Daten",
+    "body": "Die Verarbeitung personenbezogener Daten, aus denen die rassische und ethnische Herkunft, politische Meinungen, religiöse Überzeugungen oder die Gewerkschaftszugehörigkeit hervorgehen, sowie die Verarbeitung von genetischen Daten, biometrischen Daten, Gesundheitsdaten oder Daten zum Sexualleben ist untersagt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 9 Abs. 2 lit. a",
+    "title": "Besondere Kategorien – Ausnahme ausdrückliche Einwilligung",
+    "heading_context": "DSGVO – Kapitel II: Grundsätze – Art. 9 Abs. 2 lit. a Besondere Kategorien – Ausnahme ausdrückliche Einwilligung",
+    "body": "Das Verbot der Verarbeitung besonderer Kategorien personenbezogener Daten gilt nicht, wenn die betroffene Person in die Verarbeitung dieser Daten für einen oder mehrere festgelegte Zwecke ausdrücklich eingewilligt hat.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 12 Abs. 1",
+    "title": "Transparente Information, Kommunikation und Modalitäten",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 12 Abs. 1 Transparente Information, Kommunikation und Modalitäten",
+    "body": "Der Verantwortliche trifft geeignete Maßnahmen, um der betroffenen Person alle Informationen in präziser, transparenter, verständlicher und leicht zugänglicher Form in einer klaren und einfachen Sprache zu übermitteln.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 13 Abs. 1",
+    "title": "Informationspflicht bei Erhebung von personenbezogenen Daten bei der betroffenen Person",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 13 Abs. 1 Informationspflicht bei Erhebung von personenbezogenen Daten bei der betroffenen Person",
+    "body": "Werden personenbezogene Daten bei der betroffenen Person erhoben, teilt der Verantwortliche ihr unter anderem den Namen und die Kontaktdaten des Verantwortlichen sowie die Zwecke der Verarbeitung mit.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 14 Abs. 1",
+    "title": "Informationspflicht, wenn personenbezogene Daten nicht bei der betroffenen Person erhoben wurden",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 14 Abs. 1 Informationspflicht, wenn personenbezogene Daten nicht bei der betroffenen Person erhoben wurden",
+    "body": "Werden personenbezogene Daten nicht bei der betroffenen Person erhoben, stellt der Verantwortliche der betroffenen Person unter anderem Informationen zu seiner Identität, den Verarbeitungszwecken und den Kategorien der betroffenen Daten bereit.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 15 Abs. 1",
+    "title": "Auskunftsrecht der betroffenen Person",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 15 Abs. 1 Auskunftsrecht der betroffenen Person",
+    "body": "Die betroffene Person hat das Recht, von dem Verantwortlichen eine Bestätigung darüber zu verlangen, ob sie betreffende personenbezogene Daten verarbeitet werden, und wenn ja, Auskunft über diese personenbezogenen Daten zu erhalten.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 16",
+    "title": "Recht auf Berichtigung",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 16 Recht auf Berichtigung",
+    "body": "Die betroffene Person hat das Recht, von dem Verantwortlichen unverzüglich die Berichtigung sie betreffender unrichtiger personenbezogener Daten zu verlangen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 18 Abs. 1",
+    "title": "Recht auf Einschränkung der Verarbeitung",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 18 Abs. 1 Recht auf Einschränkung der Verarbeitung",
+    "body": "Die betroffene Person hat das Recht, von dem Verantwortlichen die Einschränkung der Verarbeitung zu verlangen, wenn etwa die Richtigkeit der personenbezogenen Daten von ihr bestritten wird.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 20 Abs. 1",
+    "title": "Recht auf Datenübertragbarkeit",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 20 Abs. 1 Recht auf Datenübertragbarkeit",
+    "body": "Die betroffene Person hat das Recht, die sie betreffenden personenbezogenen Daten, die sie einem Verantwortlichen bereitgestellt hat, in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten und einem anderen Verantwortlichen zu übermitteln.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 21 Abs. 1",
+    "title": "Widerspruchsrecht",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 21 Abs. 1 Widerspruchsrecht",
+    "body": "Die betroffene Person hat das Recht, aus Gründen, die sich aus ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung sie betreffender personenbezogener Daten Widerspruch einzulegen, wenn diese auf berechtigten Interessen beruht.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 22 Abs. 1",
+    "title": "Recht auf Nichtunterliegen einer ausschließlich automatisierten Entscheidung",
+    "heading_context": "DSGVO – Kapitel III: Rechte der betroffenen Person – Art. 22 Abs. 1 Recht auf Nichtunterliegen einer ausschließlich automatisierten Entscheidung",
+    "body": "Die betroffene Person hat das Recht, nicht einer ausschließlich auf einer automatisierten Verarbeitung – einschließlich Profiling – beruhenden Entscheidung unterworfen zu werden, die ihr gegenüber rechtliche Wirkung entfaltet oder sie in ähnlicher Weise erheblich beeinträchtigt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 24 Abs. 1",
+    "title": "Verantwortung des für die Verarbeitung Verantwortlichen",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 24 Abs. 1 Verantwortung des für die Verarbeitung Verantwortlichen",
+    "body": "Der Verantwortliche setzt unter Berücksichtigung der Art, des Umfangs, der Umstände und der Zwecke der Verarbeitung geeignete technische und organisatorische Maßnahmen um, um sicherzustellen und den Nachweis erbringen zu können, dass die Verarbeitung gemäß dieser Verordnung erfolgt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 25 Abs. 1",
+    "title": "Datenschutz durch Technikgestaltung und durch datenschutzfreundliche Voreinstellungen",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 25 Abs. 1 Datenschutz durch Technikgestaltung und durch datenschutzfreundliche Voreinstellungen",
+    "body": "Der Verantwortliche trifft geeignete technische und organisatorische Maßnahmen, um die Datenschutzgrundsätze wie Datenminimierung wirksam umzusetzen und die notwendigen Garantien in die Verarbeitung aufzunehmen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 27 Abs. 1",
+    "title": "Vertreter von nicht in der Union niedergelassenen Verantwortlichen",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 27 Abs. 1 Vertreter von nicht in der Union niedergelassenen Verantwortlichen",
+    "body": "Findet Art. 3 Abs. 2 Anwendung, so benennt der Verantwortliche oder der Auftragsverarbeiter schriftlich einen Vertreter in der Union.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 30 Abs. 1",
+    "title": "Verzeichnis von Verarbeitungstätigkeiten",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 30 Abs. 1 Verzeichnis von Verarbeitungstätigkeiten",
+    "body": "Jeder Verantwortliche führt ein Verzeichnis aller Verarbeitungstätigkeiten, die seiner Zuständigkeit unterliegen, mit Angaben wie dem Namen und den Kontaktdaten des Verantwortlichen und den Zwecken der Verarbeitung.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 35 Abs. 1",
+    "title": "Datenschutz-Folgenabschätzung",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 35 Abs. 1 Datenschutz-Folgenabschätzung",
+    "body": "Hat eine Form der Verarbeitung, insbesondere bei Verwendung neuer Technologien, aufgrund der Art, des Umfangs, der Umstände und der Zwecke der Verarbeitung voraussichtlich ein hohes Risiko für die Rechte und Freiheiten natürlicher Personen zur Folge, so führt der Verantwortliche vorab eine Abschätzung der Folgen der vorgesehenen Verarbeitungsvorgänge für den Schutz personenbezogener Daten durch.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 37 Abs. 1",
+    "title": "Benennung eines Datenschutzbeauftragten",
+    "heading_context": "DSGVO – Kapitel IV: Verantwortlicher und Auftragsverarbeiter – Art. 37 Abs. 1 Benennung eines Datenschutzbeauftragten",
+    "body": "Der Verantwortliche und der Auftragsverarbeiter benennen in bestimmten Fällen einen Datenschutzbeauftragten, etwa wenn die Kerntätigkeit in der umfangreichen regelmäßigen und systematischen Überwachung von betroffenen Personen besteht.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 45 Abs. 1",
+    "title": "Datenübermittlung auf der Grundlage eines Angemessenheitsbeschlusses",
+    "heading_context": "DSGVO – Kapitel V: Übermittlung an Drittländer – Art. 45 Abs. 1 Datenübermittlung auf der Grundlage eines Angemessenheitsbeschlusses",
+    "body": "Eine Übermittlung personenbezogener Daten an ein Drittland darf erfolgen, wenn die Kommission beschlossen hat, dass das Drittland ein angemessenes Schutzniveau bietet.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 46 Abs. 1",
+    "title": "Datenübermittlung vorbehaltlich geeigneter Garantien",
+    "heading_context": "DSGVO – Kapitel V: Übermittlung an Drittländer – Art. 46 Abs. 1 Datenübermittlung vorbehaltlich geeigneter Garantien",
+    "body": "Falls kein Angemessenheitsbeschluss vorliegt, darf ein Verantwortlicher personenbezogene Daten an ein Drittland nur übermitteln, sofern er geeignete Garantien vorgesehen hat und wirksame Rechtsbehelfe zur Verfügung stehen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 51 Abs. 1",
+    "title": "Zuständigkeit der Aufsichtsbehörde",
+    "heading_context": "DSGVO – Kapitel VI: Aufsichtsbehörden – Art. 51 Abs. 1 Zuständigkeit der Aufsichtsbehörde",
+    "body": "Jeder Mitgliedstaat sieht vor, dass eine oder mehrere unabhängige Behörden für die Überwachung der Anwendung dieser Verordnung zuständig sind.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 77 Abs. 1",
+    "title": "Recht auf Beschwerde bei einer Aufsichtsbehörde",
+    "heading_context": "DSGVO – Kapitel VIII: Rechtsbehelfe, Haftung und Sanktionen – Art. 77 Abs. 1 Recht auf Beschwerde bei einer Aufsichtsbehörde",
+    "body": "Jede betroffene Person hat unbeschadet eines anderweitigen verwaltungsrechtlichen oder gerichtlichen Rechtsbehelfs das Recht auf Beschwerde bei einer Aufsichtsbehörde, wenn sie der Ansicht ist, dass die Verarbeitung der sie betreffenden personenbezogenen Daten gegen diese Verordnung verstößt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 82 Abs. 1",
+    "title": "Haftung und Recht auf Schadenersatz",
+    "heading_context": "DSGVO – Kapitel VIII: Rechtsbehelfe, Haftung und Sanktionen – Art. 82 Abs. 1 Haftung und Recht auf Schadenersatz",
+    "body": "Jede Person, der wegen eines Verstoßes gegen diese Verordnung ein materieller oder immaterieller Schaden entstanden ist, hat Anspruch auf Schadenersatz gegen den Verantwortlichen oder gegen den Auftragsverarbeiter.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "DSGVO",
+    "norm_ref": "Art. 83 Abs. 4",
+    "title": "Allgemeine Bedingungen für die Verhängung von Geldbußen – niedrigerer Rahmen",
+    "heading_context": "DSGVO – Kapitel VIII: Rechtsbehelfe, Haftung und Sanktionen – Art. 83 Abs. 4 Allgemeine Bedingungen für die Verhängung von Geldbußen – niedrigerer Rahmen",
+    "body": "Bei Verstößen gegen bestimmte Pflichten des Verantwortlichen und des Auftragsverarbeiters werden Geldbußen von bis zu 10 000 000 EUR oder im Falle eines Unternehmens von bis zu 2 % seines gesamten weltweit erzielten Jahresumsatzes des vorangegangenen Geschäftsjahrs verhängt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 1 Abs. 1",
+    "title": "Anwendungsbereich des Gesetzes",
+    "heading_context": "BDSG – Teil 1: Gemeinsame Bestimmungen – § 1 Abs. 1 Anwendungsbereich des Gesetzes",
+    "body": "Dieses Gesetz gilt für die Verarbeitung personenbezogener Daten durch öffentliche Stellen des Bundes sowie durch öffentliche und nicht-öffentliche Stellen, soweit die Verarbeitung nicht ausschließlich zu persönlichen oder familiären Zwecken erfolgt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__1.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 4 Abs. 1",
+    "title": "Videoüberwachung öffentlich zugänglicher Räume",
+    "heading_context": "BDSG – Teil 1: Gemeinsame Bestimmungen – § 4 Abs. 1 Videoüberwachung öffentlich zugänglicher Räume",
+    "body": "Die Beobachtung öffentlich zugänglicher Räume mit optisch-elektronischen Einrichtungen (Videoüberwachung) ist nur zulässig, soweit sie zur Aufgabenerfüllung öffentlicher Stellen, zur Wahrnehmung des Hausrechts oder zur Wahrnehmung berechtigter Interessen für konkret festgelegte Zwecke erforderlich ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__4.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 22 Abs. 1",
+    "title": "Verarbeitung besonderer Kategorien personenbezogener Daten durch öffentliche Stellen",
+    "heading_context": "BDSG – Teil 2, Kapitel 3: Rechte der betroffenen Person – § 22 Abs. 1 Verarbeitung besonderer Kategorien personenbezogener Daten durch öffentliche Stellen",
+    "body": "Öffentliche Stellen dürfen besondere Kategorien personenbezogener Daten im Sinne von Art. 9 Abs. 1 DSGVO unter den dort genannten Voraussetzungen und den in dieser Vorschrift genannten zusätzlichen Bedingungen verarbeiten.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__22.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 24 Abs. 1",
+    "title": "Verarbeitung für andere Zwecke durch öffentliche Stellen",
+    "heading_context": "BDSG – Teil 2, Kapitel 3: Rechte der betroffenen Person – § 24 Abs. 1 Verarbeitung für andere Zwecke durch öffentliche Stellen",
+    "body": "Die Verarbeitung personenbezogener Daten durch öffentliche Stellen für einen anderen Zweck als den, zu dem die Daten erhoben wurden, ist zulässig, wenn sie zur Abwehr einer erheblichen Gefahr für die öffentliche Sicherheit oder zur Verfolgung von Straftaten erforderlich ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__24.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 25 Abs. 1",
+    "title": "Verarbeitung für andere Zwecke durch nicht-öffentliche Stellen",
+    "heading_context": "BDSG – Teil 2, Kapitel 2: Datenverarbeitung durch nicht-öffentliche Stellen – § 25 Abs. 1 Verarbeitung für andere Zwecke durch nicht-öffentliche Stellen",
+    "body": "Die Verarbeitung personenbezogener Daten durch nicht-öffentliche Stellen für einen anderen Zweck als den, zu dem die Daten erhoben wurden, ist zulässig, wenn sie zur Abwehr von Gefahren für die staatliche oder öffentliche Sicherheit erforderlich ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__25.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 26 Abs. 2",
+    "title": "Datenverarbeitung im Beschäftigungsverhältnis – Einwilligung",
+    "heading_context": "BDSG – Teil 2, Kapitel 2: Datenverarbeitung durch nicht-öffentliche Stellen – § 26 Abs. 2 Datenverarbeitung im Beschäftigungsverhältnis – Einwilligung",
+    "body": "Die Verarbeitung personenbezogener Daten von Beschäftigten, einschließlich besonderer Kategorien personenbezogener Daten, auf der Grundlage einer Einwilligung ist zulässig, soweit die Freiwilligkeit der Einwilligung unter Berücksichtigung der im Beschäftigungsverhältnis bestehenden Abhängigkeit beurteilt wird.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__26.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 26 Abs. 8",
+    "title": "Datenverarbeitung im Beschäftigungsverhältnis – Begriff Beschäftigte",
+    "heading_context": "BDSG – Teil 2, Kapitel 2: Datenverarbeitung durch nicht-öffentliche Stellen – § 26 Abs. 8 Datenverarbeitung im Beschäftigungsverhältnis – Begriff Beschäftigte",
+    "body": "Beschäftigte im Sinne dieses Gesetzes sind unter anderem Arbeitnehmerinnen und Arbeitnehmer, zur Berufsbildung Beschäftigte und Bewerberinnen und Bewerber für ein Beschäftigungsverhältnis.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__26.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 27 Abs. 1",
+    "title": "Datenverarbeitung für wissenschaftliche oder historische Forschungszwecke",
+    "heading_context": "BDSG – Teil 2, Kapitel 2: Datenverarbeitung durch nicht-öffentliche Stellen – § 27 Abs. 1 Datenverarbeitung für wissenschaftliche oder historische Forschungszwecke",
+    "body": "Die Verarbeitung besonderer Kategorien personenbezogener Daten ist auch ohne Einwilligung für wissenschaftliche oder historische Forschungszwecke oder für statistische Zwecke zulässig, wenn sie für diese Zwecke notwendig ist und die Interessen des Verantwortlichen die Interessen der betroffenen Person erheblich überwiegen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__27.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 29 Abs. 1",
+    "title": "Einschränkung der Informationspflichten und des Auskunftsrechts bei Berufsgeheimnisträgern",
+    "heading_context": "BDSG – Teil 2, Kapitel 3: Rechte der betroffenen Person – § 29 Abs. 1 Einschränkung der Informationspflichten und des Auskunftsrechts bei Berufsgeheimnisträgern",
+    "body": "Die Pflicht zur Information der betroffenen Person besteht nicht, soweit die Erteilung der Information eine einem Berufsgeheimnis unterliegende Person offenbaren würde, der die betroffene Person die Daten anvertraut hat.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__29.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 31 Abs. 2",
+    "title": "Schutz des Wirtschaftsverkehrs bei Scoring und Bonitätsauskünften",
+    "heading_context": "BDSG – Teil 2, Kapitel 2: Datenverarbeitung durch nicht-öffentliche Stellen – § 31 Abs. 2 Schutz des Wirtschaftsverkehrs bei Scoring und Bonitätsauskünften",
+    "body": "Die Verwendung eines Wahrscheinlichkeitswerts über ein zukünftiges Verhalten einer natürlichen Person (Scoring) zum Zweck der Entscheidung über die Begründung eines Vertragsverhältnisses ist nur zulässig, wenn die Berechnung auf Grundlage eines wissenschaftlich anerkannten mathematisch-statistischen Verfahrens erfolgt.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__31.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 32 Abs. 1",
+    "title": "Informationspflichten bei Erhebung bei Dritten – Einschränkungen",
+    "heading_context": "BDSG – Teil 2, Kapitel 3: Rechte der betroffenen Person – § 32 Abs. 1 Informationspflichten bei Erhebung bei Dritten – Einschränkungen",
+    "body": "Die Pflicht des Verantwortlichen zur Information der betroffenen Person besteht nicht, soweit die betroffene Person bereits über die Informationen verfügt oder die Erteilung der Information einen unverhältnismäßigen Aufwand erfordern würde.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__32.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 33 Abs. 1",
+    "title": "Ausnahmen von der Informationspflicht",
+    "heading_context": "BDSG – Teil 2, Kapitel 3: Rechte der betroffenen Person – § 33 Abs. 1 Ausnahmen von der Informationspflicht",
+    "body": "Die Pflicht zur Information der betroffenen Person nach Art. 14 DSGVO besteht nicht, soweit diese Informationspflicht voraussichtlich die Durchsetzung von Rechtsansprüchen unmöglich machen oder ernsthaft beeinträchtigen würde.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__33.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 34 Abs. 1",
+    "title": "Auskunftsrecht der betroffenen Person – Einschränkungen",
+    "heading_context": "BDSG – Teil 2, Kapitel 3: Rechte der betroffenen Person – § 34 Abs. 1 Auskunftsrecht der betroffenen Person – Einschränkungen",
+    "body": "Das Auskunftsrecht nach Art. 15 DSGVO besteht nicht, wenn die betroffene Person nach § 33 Abs. 1 Nr. 1 nicht zu informieren ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__34.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 35 Abs. 1",
+    "title": "Recht auf Löschung – Einschränkungen",
+    "heading_context": "BDSG – Teil 2, Kapitel 3: Rechte der betroffenen Person – § 35 Abs. 1 Recht auf Löschung – Einschränkungen",
+    "body": "Abweichend von Art. 17 Abs. 1 DSGVO besteht das Recht auf Löschung nicht, wenn im Fall nichtautomatisierter Datenverarbeitung eine Löschung wegen der besonderen Art der Speicherung nicht oder nur mit unverhältnismäßigem Aufwand möglich ist und das Interesse der betroffenen Person an der Löschung als gering anzusehen ist.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__35.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 38 Abs. 1",
+    "title": "Datenschutzbeauftragte nicht-öffentlicher Stellen",
+    "heading_context": "BDSG – Teil 2, Kapitel 2: Datenverarbeitung durch nicht-öffentliche Stellen – § 38 Abs. 1 Datenschutzbeauftragte nicht-öffentlicher Stellen",
+    "body": "Nicht-öffentliche Verantwortliche und Auftragsverarbeiter haben eine Datenschutzbeauftragte oder einen Datenschutzbeauftragten zu benennen, soweit sie in der Regel mindestens 20 Personen ständig mit der automatisierten Verarbeitung personenbezogener Daten beschäftigen.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__38.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 40 Abs. 1",
+    "title": "Aufgaben der Aufsichtsbehörden",
+    "heading_context": "BDSG – Teil 3: Besondere Bestimmungen – § 40 Abs. 1 Aufgaben der Aufsichtsbehörden",
+    "body": "Die Aufsichtsbehörden der Länder überwachen die Anwendung der Vorschriften zum Schutz personenbezogener Daten.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__40.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 41 Abs. 1",
+    "title": "Anwendung der Vorschriften über das Bußgeld- und Strafverfahren",
+    "heading_context": "BDSG – Teil 4: Straf- und Bußgeldvorschriften – § 41 Abs. 1 Anwendung der Vorschriften über das Bußgeld- und Strafverfahren",
+    "body": "Für Verstöße, die nach Art. 83 DSGVO oder nach § 42 mit Geldbuße bedroht sind, gelten die Vorschriften des Gesetzes über Ordnungswidrigkeiten entsprechend.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__41.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 42 Abs. 1",
+    "title": "Strafvorschriften – unbefugte Verarbeitung",
+    "heading_context": "BDSG – Teil 4: Straf- und Bußgeldvorschriften – § 42 Abs. 1 Strafvorschriften – unbefugte Verarbeitung",
+    "body": "Wer personenbezogene Daten, die nicht allgemein zugänglich sind, einer großen Zahl von Menschen zugänglich macht und dabei vorsätzlich gegen die Verarbeitungsvoraussetzungen verstößt und dadurch Gewinn erzielen oder einen anderen schädigen will, wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__42.html"
+  },
+  {
+    "law_short": "BDSG",
+    "norm_ref": "§ 43 Abs. 1",
+    "title": "Bußgeldvorschriften",
+    "heading_context": "BDSG – Teil 4: Straf- und Bußgeldvorschriften – § 43 Abs. 1 Bußgeldvorschriften",
+    "body": "Als Ordnungswidrigkeit kann geahndet werden, wer vorsätzlich oder fahrlässig entgegen § 31 Abs. 2 einen dort genannten Wahrscheinlichkeitswert zur Entscheidung über die Begründung eines Vertragsverhältnisses verwendet.",
+    "valid_from": "2018-05-25",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/bdsg_2018/__43.html"
+  },
+  {
+    "law_short": "TTDSG",
+    "norm_ref": "§ 1 Abs. 1",
+    "title": "Zweck des Gesetzes",
+    "heading_context": "TTDSG – Teil 1: Allgemeine Bestimmungen – § 1 Abs. 1 Zweck des Gesetzes",
+    "body": "Zweck dieses Gesetzes ist der Schutz des Fernmeldegeheimnisses und der Privatsphäre bei Telekommunikation und bei der Nutzung digitaler Dienste.",
+    "valid_from": "2021-12-01",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/ttdsg/__1.html"
+  },
+  {
+    "law_short": "TTDSG",
+    "norm_ref": "§ 19 Abs. 1",
+    "title": "Begriffsbestimmungen – Endeinrichtung, Anbieter digitaler Dienste",
+    "heading_context": "TTDSG – Teil 3: Datenschutz bei Telekommunikationsdiensten und digitalen Diensten – § 19 Abs. 1 Begriffsbestimmungen – Endeinrichtung, Anbieter digitaler Dienste",
+    "body": "Im Sinne dieses Teils ist eine Endeinrichtung jede direkt oder indirekt an die Schnittstelle eines öffentlichen Telekommunikationsnetzes angeschlossene Einrichtung zur Aussendung, zum Verarbeiten oder zum Empfang von Nachrichten.",
+    "valid_from": "2021-12-01",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/ttdsg/__19.html"
+  },
+  {
+    "law_short": "TTDSG",
+    "norm_ref": "§ 20 Abs. 1",
+    "title": "Fernmeldegeheimnis",
+    "heading_context": "TTDSG – Teil 2: Fernmeldegeheimnis – § 20 Abs. 1 Fernmeldegeheimnis",
+    "body": "Dem Fernmeldegeheimnis unterliegen der Inhalt der Telekommunikation und ihre näheren Umstände, insbesondere die Tatsache, ob jemand an einem Telekommunikationsvorgang beteiligt ist oder war.",
+    "valid_from": "2021-12-01",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/ttdsg/__20.html"
+  },
+  {
+    "law_short": "TTDSG",
+    "norm_ref": "§ 25 Abs. 1",
+    "title": "Schutz der Privatsphäre bei Endeinrichtungen",
+    "heading_context": "TTDSG – Teil 3: Datenschutz bei Telekommunikationsdiensten und digitalen Diensten – § 25 Abs. 1 Schutz der Privatsphäre bei Endeinrichtungen",
+    "body": "Die Speicherung von Informationen in der Endeinrichtung des Endnutzers oder der Zugriff auf Informationen, die bereits in der Endeinrichtung gespeichert sind, ist nur zulässig, wenn der Endnutzer auf der Grundlage von klaren und umfassenden Informationen eingewilligt hat.",
+    "valid_from": "2021-12-01",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/ttdsg/__25.html"
+  },
+  {
+    "law_short": "TTDSG",
+    "norm_ref": "§ 25 Abs. 2 Nr. 2",
+    "title": "Ausnahme vom Einwilligungserfordernis – technisch erforderliche Speicherung",
+    "heading_context": "TTDSG – Teil 3: Datenschutz bei Telekommunikationsdiensten und digitalen Diensten – § 25 Abs. 2 Nr. 2 Ausnahme vom Einwilligungserfordernis – technisch erforderliche Speicherung",
+    "body": "Eine Einwilligung ist nicht erforderlich, wenn die Speicherung von Informationen oder der Zugriff auf bereits gespeicherte Informationen unbedingt erforderlich ist, damit der Anbieter einen von dem Nutzer ausdrücklich gewünschten Telemediendienst zur Verfügung stellen kann.",
+    "valid_from": "2021-12-01",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/ttdsg/__25.html"
+  },
+  {
+    "law_short": "TTDSG",
+    "norm_ref": "§ 28 Abs. 1",
+    "title": "Bußgeldvorschriften",
+    "heading_context": "TTDSG – Teil 5: Bußgeldvorschriften – § 28 Abs. 1 Bußgeldvorschriften",
+    "body": "Als Ordnungswidrigkeit kann geahndet werden, wer vorsätzlich oder fahrlässig entgegen § 25 Abs. 1 Informationen in einer Endeinrichtung speichert oder auf dort gespeicherte Informationen zugreift, ohne dass die dafür erforderliche Einwilligung vorliegt.",
+    "valid_from": "2021-12-01",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/ttdsg/__28.html"
+  },
+  {
+    "law_short": "BetrVG",
+    "norm_ref": "§ 75 Abs. 2",
+    "title": "Grundsätze für die Behandlung der Betriebsangehörigen",
+    "heading_context": "BetrVG – Zweiter Abschnitt: Betriebsrat – § 75 Abs. 2 Grundsätze für die Behandlung der Betriebsangehörigen",
+    "body": "Arbeitgeber und Betriebsrat haben die freie Entfaltung der Persönlichkeit der im Betrieb beschäftigten Arbeitnehmer zu schützen und zu fördern.",
+    "valid_from": "2001-07-28",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/betrvg/__75.html"
+  },
+  {
+    "law_short": "BetrVG",
+    "norm_ref": "§ 80 Abs. 1",
+    "title": "Allgemeine Aufgaben des Betriebsrats",
+    "heading_context": "BetrVG – Zweiter Abschnitt: Betriebsrat – § 80 Abs. 1 Allgemeine Aufgaben des Betriebsrats",
+    "body": "Der Betriebsrat hat unter anderem darüber zu wachen, dass die zugunsten der Arbeitnehmer geltenden Gesetze, Verordnungen, Unfallverhütungsvorschriften, Tarifverträge und Betriebsvereinbarungen durchgeführt werden.",
+    "valid_from": "2001-07-28",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/betrvg/__80.html"
+  },
+  {
+    "law_short": "BetrVG",
+    "norm_ref": "§ 87 Abs. 1 Nr. 6",
+    "title": "Mitbestimmung bei technischen Überwachungseinrichtungen",
+    "heading_context": "BetrVG – Dritter Abschnitt: Mitbestimmung des Betriebsrats – § 87 Abs. 1 Nr. 6 Mitbestimmung bei technischen Überwachungseinrichtungen",
+    "body": "Der Betriebsrat hat mitzubestimmen bei der Einführung und Anwendung von technischen Einrichtungen, die dazu bestimmt sind, das Verhalten oder die Leistung der Arbeitnehmer zu überwachen.",
+    "valid_from": "2001-07-28",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/betrvg/__87.html"
+  },
+  {
+    "law_short": "BetrVG",
+    "norm_ref": "§ 90 Abs. 1",
+    "title": "Unterrichtungs- und Beratungsrechte bei der Planung technischer Anlagen",
+    "heading_context": "BetrVG – Dritter Abschnitt: Mitbestimmung des Betriebsrats – § 90 Abs. 1 Unterrichtungs- und Beratungsrechte bei der Planung technischer Anlagen",
+    "body": "Der Arbeitgeber hat den Betriebsrat über die Planung von technischen Anlagen, von Arbeitsverfahren und Arbeitsabläufen rechtzeitig unter Vorlage der erforderlichen Unterlagen zu unterrichten.",
+    "valid_from": "2001-07-28",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/betrvg/__90.html"
+  },
+  {
+    "law_short": "BetrVG",
+    "norm_ref": "§ 94 Abs. 1",
+    "title": "Mitbestimmung bei Personalfragebögen",
+    "heading_context": "BetrVG – Dritter Abschnitt: Mitbestimmung des Betriebsrats – § 94 Abs. 1 Mitbestimmung bei Personalfragebögen",
+    "body": "Personalfragebögen bedürfen der Zustimmung des Betriebsrats; dies gilt auch für den Inhalt von Formulararbeitsverträgen, soweit sie Angaben entsprechend einem Personalfragebogen enthalten.",
+    "valid_from": "2001-07-28",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/betrvg/__94.html"
+  },
+  {
+    "law_short": "UWG",
+    "norm_ref": "§ 7 Abs. 1",
+    "title": "Unzumutbare Belästigungen – Grundsatz",
+    "heading_context": "UWG – Kapitel 2: Unzulässige geschäftliche Handlungen – § 7 Abs. 1 Unzumutbare Belästigungen – Grundsatz",
+    "body": "Eine geschäftliche Handlung, durch die ein Marktteilnehmer in unzumutbarer Weise belästigt wird, ist unzulässig.",
+    "valid_from": "2004-07-08",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/uwg_2004/__7.html"
+  },
+  {
+    "law_short": "UWG",
+    "norm_ref": "§ 7 Abs. 2 Nr. 2",
+    "title": "Unzumutbare Belästigung – Telefonwerbung ohne Einwilligung",
+    "heading_context": "UWG – Kapitel 2: Unzulässige geschäftliche Handlungen – § 7 Abs. 2 Nr. 2 Unzumutbare Belästigung – Telefonwerbung ohne Einwilligung",
+    "body": "Eine unzumutbare Belästigung ist stets anzunehmen bei Werbung mit einem Telefonanruf gegenüber einem Verbraucher ohne dessen vorherige ausdrückliche Einwilligung.",
+    "valid_from": "2004-07-08",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/uwg_2004/__7.html"
+  },
+  {
+    "law_short": "UWG",
+    "norm_ref": "§ 7 Abs. 2 Nr. 3",
+    "title": "Unzumutbare Belästigung – Werbung per Fax oder E-Mail ohne Einwilligung",
+    "heading_context": "UWG – Kapitel 2: Unzulässige geschäftliche Handlungen – § 7 Abs. 2 Nr. 3 Unzumutbare Belästigung – Werbung per Fax oder E-Mail ohne Einwilligung",
+    "body": "Eine unzumutbare Belästigung ist stets anzunehmen bei Werbung unter Verwendung von Faxgeräten, automatischen Anrufmaschinen oder elektronischer Post, ohne dass eine vorherige ausdrückliche Einwilligung des Empfängers vorliegt.",
+    "valid_from": "2004-07-08",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/uwg_2004/__7.html"
+  },
+  {
+    "law_short": "UWG",
+    "norm_ref": "§ 7 Abs. 3",
+    "title": "Ausnahme – Bestandskundenwerbung per E-Mail",
+    "heading_context": "UWG – Kapitel 2: Unzulässige geschäftliche Handlungen – § 7 Abs. 3 Ausnahme – Bestandskundenwerbung per E-Mail",
+    "body": "Eine unzumutbare Belästigung ist abweichend von Absatz 2 Nummer 3 nicht anzunehmen, wenn ein Unternehmer im Zusammenhang mit dem Verkauf einer Ware die elektronische Postadresse des Kunden erhalten hat und diese zur Direktwerbung für eigene ähnliche Waren verwendet, der Kunde der Verwendung nicht widersprochen hat und bei Erhebung der Adresse auf die Widerspruchsmöglichkeit hingewiesen wurde.",
+    "valid_from": "2004-07-08",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/uwg_2004/__7.html"
+  },
+  {
+    "law_short": "UWG",
+    "norm_ref": "§ 7a Abs. 1",
+    "title": "Einwilligung in Telefonwerbung – Nachweis und Dokumentation",
+    "heading_context": "UWG – Kapitel 2: Unzulässige geschäftliche Handlungen – § 7a Abs. 1 Einwilligung in Telefonwerbung – Nachweis und Dokumentation",
+    "body": "Wer gegenüber einem Verbraucher mit einem Telefonanruf wirbt, hat die vor dem Telefonanruf erteilte Einwilligung angemessen zu dokumentieren und für die Dauer von fünf Jahren aufzubewahren.",
+    "valid_from": "2021-10-01",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/uwg_2004/__7a.html"
+  },
+  {
+    "law_short": "KUG",
+    "norm_ref": "§ 22 Satz 1",
+    "title": "Recht am eigenen Bild – Einwilligungserfordernis",
+    "heading_context": "KUG – Recht am eigenen Bild – § 22 Satz 1 Recht am eigenen Bild – Einwilligungserfordernis",
+    "body": "Bildnisse dürfen nur mit Einwilligung des Abgebildeten verbreitet oder öffentlich zur Schau gestellt werden.",
+    "valid_from": "1907-06-09",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/kunsturhg/__22.html"
+  },
+  {
+    "law_short": "KUG",
+    "norm_ref": "§ 23 Abs. 1 Nr. 1",
+    "title": "Ausnahme – Bildnisse aus dem Bereich der Zeitgeschichte",
+    "heading_context": "KUG – Recht am eigenen Bild – § 23 Abs. 1 Nr. 1 Ausnahme – Bildnisse aus dem Bereich der Zeitgeschichte",
+    "body": "Ohne die nach § 22 erforderliche Einwilligung dürfen Bildnisse aus dem Bereich der Zeitgeschichte verbreitet und zur Schau gestellt werden.",
+    "valid_from": "1907-06-09",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/kunsturhg/__23.html"
+  },
+  {
+    "law_short": "KUG",
+    "norm_ref": "§ 24",
+    "title": "Ausnahme für Zwecke der Rechtspflege und öffentlichen Sicherheit",
+    "heading_context": "KUG – Recht am eigenen Bild – § 24 Ausnahme für Zwecke der Rechtspflege und öffentlichen Sicherheit",
+    "body": "Für Zwecke der Rechtspflege und der öffentlichen Sicherheit dürfen Behörden Bildnisse ohne die nach § 22 erforderliche Einwilligung vervielfältigen, verbreiten und öffentlich zur Schau stellen.",
+    "valid_from": "1907-06-09",
+    "valid_to": null,
+    "source_url": "https://www.gesetze-im-internet.de/kunsturhg/__24.html"
   }
 ]

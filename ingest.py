@@ -8,6 +8,43 @@ from sentence_transformers import SentenceTransformer
 DB_URL = os.environ.get("DATABASE_URL", "postgresql://legal:legal@localhost:5433/legaldb")
 EMBED_MODEL = "intfloat/multilingual-e5-small"
 SEED_FILE = os.path.join(os.path.dirname(__file__), "data", "seed_norms.json")
+DEFINITIONS_FILE = os.path.join(os.path.dirname(__file__), "data", "definitions.json")
+
+
+def norm_ids_for(cur, ref):
+    cur.execute(
+        "SELECT id FROM norms WHERE law_short = %s AND norm_ref = %s",
+        (ref["law_short"], ref["norm_ref"]),
+    )
+    return [row[0] for row in cur.fetchall()]
+
+
+def ingest_definitions(cur):
+    with open(DEFINITIONS_FILE, encoding="utf-8") as f:
+        definitions = json.load(f)
+
+    for d in definitions:
+        cur.execute(
+            "INSERT INTO definitions (term, definition_text) VALUES (%s, %s) RETURNING id",
+            (d["term"], d["definition_text"]),
+        )
+        definition_id = cur.fetchone()[0]
+
+        for norm_id in norm_ids_for(cur, d["defining_norm"]):
+            cur.execute(
+                "INSERT INTO definition_links (definition_id, norm_id, role) VALUES (%s, %s, 'definiert')",
+                (definition_id, norm_id),
+            )
+
+        for ref in d.get("used_by", []):
+            for norm_id in norm_ids_for(cur, ref):
+                cur.execute(
+                    "INSERT INTO definition_links (definition_id, norm_id, role) VALUES (%s, %s, 'verwendet')",
+                    (definition_id, norm_id),
+                )
+
+    cur.execute("SELECT count(*) FROM definitions")
+    print(f"{cur.fetchone()[0]} Definitionen eingespielt.")
 
 
 def main():
@@ -24,7 +61,7 @@ def main():
     conn = psycopg2.connect(DB_URL)
     register_vector(conn)
     cur = conn.cursor()
-    cur.execute("TRUNCATE norms RESTART IDENTITY")
+    cur.execute("TRUNCATE TABLE norms, definitions, definition_links RESTART IDENTITY CASCADE")
 
     for r, emb in zip(records, embeddings):
         cur.execute(
@@ -46,9 +83,12 @@ def main():
             ),
         )
 
-    conn.commit()
     cur.execute("SELECT count(*) FROM norms")
     print(f"{cur.fetchone()[0]} Normen eingespielt.")
+
+    ingest_definitions(cur)
+
+    conn.commit()
     cur.close()
     conn.close()
 

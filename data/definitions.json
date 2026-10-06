@@ -1,0 +1,43 @@
+[
+  {
+    "term": "Auftragsverarbeiter",
+    "definition_text": "Eine natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet (Art. 4 Nr. 8 DSGVO).",
+    "defining_norm": {"law_short": "DSGVO", "norm_ref": "Art. 4 Nr. 8"},
+    "used_by": [
+      {"law_short": "DSGVO", "norm_ref": "Art. 28 Abs. 1"},
+      {"law_short": "DSGVO", "norm_ref": "Art. 28 Abs. 3"},
+      {"law_short": "DSGVO", "norm_ref": "Art. 32 Abs. 1"}
+    ]
+  },
+  {
+    "term": "gemeinsam Verantwortliche",
+    "definition_text": "Legen zwei oder mehr Verantwortliche gemeinsam die Zwecke der und die Mittel zur Verarbeitung fest, so sind sie gemeinsam Verantwortliche (Art. 26 Abs. 1 DSGVO).",
+    "defining_norm": {"law_short": "DSGVO", "norm_ref": "Art. 26 Abs. 1"},
+    "used_by": []
+  },
+  {
+    "term": "Einwilligung",
+    "definition_text": "Jede freiwillig für den bestimmten Fall, in informierter Weise und unmissverständlich abgegebene Willensbekundung, mit der die betroffene Person zu verstehen gibt, dass sie mit der Verarbeitung der sie betreffenden personenbezogenen Daten einverstanden ist (Art. 4 Nr. 11 DSGVO).",
+    "defining_norm": {"law_short": "DSGVO", "norm_ref": "Art. 4 Nr. 11"},
+    "used_by": [
+      {"law_short": "DSGVO", "norm_ref": "Art. 6 Abs. 1 lit. a"},
+      {"law_short": "DSGVO", "norm_ref": "Art. 7 Abs. 3"},
+      {"law_short": "DSGVO", "norm_ref": "Art. 8 Abs. 1"},
+      {"law_short": "DSGVO", "norm_ref": "Art. 9 Abs. 2 lit. a"},
+      {"law_short": "BDSG", "norm_ref": "§ 26 Abs. 2"},
+      {"law_short": "TTDSG", "norm_ref": "§ 25 Abs. 1"},
+      {"law_short": "UWG", "norm_ref": "§ 7 Abs. 2 Nr. 2"},
+      {"law_short": "UWG", "norm_ref": "§ 7 Abs. 2 Nr. 3"},
+      {"law_short": "UWG", "norm_ref": "§ 7a Abs. 1"},
+      {"law_short": "KUG", "norm_ref": "§ 22 Satz 1"}
+    ]
+  },
+  {
+    "term": "Verletzung des Schutzes personenbezogener Daten",
+    "definition_text": "Eine Verletzung der Sicherheit, die zur Vernichtung, zum Verlust, zur Veränderung oder zur unbefugten Offenlegung von bzw. zum unbefugten Zugang zu personenbezogenen Daten führt (Art. 4 Nr. 12 DSGVO).",
+    "defining_norm": {"law_short": "DSGVO", "norm_ref": "Art. 4 Nr. 12"},
+    "used_by": [
+      {"law_short": "DSGVO", "norm_ref": "Art. 33 Abs. 1"}
+    ]
+  }
+]

@@ -1,17 +1,22 @@
 # Prototyp: zeitversionierte Rechts-Wissensdatenbank
 
-Kleiner Machbarkeitstest für drei Kernideen:
+Kleiner Machbarkeitstest für vier Kernideen:
 
 1. Speichereinheit = einzelne Norm-Fassung mit Gültigkeitszeitraum (`daterange`), DB erzwingt per
    `EXCLUDE`-Constraint, dass sich zwei Fassungen derselben Norm nicht überlappen.
 2. Hybride Suche: Volltext (Postgres `tsvector`, deutscher Analyzer) + Vektorsuche (pgvector),
    kombiniert per Reciprocal Rank Fusion, danach Reranking mit einem Cross-Encoder.
 3. Stichtag-Filterung: die Suche liefert nur an einem gegebenen Datum gültige Fassungen.
+4. Definitionsbibliothek: Rechtsbegriffe verknüpfen die sie definierende Norm mit den Normen, die
+   sie verwenden. Erkennt die Suche einen solchen Begriff in der Anfrage, schränkt sie die
+   Kandidaten hart auf die verknüpften Normen ein, statt nur per Reranking herunterzustufen.
 
-**Hinweis zu den Daten:** Die DSGVO/BDSG-Texte in `data/seed_norms.json` sind aus dem Gedächtnis
-rekonstruiert und nur für diesen Test gedacht — vor echtem Einsatz gegen die Primärquelle (EUR-Lex,
-gesetze-im-internet.de) prüfen. Das "Beispielgesetz (fiktiv)" mit drei Fassungen von § 5 ist komplett
-erfunden und dient nur dazu, die Zeitraum-Logik zu testen.
+**Hinweis zu den Daten:** `data/seed_norms.json` enthält 100 Normen aus 7 Gesetzen (DSGVO, BDSG,
+TTDSG, BetrVG, UWG, KUG und das fiktive "Beispielgesetz"), um Suche, Reranking und die
+Jev-Klassifikation an einem größeren, thematisch breiteren Datensatz zu testen. Die Texte sind aus
+dem Gedächtnis rekonstruiert/paraphrasiert und nur für diesen Test gedacht — vor echtem Einsatz
+gegen die Primärquelle (EUR-Lex, gesetze-im-internet.de) prüfen. Das "Beispielgesetz (fiktiv)" mit
+drei Fassungen von § 5 ist komplett erfunden und dient nur dazu, die Zeitraum-Logik zu testen.
 
 ## Setup
 
@@ -22,27 +27,49 @@ pip install -r requirements.txt
 python ingest.py                  # embeddet und lädt die 10 Beispiel-Normen (lädt ~500MB Modell beim ersten Mal)
 ```
 
-## Web-Frontend (für Demos)
+## Web-Frontend (React + MUI)
+
+Das Frontend ist eine React-Single-Page-App (Vite, ausschließlich MUI-Material-Komponenten) in
+`frontend/`. Flask (`app.py`) ist ein reines JSON-Backend und liefert zusätzlich den gebauten
+Frontend-Stand aus `frontend/dist` aus.
 
 ```bash
-python app.py    # startet auf http://127.0.0.1:5050
+# einmalig
+cd frontend && npm install && cd ..
+
+# Variante A - Produktivbetrieb: Frontend bauen, Flask liefert alles auf einem Port aus
+cd frontend && npm run build && cd ..
+python app.py                    # http://127.0.0.1:5050
+
+# Variante B - Entwicklung mit Hot Reload: Flask + Vite parallel
+python app.py                    # Terminal 1, API auf :5050
+cd frontend && npm run dev       # Terminal 2, UI auf http://127.0.0.1:5173 (proxyt /api -> :5050)
 ```
 
-Einfache Ein-Seiten-Oberfläche: Frage eingeben, Stichtag wählen, Ergebnisse als Karten mit
-Score, Gültigkeitszeitraum, Status-Badge (vergangen/aktuell/zukünftig relativ zu heute) und Quelle.
-Über den Beispiel-Chips lassen sich die drei Kernszenarien (semantische Suche, Reranker-Test,
-Zeitraum-Filterung) mit einem Klick vorführen. Die Pipeline-Zeile über den Ergebnissen zeigt
-transparent, wie viele Kandidaten Volltext- und Vektorsuche jeweils gefunden haben und wie viele
-nach RRF-Fusion übrig bleiben.
+Nach Änderungen an `app.py` muss Flask neu gestartet werden (kein Auto-Reload); Änderungen im
+Frontend greifen in Variante B sofort, in Variante A nach erneutem `npm run build`.
 
-Über die Navbar erreichbar:
-- **Suche** (`/`) – die oben beschriebene Such-Oberfläche inkl. Zeitstrahl aller Normen.
+Oben rechts in der Navigation lässt sich der **Entwicklungsstand** umschalten (Cookie `app_state`):
+*Plain* (nur hybride Suche) → *+ Definitionen* (Begriffsfilter) → *+ Jev* (Klassifikation). Der Stand
+steuert, welche Navigationspunkte sichtbar sind, wie `/api/search` arbeitet und welche
+Diagrammversion die Architektur-Seite zeigt.
+
+Seiten:
+- **Suche** (`/`) – Frage + Stichtag, Beispiel-Chips (zwei pro Testfall aus `TESTFRAGEN.md`),
+  Pipeline-Zeile, Jev-Panel (Gesetze + einzelne Normen), Ergebnis-Karten, Jev-Laufzeit/Kosten-Karte
+  und der Zeitstrahl aller Normen.
 - **Datenbank** (`/datenbank`) – alle Normen gruppiert nach Gesetz, mit Gültigkeitszeitraum und Status.
-- **Architektur** (`/architektur`) – die Such-Pipeline als Diagramm, farblich markiert nach
-  umgesetzt/teilweise/offen. Quelle ist `diagrams/search-pipeline.puml`; Flask rendert die Datei
-  bei jedem Aufruf von `/architektur/diagram.svg` live über den lokalen PlantUML-Docker-Container neu
-  (gecacht anhand der Datei-Änderungszeit). Einfach die `.puml`-Datei bearbeiten und die Seite neu
-  laden – kein manuelles Re-Rendern nötig, Docker muss dafür laufen.
+- **Definitionen** (`/definitionen`, ab Stand *+ Definitionen*) – Begriffe der Definitionsbibliothek
+  mit definierender Norm und verwendenden Normen.
+- **Architektur** (`/architektur`) – die Such-Pipeline als PlantUML-Diagramm passend zum Stand.
+  Quelle ist `diagrams/search-pipeline[-2|-3].puml`; `/api/diagram.svg` rendert live über den
+  lokalen PlantUML-Docker-Container (gecacht anhand der Datei-Änderungszeit). Docker muss laufen.
+- **Jev-Klassifikation** (`/jev`, nur Stand *+ Jev*) – Verlauf aller Klassifikationen inkl.
+  aufklappbarer Normebene.
+- **Norm-Detail** (`/norm/<id>`) – Volltext, alle Fassungen, Verweise auf Definitionen.
+
+JSON-API: `GET/POST /api/state`, `GET /api/search`, `GET /api/norms`, `GET /api/norms/<id>`,
+`GET /api/definitions`, `GET /api/jev/runs`, `GET /api/diagram.svg?v=1|2|3`.
 
 ## Suche testen (CLI)
 
@@ -61,6 +88,10 @@ python search.py "Art. 28 Abs. 3 DSGVO"
 python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2018-06-01   # -> Fassung 1 (Vergangenheit)
 python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2026-09-29  # -> Fassung 2 (aktuell)
 python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2028-01-01  # -> Fassung 3 (Zukunft)
+
+# Begriffsfilter: "Auftragsverarbeiter" ist in der Definitionsbibliothek hinterlegt -> Kandidaten
+# werden hart auf die 4 verknüpften Normen eingeschränkt, Art. 26 (der "false friend") fällt komplett weg
+python search.py "Auftragsverarbeiter Vertrag"
 ```
 
 ## Was validiert wurde
@@ -76,6 +107,10 @@ python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2028-01-01  # -> Fa
   `body`. Nach Aufnahme von `law_short`/`norm_ref` in den generierten `search_vector` (siehe
   `schema.sql`) finden sowohl reine Fachbegriffe ("Sicherheit der Verarbeitung") als auch exakte
   Normverweise ("Art. 28 Abs. 3 DSGVO") zuverlässig Treffer.
+- Der Begriffsfilter über die Definitionsbibliothek (`definitions`/`definition_links`) löst das
+  Art.-26-vs.-Art.-28-Problem robuster als der Reranker allein: statt den falschen Treffer nur
+  herunterzustufen, verschwindet er komplett aus der Kandidatenmenge, sobald ein bekannter Begriff
+  erkannt wird.
 
 ## Offene Fragen für die nächste Ausbaustufe
 
@@ -85,4 +120,8 @@ python search.py "Was steht in § 5 Beispielgesetz?" --as-of 2028-01-01  # -> Fa
   plus ggf. `websearch_to_tsquery` oder OR-Verknüpfung einzelner Begriffe.
 - Kein echter Import-Pipeline-Test gegen EUR-Lex/CELLAR oder rechtsinformationen.bund.de.
 - Embedding-/Reranker-Modellwahl wurde nicht gegen ein Evaluationsset (Recall@10) verglichen.
-- Graph-Schicht (Verweise, "setzt um", "ändert") ist in diesem Prototyp nicht enthalten.
+- Graph-Schicht für Normverweise ("verweist auf", "setzt um", "ändert") ist weiterhin nicht enthalten
+  — nur die Definitionsbibliothek als erste, engere Form einer Normen-Verknüpfung.
+- Der Begriffsabgleich in `find_matching_definitions()` ist ein simpler case-insensitiver
+  Teilstring-Match, keine echte linguistische Analyse (z. B. keine Erkennung von Synonymen oder
+  Ambiguitäten wie einem Begriff mit zwei unterschiedlichen Definitionen in verschiedenen Gesetzen).
