@@ -28,6 +28,7 @@ app = Flask(__name__)
 DIAGRAM_PATHS = {
     "1": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline.puml"),
     "2": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline-2.puml"),
+    "3": os.path.join(os.path.dirname(__file__), "diagrams", "search-pipeline-3.puml"),
 }
 _diagram_cache = {}
 
