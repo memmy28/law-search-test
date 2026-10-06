@@ -141,6 +141,24 @@ button:hover { opacity: 0.9; }
 .examples {
   margin-top: 16px;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.examples-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.examples-hint code {
+  background: #eef0f4;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.examples-group {
+  display: flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
@@ -149,6 +167,7 @@ button:hover { opacity: 0.9; }
 .examples-label {
   font-size: 12px;
   color: var(--muted);
+  min-width: 118px;
   margin-right: 4px;
 }
 

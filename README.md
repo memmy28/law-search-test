@@ -11,10 +11,12 @@ Kleiner Machbarkeitstest für vier Kernideen:
    sie verwenden. Erkennt die Suche einen solchen Begriff in der Anfrage, schränkt sie die
    Kandidaten hart auf die verknüpften Normen ein, statt nur per Reranking herunterzustufen.
 
-**Hinweis zu den Daten:** Die DSGVO/BDSG-Texte in `data/seed_norms.json` sind aus dem Gedächtnis
-rekonstruiert und nur für diesen Test gedacht — vor echtem Einsatz gegen die Primärquelle (EUR-Lex,
-gesetze-im-internet.de) prüfen. Das "Beispielgesetz (fiktiv)" mit drei Fassungen von § 5 ist komplett
-erfunden und dient nur dazu, die Zeitraum-Logik zu testen.
+**Hinweis zu den Daten:** `data/seed_norms.json` enthält 100 Normen aus 7 Gesetzen (DSGVO, BDSG,
+TTDSG, BetrVG, UWG, KUG und das fiktive "Beispielgesetz"), um Suche, Reranking und die
+Jev-Klassifikation an einem größeren, thematisch breiteren Datensatz zu testen. Die Texte sind aus
+dem Gedächtnis rekonstruiert/paraphrasiert und nur für diesen Test gedacht — vor echtem Einsatz
+gegen die Primärquelle (EUR-Lex, gesetze-im-internet.de) prüfen. Das "Beispielgesetz (fiktiv)" mit
+drei Fassungen von § 5 ist komplett erfunden und dient nur dazu, die Zeitraum-Logik zu testen.
 
 ## Setup
 

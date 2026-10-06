@@ -30,13 +30,43 @@
       </form>
 
       <div class="examples">
-        <span class="examples-label">Beispiele:</span>
-        <button class="chip" data-query="Wir lassen unsere Lohnabrechnung von einem externen Dienstleister machen. Brauchen wir einen Vertrag?" data-asof="">semantische Suche (kein Fachbegriff im Text)</button>
-        <button class="chip" data-query="Was gilt, wenn zwei Unternehmen gemeinsam über Zwecke der Datenverarbeitung entscheiden?" data-asof="">Art. 26 vs. Art. 28 (Reranker-Test)</button>
-        <button class="chip" data-query="Was ist ein Auftragsverarbeiter?" data-asof="">Begriffsfilter (Definitionsbibliothek)</button>
-        <button class="chip" data-query="Was steht in § 5 Beispielgesetz?" data-asof="2018-06-01">§5 – Vergangenheit</button>
-        <button class="chip" data-query="Was steht in § 5 Beispielgesetz?" data-asof="">§5 – aktuell (heute)</button>
-        <button class="chip" data-query="Was steht in § 5 Beispielgesetz?" data-asof="2028-01-01">§5 – Zukunft</button>
+        <p class="examples-hint">Beispiele aus <code>TESTFRAGEN.md</code>, zwei pro Testfall:</p>
+
+        <div class="examples-group">
+          <span class="examples-label">1. Eindeutige Treffer:</span>
+          <button class="chip" data-query="Muss unser Shop eine Cookie-Einwilligung einholen?" data-asof="">Cookie-Einwilligung → TTDSG</button>
+          <button class="chip" data-query="Darf der Betriebsrat mitbestimmen, wenn wir eine Software zur Mitarbeiterüberwachung einführen?" data-asof="">Mitarbeiterüberwachung → BetrVG</button>
+        </div>
+
+        <div class="examples-group">
+          <span class="examples-label">2. Mehrere Gesetze:</span>
+          <button class="chip" data-query="Was gilt, wenn zwei Unternehmen gemeinsam über Zwecke der Datenverarbeitung entscheiden?" data-asof="">Art. 26 vs. Art. 28 (Reranker-Test)</button>
+          <button class="chip" data-query="Welche Pflichten haben wir, wenn personenbezogene Daten gestohlen oder verloren gehen?" data-asof="">Datenschutzverletzung → DSGVO + BDSG</button>
+        </div>
+
+        <div class="examples-group">
+          <span class="examples-label">3. Negativ-Kontrollen:</span>
+          <button class="chip" data-query="Dürfen wir Mitarbeiterfotos ohne Einwilligung auf der Firmenwebsite veröffentlichen?" data-asof="">Mitarbeiterfoto → nur KUG/DSGVO/BDSG</button>
+          <button class="chip" data-query="Braucht unser Betriebsrat Zugriff auf die Zeiterfassungsdaten?" data-asof="">Zeiterfassung → nur BetrVG/BDSG</button>
+        </div>
+
+        <div class="examples-group">
+          <span class="examples-label">4. Zeitfilter:</span>
+          <button class="chip" data-query="Was steht in § 5 Beispielgesetz?" data-asof="2018-06-01">§5 – Vergangenheit</button>
+          <button class="chip" data-query="Was steht in § 5 Beispielgesetz?" data-asof="2028-01-01">§5 – Zukunft</button>
+        </div>
+
+        <div class="examples-group">
+          <span class="examples-label">5. Definitionsfilter:</span>
+          <button class="chip" data-query="Was ist ein Auftragsverarbeiter?" data-asof="">Auftragsverarbeiter (4 Normen)</button>
+          <button class="chip" data-query="Was bedeutet Einwilligung?" data-asof="">Einwilligung (11 Normen, 5 Gesetze)</button>
+        </div>
+
+        <div class="examples-group">
+          <span class="examples-label">6. Ambige Fälle:</span>
+          <button class="chip" data-query="Wir planen eine Videoüberwachung im Lager." data-asof="">Videoüberwachung im Lager</button>
+          <button class="chip" data-query="Dürfen wir unsere Kunden anrufen, um ihnen ein neues Produkt vorzustellen?" data-asof="">Werbeanruf bei Kunden</button>
+        </div>
       </div>
     </section>
 
